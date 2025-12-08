@@ -2,7 +2,7 @@ services:
   web: #или nginx
     image: nginx
     ports:
-      - 82:80    #ТОЧНО 80? когда запускаю http://localhost:81/index.php выдает ошибку
+      - 82:80
     volumes:
       - '/home/mdr11/projects/online_shop/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
       - '/home/mdr11/projects/online_shop:/var/www/html'
@@ -17,8 +17,8 @@ services:
   postgres:
     image: postgres:16
     environment:
-      - POSTGRES_USER={$DB_USER}
-      - POSTGRES_PASSWORD={$DB_PASSWORD}
-      - POSTGRES_DB={$DB}
-    #ports:
-     # -54322:5432
+      - POSTGRES_USER=USER # {$DB_USER}
+      - POSTGRES_PASSWORD=PASS #{$DB_PASSWORD}
+      - POSTGRES_DB=mydb #{$DB}
+    ports:
+      - 54324:5432
