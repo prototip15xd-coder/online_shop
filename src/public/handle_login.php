@@ -12,6 +12,7 @@ if ($user === false) {
 } else {
     $passworddb = $user['password'];
     if (password_verify($PASSWORD, $passworddb)) {
+        setcookie("userid", $user['id']);
         header("Location: /src/public/catalog.php");
     } else {
         $errors['PASSWORD'] = 'password указаны неверно';
