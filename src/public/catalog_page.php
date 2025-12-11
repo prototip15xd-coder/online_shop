@@ -1,4 +1,3 @@
-
 <div class="container">
     <h3>Catalog</h3>
     <div class="card-deck">

@@ -1,103 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-#ДОБАВИТЬ ОТРАЖЕНИЕ ОШИБОК ERRORS
-</head>
-<body>
-<!-- ИСПРАВЛЕНО: Правильный HTML вместо Pug/Jade синтаксиса -->
-<div class="circle">
-    <form action="handle_login.php" method="POST">
-        <div class="content">
-            <p>CodePen.io</p>
-            <input type="text" placeholder="USERNAME" required>
-            <input type="password" placeholder="PASSWORD" required>
-        </div>
-        <div class="login">
-            <input type="submit" class="btn" value="LOGIN">
-        </div>
-    </form>
-</div>
-</body>
-</html>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        /* ИСПРАВЛЕНО: Добавлены фигурные скобки и точки с запятой */
-        * {
-            box-sizing: border-box;
-            position: relative;
-            font-family: 'Cabin', sans-serif;
-        }
 
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: black;
-            overflow-x: hidden;
-            overflow-y: hidden;
-        }
+<form action="handle_login.php" method = "POST">
+    <div class="container">
+        <h1>Log in</h1>
+        <p>Please fill in this form to create an account.</p>
+        <hr>
 
-        p {
-            font-size: 30px;
-            letter-spacing: 1px;
-            font-weight: 500;
-            margin-bottom: 18px;
-            color: white;
-        }
+        <label for="login"><b>Login</b></label>
+        <?php if (isset($errors['USERNAME'])): ?>
+            <label style="color: red"><?php echo $errors['USERNAME']; ?></label>
+        <?php endif; ?>
+        <input type="text" placeholder="Enter login" name="login" id="login" required>
 
-        .circle {
-            height: 300px;
-            width: 300px;
-            margin: 0 auto;
-            margin-top: 15%;
-            padding: 60px;
-            padding-top: 23px;
-            border-radius: 100%;
-            background-color: black;
-            box-shadow: 0px 0px 150px -5px white;
-            -webkit-transition: box-shadow 1s;
-            -moz-transition: box-shadow 1s;
-            -o-transition: box-shadow 1s;
-            transition: box-shadow 1s;
-        }
+        <label for="password"><b>Password</b></label>
+        <?php if (isset($errors['PASSWORD'])): ?>
+            <label style="color: red"><?php echo $errors['PASSWORD']; ?></label>
+        <?php endif; ?>
+        <input type="password" placeholder="Enter Password" name="password" id="password" required>
 
-        /* ИСПРАВЛЕНО: Правильный CSS синтаксис вместо & */
-        .circle input {
-            margin-bottom: 20px;
-            border: solid 2px white;
-            border-radius: 5px;
-            padding: 5px;
-            width: 100%;
-            text-align: center;
-            letter-spacing: 1px;
-            background-color: black;
-            color: white;
-        }
+        <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+        <button type="submit" class="loginbtn">Log in</button>
+    </div>
 
-        /* ИСПРАВЛЕНО: Правильный CSS синтаксис */
-        .circle .content,
-        .circle .login {
-            text-align: center;
-        }
+    <div class="container signin">
+        <p>Already have an account? <a href="#">Sign in</a>.</p>
+    </div>
+</form>
+<style>
+    * {box-sizing: border-box}
 
-        /* ИСПРАВЛЕНО: Правильный CSS синтаксис */
-        .circle .btn {
-            padding: 10px;
-            letter-spacing: 2px;
-            cursor: pointer;
-            color: white;
-            background-color: transparent;
-            border: solid 2px white;
-            border-radius: 5px;
-            width: 100%;
-        }
+    /* Add padding to containers */
+    .container {
+        padding: 16px;
+    }
 
-        /* ИСПРАВЛЕНО: Добавлены точка с запятой и скобка */
-        .circle:hover {
-            box-shadow: 0px 0px 150px -5px #82FF9E;
-        }
-    </style>
+    /* Full-width input fields */
+    input[type=text], input[type=password] {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+
+    input[type=text]:focus, input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    /* Overwrite default styles of hr */
+    hr {
+        border: 1px solid #f1f1f1;
+        margin-bottom: 25px;
+    }
+
+    /* Set a style for the submit/register button */
+    .loginbtn {
+        background-color: #04AA6D;
+        color: white;
+        padding: 16px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+    .loginbtn:hover {
+        opacity:1;
+    }
+
+    /* Add a blue text color to links */
+    a {
+        color: dodgerblue;
+    }
+
+    /* Set a grey background color and center the text of the "sign in" section */
+    .signin {
+        background-color: #f1f1f1;
+        text-align: center;
+    }
+</style>
