@@ -16,6 +16,7 @@ services:
 
   postgres:
     image: postgres:16
+    #добавить volumes? см урок от 4 дек
     environment:
       - POSTGRES_USER=USER # {$DB_USER}
       - POSTGRES_PASSWORD=PASS #{$DB_PASSWORD}

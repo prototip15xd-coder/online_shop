@@ -2,7 +2,7 @@
 
 session_start();
 
-if (!isset($_SESSION['userid'])) {
+if (isset($_SESSION['userid'])) {
     $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
     $stms = $pdo->query('SELECT * FROM products');
     $products = $stms->fetchAll();
