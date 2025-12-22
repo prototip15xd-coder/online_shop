@@ -8,7 +8,7 @@ if (isset($_SESSION['userid'])) {
     $products = $stms->fetchAll();
     require_once './catalog_page.php';
 } else {
-    header("Location: /src/public/login_page.php");
+    header("Location: /login");
 
 }
 

@@ -7,7 +7,7 @@
 
     <body>
         <div class="container">
-            <a href="./profile.php" target="_blank">Мой профиль</a>
+            <a href="./profile" target="_blank">Мой профиль</a>
             <h3>Catalog</h3>
             <div class="card-deck">
                 <?php foreach ($products as $product): ?>
@@ -33,5 +33,3 @@
     </body>
 </html>
 
-
-#придумай CSS стиль

@@ -1,42 +1,31 @@
+// Сделать файл который сохраняет данные о товари в таблицу,
+// юзер_ид брать чеарез сессию пользователей которых есть логин?
 
 
 <form action="/registration" method = "POST">
     <div class="container">
-        <h1>Register</h1>
+        <h1>Add Product</h1>
         <p>Please fill in this form to create an account.</p>
         <hr>
 
-        <label for="name"><b>Name</b></label>
-        <?php if (isset($errors['name'])): ?>
-        <label style="color: red"><?php echo $errors['name']; ?></label>
+        <label for="name"><b>Product-id</b></label>
+        <?php if (isset($errors['product_id'])): ?>
+        <label style="color: red"><?php echo $errors['product_id']; ?></label>
         <?php endif; ?>
-        <input type="text" placeholder="Enter name" name="name" id="name" required>
+        <input type="text" placeholder="Enter product-id" name="product_id" id="product_id" required>
 
-        <label for="email"><b>Email</b></label>
-        <?php if (isset($errors['email'])): ?>
-        <label style="color: red"><?php echo $errors['email']; ?></label>
+        <label for="amount"><b>Amount</b></label>
+        <?php if (isset($errors['amount'])): ?>
+        <label style="color: red"><?php echo $errors['amount']; ?></label>
         <?php endif; ?>
-        <input type="text" placeholder="Enter Email" name="email" id="email" required>
-
-        <label for="psw"><b>Password</b></label>
-        <?php if (isset($errors['password'])): ?>
-        <label style="color: red"><?php echo $errors['password']; ?></label>
-        <?php endif; ?>
-        <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
-
-        <label for="psw-repeat"><b>Repeat Password</b></label>
-        <?php if (isset($errors['psw-repeat'])): ?>
-        <label style="color: red"><?php echo $errors['psw-repeat']; ?></label>
-        <?php endif; ?>
-        <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
-        <hr>
+        <input type="text" placeholder="Enter amount" name="amount" id="amount" required>
 
         <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
-        <button type="submit" class="registerbtn">Register</button>
+        <button type="submit" class="AddProdbtn">Add Product</button>
     </div>
 
     <div class="container signin">
-        <p>Already have an account? <a href="./login">Sign in</a>.</p>
+        <p>Already have an account? <a href="#">Sign in</a>.</p>
     </div>
 </form>
 <style>
@@ -69,7 +58,7 @@
     }
 
     /* Set a style for the submit/register button */
-    .registerbtn {
+    .AddProdbtn {
         background-color: #04AA6D;
         color: white;
         padding: 16px 20px;
@@ -80,7 +69,7 @@
         opacity: 0.9;
     }
 
-    .registerbtn:hover {
+    .AddProdbtn:hover {
         opacity:1;
     }
 

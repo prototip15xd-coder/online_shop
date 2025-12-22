@@ -1,6 +1,6 @@
 
 
-<form action="handle_login.php" method = "POST">
+<form action="/login" method = "POST">
     <div class="container">
         <h1>Log in</h1>
         <p>Please fill in this form to create an account.</p>
@@ -18,12 +18,11 @@
         <?php endif; ?>
         <input type="password" placeholder="Enter Password" name="password" id="password" required>
 
-        <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
         <button type="submit" class="loginbtn">Log in</button>
     </div>
 
     <div class="container signin">
-        <p>Already have an account? <a href="#">Sign in</a>.</p>
+        <p>Dont have an account? <a href="/registration">Create account</a>.</p>
     </div>
 </form>
 <style>
