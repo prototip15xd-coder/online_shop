@@ -1,51 +1,39 @@
 <?php
-// проверка пользователя , валидания -> сохр в базу данных
-// добавляем товары через сумму! а не каждый отдельной строкой
-echo "Метод запроса: " . $_SERVER['REQUEST_METHOD'] . "<br>";
-echo "URL: " . $_SERVER['REQUEST_URI'] . "<br>";
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $pdo = new PDO('mysql:host=localhost;dbname=catalog', 'root', '');
-
-}
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    function add_prod($POST_DATA)
-    {
+    function add_prod($POST_DATA) {
         $errors = [];
-        if (empty($POST_DATA['product_id']) || empty($POST_DATA['amount'])) {
-            $errors['USERNAME'] = 'Выберите товар и количество';
+        session_start();
+
+        if (!isset($_SESSION['userid'])) {
+            header("Location: /login");
         } else {
-            $product_Id = $POST_DATA['product_id'];
+            $product_id = $POST_DATA['product_id'];
             $amount = $POST_DATA['amount'];
-
-            ??????????
+            $user_id = $_SESSION['userid'];
             $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
-            $stms = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-            $stms->execute(['email' => $USERNAME]);
-            $user = $stms->fetch();
-
-            if ($user === false) {
-                $errors['PASSWORD'] = 'логин или пароль указаны неверно';
+            if (empty($POST_DATA['product_id']) || empty($POST_DATA['amount'])) {
+                $errors['product_id'] = 'Выберите товар и количество';
             } else {
-                $passworddb = $user['password'];
-                if (password_verify($PASSWORD, $passworddb)) {
-                    session_start();
-                    $_SESSION['userid'] = $user['id'];
-                    header("Location: /catalog");
+                $stms = $pdo->prepare("SELECT id FROM products WHERE id = :product_id");
+                $stms->execute(['product_id' => $product_id]);
+                if ($stms->rowCount() === 0) {
+                    $errors['product_id'] = 'Такого товара не существует';
                 } else {
-                    $errors['PASSWORD'] = 'логин или пароль указаны неверно';
+                    $stmt = $pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
+                    $stmt->execute(['user_id' => $user_id, 'product_id' => $product_id, 'amount' => $amount]); # НИЧЕ НЕ ДОБАВИЛОСЬ НУ ПИЗДЕЦ
+                    }
                 }
             }
-        }
-        return $errors;
+            return $errors;
     }
 
-    $errors = logIN($_POST);
+        $errors = add_prod($_POST);
 }
 
 
-require_once './login_page.php';
+require_once './add_product_page.php';
+
 
 
 

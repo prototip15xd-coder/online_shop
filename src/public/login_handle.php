@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $USERNAME = $POST_DATA['login'];
             $PASSWORD = $POST_DATA['password'];
-            $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
+            $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');   //ЭТА ЧАСТЬ КОДА ПРОВЕРЯЕТ НАЛИЧИЕ ПОЛЬЗОВАТЕЛЯ АДАПТИРУЙ ДЛЯ ТОВАРА !!!! В ФАЙЛЕ С КОРЗИНОЙ
             $stms = $pdo->prepare("SELECT * FROM users WHERE email = :email");
             $stms->execute(['email' => $USERNAME]);
             $user = $stms->fetch();
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 
-require_once './login_page.php';
+require_once './login_page.php'; // точно с указанием файла?
 
 
 

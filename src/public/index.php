@@ -14,9 +14,7 @@ if ($requestUri ==='/registration') {
 } elseif ($requestUri ==='/login') {
         require_once './login_handle.php';
 } elseif ($requestUri === '/add_product') {
-    if ($requestMethod === 'GET') {
         require_once './add_product_page.php';
-    }
 } elseif ($requestUri === '/catalog') {
     require_once './catalog.php';
 } elseif ($requestUri === '/profile') {
