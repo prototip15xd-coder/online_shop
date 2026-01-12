@@ -7,9 +7,9 @@ class Products
             $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
             $stms = $pdo->query('SELECT * FROM products');
             $products = $stms->fetchAll();
-            require_once '../catalog_page.php';
+            require_once '/var/www/html/src/public/catalog_page.php';
         } else {
-            header("Location: /login");
+            require_once '/var/www/html/src/public/login';
 
         }
     }
@@ -18,7 +18,7 @@ class Products
         $errors = [];
 
         if (!isset($SESSION_DATA['userid'])) {
-            header("Location: /login");
+            require_once '/var/www/html/src/public/login';
         } else {
             $amount = $POST_DATA['amount'];
             if (empty($POST_DATA['product_id']) || empty($POST_DATA['amount'])) {
@@ -68,7 +68,7 @@ class Products
 
         }
         $errors = $errors ?? [];
-        require_once '../add_product_page.php';
+        require_once '/var/www/html/src/public/add_product_page.php';
     }
 
 }

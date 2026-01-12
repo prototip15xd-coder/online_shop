@@ -31,7 +31,9 @@ if ($requestUri ==='/registration') {
 } elseif ($requestUri === '/profile') {
     require_once './classes/User.php';
     $user = new User();
-    $user -> profile();
+    $user->profile();
+} elseif ($requestUri === '/profile?edit=true') {
+    //////????????????????????????????????????????
 } elseif ($requestUri === '/cart') {
     require_once './classes/User.php';
     $user = new User();

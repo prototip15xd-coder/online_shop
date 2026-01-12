@@ -21,6 +21,27 @@
 
         <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
         <button type="submit" class="AddProdbtn">Add Product</button>
+        <div class="container">
+            <h1>Add Product</h1>
+            <p>Please fill in this form to create an account.</p>
+            <hr>
+
+            <label for="name"><b>Product-id</b></label>
+            <?php if (isset($errors['product_id'])): ?>
+                <label style="color: red"><?php echo $errors['product_id']; ?></label>
+            <?php endif; ?>
+            <input type="text" placeholder="Enter product-id" name="product_id" id="product_id" required>
+
+            <label for="amount"><b>Amount</b></label>
+            <?php if (isset($errors['amount'])): ?>
+                <label style="color: red"><?php echo $errors['amount']; ?></label>
+            <?php endif; ?>
+            <input type="text" placeholder="Enter amount" name="amount" id="amount" required>
+
+            <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+            <button type="submit" class="AddProdbtn">Add Product</button>
+        </div>
+
     </div>
 
     <div class="container signin">

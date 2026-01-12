@@ -12,6 +12,7 @@ services:
     build: ./docker/php
     volumes:
       - '/home/mdr11/projects/online_shop:/var/www/html'
+      - ./docker/php/Xdebug.ini:/usr/local/etc/php/conf.d/docker-php-xdebug.ini
 
 
   postgres:

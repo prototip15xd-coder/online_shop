@@ -5,9 +5,9 @@ class User
     public function getRegistrate()
     {
         if (isset($_SESSION['userid'])) {
-            header("Location: ../catalog.php");
+            header("Location: /var/www/html/src/public/catalog.php");
         }
-        require_once '../registration_form.php';   ///???
+        require_once '/var/www/html/src/public/registration_form.php';
     }
 //    public function getLogin()
 //    {
@@ -45,7 +45,7 @@ class User
             }
 
         $errors = $errors ?? [];
-        require_once '../registration_form.php';
+        require_once '/var/www/html/src/public/registration_form.php';
     }
 
     private function validate(array $POST_DATA)
@@ -102,7 +102,7 @@ class User
                     $passworddb = $user['password'];
                     if (password_verify($PASSWORD, $passworddb)) {
                         $_SESSION['userid'] = $user['id'];
-                        header("Location: /catalog");
+                        require_once '/var/www/html/src/public/catalog.php';
                     } else {
                         $errors['PASSWORD'] = 'логин или пароль указаны неверно';
                     }
@@ -111,7 +111,7 @@ class User
 
             }
         }
-        require_once '../login_page.php';
+        require_once '/var/www/html/src/public/login_page.php';
     }
 
     public function profile() {
@@ -140,7 +140,7 @@ class User
                             'id' => $_SESSION['userid']
                     ]);
                 }
-                header("Location: ../profile.php");
+                require_once '/var/www/html/src/public/profile.php';
             }
 
             $stmt = $pdo->prepare("SELECT name, email, password FROM users WHERE id = :id");
@@ -148,9 +148,9 @@ class User
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $isEditing = isset($_GET['edit']);
-            require_once '../profile_page.php';
+            require_once '/var/www/html/src/public/profile_page.php';
         } else {
-            header("Location: /src/public/login_page.php");
+            require_once '/var/www/html/src/public/login_page.php';
 
         }
     }
@@ -171,9 +171,9 @@ class User
                WHERE user_products.user_id = :user_id");
             $stms ->execute(['user_id'=> $us_id]);
             $all_products = $stms->fetchAll(PDO::FETCH_ASSOC);
-            require_once '../cart_page.php';
+            require_once '/var/www/html/src/public/cart_page.php';
         } else {
-            header("Location: ../login");
+            require_once '/var/www/html/src/public/login.php';
         }
 
     }
