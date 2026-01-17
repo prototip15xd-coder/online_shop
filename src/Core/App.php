@@ -76,30 +76,16 @@ class App
             $product = new ProductController();
             $product->catalog();
         } elseif ($requestUri === '/profile') {
-
-            require_once '../Controllers/UserController.php';
-            $user = new UserController();
             if ($requestMethod === 'GET') {
-                $user->getProfile();
+                require_once '../Controllers/UserController.php';
+                $user = new UserController();
+                $user->profile();
             } elseif ($requestMethod === 'POST') {
-                $user->editProfile();
+                require_once '../Views/profile.php';
             } else {
                 echo "$requestMethod для адреса $requestUri не поддерживается";
             }
-
-
-            echo $requestMethod;
-            require_once '../Controllers/UserController.php';
-            $user = new UserController();
-            $user->profile();
-        } elseif ($requestUri === '/profile?edit=true') {         ////
-            echo $requestMethod;
-            require_once '../Controllers/UserController.php';
-            $user = new UserController();
-            $isEditing = isset($_GET['edit']); // ЧТО ЭТО???
-            echo $isEditing;
-            $user->profile();
-        } elseif ($requestUri === '/cart') {                      ////
+        } elseif ($requestUri === '/cart') {
             require_once '../Controllers/CartController.php';
             $user = new CartController();
             $user->cart();

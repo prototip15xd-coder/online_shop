@@ -108,7 +108,7 @@
     <div class="card">
         <div class="card-body">
             <?php if (!$isEditing): ?>
-                <a href="?edit=true" class="edit-mode-btn">
+                <a href="/profile" class="edit-mode-btn">
                     <i class="fa fa-pen fa-xs"></i> Редактировать профиль
                 </a>
             <?php endif; ?>
@@ -159,7 +159,7 @@
 
             <?php if ($isEditing): ?>
                 <div style="text-align: center; margin-top: 20px;">
-                    <button type="submit" class="save-btn">Сохранить</button>
+                    <a href="/profile" class="save-btn">Сохранить</a>
                     <a href="/profile" class="cancel-btn">Отмена</a>
                 </div>
                 </form>

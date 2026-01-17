@@ -111,31 +111,69 @@ class UserController
         if (isset($_SESSION['userid'])) {
             require_once '../Model/User.php';
             $userModel = new User();
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $newName = $_POST['name'];
-                $newEmail = $_POST['email'];
-                $newPassword = $_POST['password'];
-
-                if (!empty($newPassword)) {
-                    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-                    $userModel->UpdateByPassword($newName, $newEmail, $hashedPassword);
-
-                } else {
-                    $userModel->UpdateByName_Email($newName, $newEmail);
-                }
-                require_once '/var/www/html/src/public/profile.php';   //// КЛАСС ИЛИ ФУКНЦИЮ ВЫЗЫВАЙ??????
-            }
             $user = $userModel->UserbyDB();
 
-            $isEditing = isset($_GET['edit']);
+//            $isEditing = isset($_GET['edit']) && $_GET['edit'] == 'true';
+//
+//
+//            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//
+//                $newName = $_POST['name'] ?? $user['name'];
+//                $newEmail = $_POST['email'] ?? $user['email'];
+//                $newPassword = $_POST['password'] ?? '';
+//
+//                $nameChanged = ($newName !== $user['name']);
+//                $emailChanged = ($newEmail !== $user['email']);
+//                $passwordChanged = !empty($newPassword);
+//
+//                if ($passwordChanged) {
+//                    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+//                    $userModel->UpdateByPassword($newName, $newEmail, $hashedPassword);
+//                } else if ($nameChanged && $emailChanged) {
+//                    $userModel->UpdateByName_Email($newName, $newEmail);
+//                } else if ($nameChanged) {
+//                    $userModel->UpdateName($newName);
+//                } else if ($emailChanged) {
+//                    $userModel->UpdateEmail($newEmail);
+//                }
+//
+//                $user = $userModel->UserbyDB();
+//
+//                $isEditing = false;
+//            }
             require_once '/var/www/html/src/Views/profile.php';
         } else {
             require_once '/var/www/html/src/Views/login.php';
+        }
+    }
+    public function editProfile() {
+        if (isset($_SESSION['userid']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            require_once '../Model/User.php';
+            $userModel = new User();
+            $user = $userModel->UserbyDB();
+            $newName = $_POST['name'] ?? $user['name'];
+            $newEmail = $_POST['email'] ?? $user['email'];
+            $newPassword = $_POST['password'] ?? '';
+
+            $nameChanged = ($newName !== $user['name']);
+            $emailChanged = ($newEmail !== $user['email']);
+            $passwordChanged = !empty($newPassword);
+
+            if ($passwordChanged) {
+                $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                $userModel->UpdateByPassword($newName, $newEmail, $hashedPassword);
+            } else if ($nameChanged && $emailChanged) {
+                $userModel->UpdateByName_Email($newName, $newEmail);
+            } else if ($nameChanged) {
+                $userModel->UpdateName($newName);
+            } else if ($emailChanged) {
+                $userModel->UpdateEmail($newEmail);
+            }
+
+            $user = $userModel->UserbyDB();
 
         }
     }
-
-
 }
 
 ?>
