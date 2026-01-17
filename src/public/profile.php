@@ -35,7 +35,6 @@ if (isset($_SESSION['userid'])) {
     $stmt->execute(['id' => $_SESSION['userid']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $isEditing = isset($_GET['edit']);
     require_once './profile_page.php';
 } else {
     header("Location: /src/public/login_page.php");

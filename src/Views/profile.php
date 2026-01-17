@@ -160,7 +160,7 @@
             <?php if ($isEditing): ?>
                 <div style="text-align: center; margin-top: 20px;">
                     <button type="submit" class="save-btn">Сохранить</button>
-                    <a href="?" class="cancel-btn">Отмена</a>
+                    <a href="/profile" class="cancel-btn">Отмена</a>
                 </div>
                 </form>
             <?php endif; ?>
