@@ -1,10 +1,10 @@
 <?php
-class User
+class User extends Model
 {
+
     public function getbyEmail($email)
     {
-        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');   //ЭТА ЧАСТЬ КОДА ПРОВЕРЯЕТ НАЛИЧИЕ ПОЛЬЗОВАТЕЛЯ АДАПТИРУЙ ДЛЯ ТОВАРА !!!! В ФАЙЛЕ С КОРЗИНОЙ
-        $stms = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stms = $this->connection->prepare("SELECT * FROM users WHERE email = :email");
         $stms->execute(['email' => $email]);
         $result = $stms->fetch();
 
@@ -13,8 +13,7 @@ class User
 
     public function count_getbyEmail(string $email)
     {
-        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');   //ЭТА ЧАСТЬ КОДА ПРОВЕРЯЕТ НАЛИЧИЕ ПОЛЬЗОВАТЕЛЯ АДАПТИРУЙ ДЛЯ ТОВАРА !!!! В ФАЙЛЕ С КОРЗИНОЙ
-        $stms = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stms = $this->connection->prepare("SELECT * FROM users WHERE email = :email");
         $stms->execute(['email' => $email]);
         $stms->rowCount();
         return $stms;
@@ -22,8 +21,7 @@ class User
 
     public function password_hash($password)
     {
-        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
-        $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+        $stmt = $this->connection->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
         $stmt->execute(['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $password]);
         return $stmt;
     }
@@ -31,8 +29,7 @@ class User
 
     public function UpdateByPassword($newName, $newEmail, $hashedPassword)  /// сделай опциональность для редактирования каждого парметра
     {
-        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
-        $stmt = $pdo->prepare("UPDATE users SET name = :name, email = :email, password = :password WHERE id = :id");
+        $stmt = $this->connection->prepare("UPDATE users SET name = :name, email = :email, password = :password WHERE id = :id");
         $stmt->execute([
             'name' => $newName,
             'email' => $newEmail,
@@ -43,8 +40,7 @@ class User
 
     public function UpdateByName_Email($newName, $newEmail)
     {
-        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
-        $stmt = $pdo->prepare("UPDATE users SET name = :name, email = :email WHERE id = :id");
+        $stmt = $this->connection->prepare("UPDATE users SET name = :name, email = :email WHERE id = :id");
         $stmt->execute([
             'name' => $newName,
             'email' => $newEmail,
@@ -53,16 +49,14 @@ class User
     }
     public function UserbyDB()
     {
-        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
-        $stmt = $pdo->prepare("SELECT name, email, password FROM users WHERE id = :id");
+        $stmt = $this->connection->prepare("SELECT name, email, password FROM users WHERE id = :id");
         $stmt->execute(['id' => $_SESSION['userid']]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         return $user;
     }
     public function UpdateName($newName)
     {
-        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
-        $stmt = $pdo->prepare("UPDATE users SET name = :name WHERE id = :id");
+        $stmt = $this->connection->prepare("UPDATE users SET name = :name WHERE id = :id");
         $stmt->execute([
             'name' => $newName,
             'id' => $_SESSION['userid']
@@ -71,8 +65,7 @@ class User
 
     public function UpdateEmail($newEmail)
     {
-        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
-        $stmt = $pdo->prepare("UPDATE users SET email = :email WHERE id = :id");
+        $stmt = $this->connection->prepare("UPDATE users SET email = :email WHERE id = :id");
         $stmt->execute([
             'email' => $newEmail,
             'id' => $_SESSION['userid']

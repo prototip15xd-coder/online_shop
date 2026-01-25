@@ -4,7 +4,7 @@
 
 class UserController
 {
-    public function getRegistrate()
+    public function getRegistration()
     {
         if (isset($_SESSION['userid'])) {
             header("Location: /catalog");   //// вызов класса!!!??
@@ -12,14 +12,7 @@ class UserController
         }
         require_once '/var/www/html/src/Views/registration.php';
     }
-    public function getProfile()
-    {
-        if (isset($_SESSION['userid'])) {
-            header("Location: /profile");   //// вызов класса!!!??
-            exit;
-        }
-        require_once '/var/www/html/src/Views/profile.php';
-    }
+
     function registration()
     {
         $errors = $this->validate($_POST);
@@ -76,15 +69,15 @@ class UserController
         }
     }
 
-    public function login(array $POST_DATA)
+    public function login()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors = [];
-            if (empty($POST_DATA['login']) || empty($POST_DATA['password'])) {
+            if (empty($_POST['login']) || empty($_POST['password'])) {
                 $errors['USERNAME'] = 'Все поля должны быть заполнены';
             } else {
-                $email = $POST_DATA['login'];
-                $PASSWORD = $POST_DATA['password'];
+                $email = $_POST['login'];
+                $PASSWORD = $_POST['password'];
 
                 require_once '../Model/User.php';
                 $userModel = new User();
@@ -96,14 +89,18 @@ class UserController
                     $passworddb = $user['password'];
                     if (password_verify($PASSWORD, $passworddb)) {
                         $_SESSION['userid'] = $user['id'];
-                        require_once '/var/www/html/src/public/catalog.php';     // вызываем класс/функцию
+                        require_once '/var/www/html/src/Controllers/ProductController.php';
+                        $products = new ProductController();
+                        $products->catalog();
+                        //require_once '/var/www/html/src/Views/catalog.php';     // вызываем класс/функцию
                     } else {
                         $errors['PASSWORD'] = 'логин или пароль указаны неверно';
                     }
                 }
             }
+        } else {
+            require_once '/var/www/html/src/Views/login.php';
         }
-        require_once '/var/www/html/src/Views/login.php';
     }
 
     public function profile()
@@ -112,69 +109,53 @@ class UserController
             require_once '../Model/User.php';
             $userModel = new User();
             $user = $userModel->UserbyDB();
-
-//            $isEditing = isset($_GET['edit']) && $_GET['edit'] == 'true';
-//
-//
-//            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//
-//                $newName = $_POST['name'] ?? $user['name'];
-//                $newEmail = $_POST['email'] ?? $user['email'];
-//                $newPassword = $_POST['password'] ?? '';
-//
-//                $nameChanged = ($newName !== $user['name']);
-//                $emailChanged = ($newEmail !== $user['email']);
-//                $passwordChanged = !empty($newPassword);
-//
-//                if ($passwordChanged) {
-//                    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-//                    $userModel->UpdateByPassword($newName, $newEmail, $hashedPassword);
-//                } else if ($nameChanged && $emailChanged) {
-//                    $userModel->UpdateByName_Email($newName, $newEmail);
-//                } else if ($nameChanged) {
-//                    $userModel->UpdateName($newName);
-//                } else if ($emailChanged) {
-//                    $userModel->UpdateEmail($newEmail);
-//                }
-//
-//                $user = $userModel->UserbyDB();
-//
-//                $isEditing = false;
-//            }
             require_once '/var/www/html/src/Views/profile.php';
         } else {
             require_once '/var/www/html/src/Views/login.php';
         }
     }
-    public function editProfile() {
-        if (isset($_SESSION['userid']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    public function profileEdit() {
+        if (isset($_SESSION['userid'])) {
             require_once '../Model/User.php';
             $userModel = new User();
             $user = $userModel->UserbyDB();
-            $newName = $_POST['name'] ?? $user['name'];
-            $newEmail = $_POST['email'] ?? $user['email'];
-            $newPassword = $_POST['password'] ?? '';
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $newName = $_POST['name'] ?? $user['name'];
+                $newEmail = $_POST['email'] ?? $user['email'];
+                $newPassword = $_POST['password'] ?? '';
 
-            $nameChanged = ($newName !== $user['name']);
-            $emailChanged = ($newEmail !== $user['email']);
-            $passwordChanged = !empty($newPassword);
+                $nameChanged = ($newName !== $user['name']);
+                $emailChanged = ($newEmail !== $user['email']);
+                $passwordChanged = !empty($newPassword);
 
-            if ($passwordChanged) {
-                $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-                $userModel->UpdateByPassword($newName, $newEmail, $hashedPassword);
-            } else if ($nameChanged && $emailChanged) {
-                $userModel->UpdateByName_Email($newName, $newEmail);
-            } else if ($nameChanged) {
-                $userModel->UpdateName($newName);
-            } else if ($emailChanged) {
-                $userModel->UpdateEmail($newEmail);
+                if ($passwordChanged) {
+                    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                    $userModel->UpdateByPassword($newName, $newEmail, $hashedPassword);
+                } else if ($nameChanged && $emailChanged) {
+                    $userModel->UpdateByName_Email($newName, $newEmail);
+                } else if ($nameChanged) {
+                    $userModel->UpdateName($newName);
+                } else if ($emailChanged) {
+                    $userModel->UpdateEmail($newEmail);
+                }
+
+                header('Location: /profile');
+                exit;
+            } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                require_once '/var/www/html/src/Views/profile_edit.php';
+            } else {
+                header('Location: /login');
+                exit;
             }
 
-            $user = $userModel->UserbyDB();
-
         }
+    }
+
+    public function logout()
+    {
+        session_destroy();
+        header('Location: /login');
     }
 }
 
 ?>
-

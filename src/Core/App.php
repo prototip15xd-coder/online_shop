@@ -2,7 +2,7 @@
 
 class App
 {
-    private array $routes =[
+    private array $routes = [
         '/registration' => [
             'GET' => [
                 'class' => 'UserController',
@@ -10,13 +10,13 @@ class App
             ],
             'POST' => [
                 'class' => 'UserController',
-                'method' => 'Registration',
+                'method' => 'registration',
             ]
         ],
         '/login' => [
             'GET' => [
                 'class' => 'UserController',
-                'method' => 'getLogin',
+                'method' => 'login',
             ],
             'POST' => [
                 'class' => 'UserController',
@@ -25,8 +25,12 @@ class App
         ],
         '/catalog' => [
             'GET' => [
-                'class' => 'CatalogController',
+                'class' => 'ProductController',
                 'method' => 'catalog',
+            ],
+            'POST' => [
+                'class' => 'ProductController',
+                'method' => 'add_product',
             ]
         ],
         '/profile' => [
@@ -34,14 +38,33 @@ class App
                 'class' => 'UserController',
                 'method' => 'profile',
             ],
-            'POST' => [] //СДЕЛАЙ ЗДЕСЬ КАК РАЗ РЕДАКЦИЮ ПРОФИЛЯ!!!
-        ],
-        '/add_product' => [
-            'GET' => [
-                'class' => 'ProductController',
-                'method' => 'add_product',
+            'POST' => [
+                'class' => 'UserController',
+                'method' => 'profile',
             ]
         ],
+        '/profile-edit' => [
+            'GET' => [
+                'class' => 'UserController',
+                'method' => 'profileEdit',
+            ],
+            'POST' => [
+                'class' => 'UserController',
+                'method' => 'profileEdit',
+            ]
+        ],
+        '/cart' => [
+            'GET' => [
+                'class' => 'CartController',
+                'method' => 'cart',
+            ]
+        ],
+        '/logout' => [
+            'GET' => [
+                'class' => 'UserController',
+                'method' => 'logout',
+            ]
+        ]
 
     ];
 
@@ -51,48 +74,23 @@ class App
 
         $requestUri = $_SERVER['REQUEST_URI'];
         $requestMethod = $_SERVER['REQUEST_METHOD'];
+        if (isset($this->routes[$requestUri])) {   //если перестанет работать см урок разбор рефакторинга маршрутизации
+            $routeMethod = $this->routes[$requestUri];
+            if (isset($routeMethod[$requestMethod])) {
+                $handler = $routeMethod[$requestMethod];
 
+                $class = $handler['class'];
+                $method = $handler['method'];
 
-        if ($requestUri === '/registration') {
-            require_once '../Controllers/UserController.php';
-            $user = new UserController();
-            if ($requestMethod === 'GET') {
-                $user->getRegistrate();
-            } elseif ($requestMethod === 'POST') {
-                $user->registration();
+                require_once "../Controllers/{$class}.php";
+                $controller = new $class();
+                $controller->$method();
             } else {
-                echo "$requestMethod для адреса $requestUri не поддерживается";
+                echo "$requestMethod не поддерживается для $requestUri";
             }
-        } elseif ($requestUri === '/login') {
-            require_once '../Controllers/UserController.php';
-            $user = new UserController();
-            $user->login($_POST);
-        } elseif ($requestUri === '/add_product') {
-            require_once '../Controllers/ProductController.php';
-            $product = new ProductController();
-            $product->add_product($_POST, $_SESSION);
-        } elseif ($requestUri === '/catalog') {
-            require_once '../Controllers/ProductController.php';
-            $product = new ProductController();
-            $product->catalog();
-        } elseif ($requestUri === '/profile') {
-            if ($requestMethod === 'GET') {
-                require_once '../Controllers/UserController.php';
-                $user = new UserController();
-                $user->profile();
-            } elseif ($requestMethod === 'POST') {
-                require_once '../Views/profile.php';
-            } else {
-                echo "$requestMethod для адреса $requestUri не поддерживается";
-            }
-        } elseif ($requestUri === '/cart') {
-            require_once '../Controllers/CartController.php';
-            $user = new CartController();
-            $user->cart();
         } else {
-            echo("$requestUri");
             http_response_code(404);
-            require_once '../404.php';
+            require_once '../Views/404.php';
         }
     }
 }

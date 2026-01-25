@@ -1,12 +1,10 @@
 <?php
-
-class Cart
+class Cart extends Model
 {
     public function cartbyDB()
     {
-        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
         $us_id = $_SESSION['userid'];
-        $stms = $pdo->prepare("SELECT products.name,
+        $stms = $this->connection->prepare("SELECT products.name,
                products.description,
                products.price,
                products.image_url,

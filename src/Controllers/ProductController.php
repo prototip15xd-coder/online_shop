@@ -5,25 +5,24 @@ class ProductController
     public function catalog()
     {
         if (isset($_SESSION['userid'])) {
-            require_once '../Model/Product.php';
             $productModel = new Product();
             $products = $productModel->productByDB();
             require_once '/var/www/html/src/Views/catalog.php';
         } else {
-            require_once '/var/www/html/src/public/login'; //КЛАСС ИЛИ ФУНКЦИЮ ВЫЗЫВАЙ
+            require_once '/var/www/html/src/Views/login.php';
 
         }
     }
 
-    public function add_product_validate($POST_DATA, $SESSION_DATA)
+    public function add_product_validate()
     {
         $errors = [];
 
-        if (!isset($SESSION_DATA['userid'])) {
-            require_once '/var/www/html/src/public/login';
+        if (!isset($_SESSION['userid'])) {
+            require_once '/var/www/html/src/Views/login';
         } else {
-            $amount = $POST_DATA['amount'];
-            if (empty($POST_DATA['product_id']) || empty($POST_DATA['amount'])) {
+            $amount = $_POST['amount'];
+            if (empty($_POST['product_id']) || empty($_POST['amount'])) {
                 $errors['product_id'] = 'Выберите товар и количество';
             } else {
                 if (!is_numeric($amount) || $amount <= 0) {
@@ -34,13 +33,11 @@ class ProductController
         return $errors;
     }
 
-    public function add_product($POST_DATA, $SESSION_DATA)
+    public function add_product()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $errors = $this->add_product_validate($_POST, $_SESSION);
+            $errors = $this->add_product_validate();
             if (empty($errors)) {
-
-                require_once '../Model/Product.php';
                 $productModel = new Product();
                 $productModel->validate_product();
                 if ($productModel === 0) {
@@ -52,7 +49,7 @@ class ProductController
 
         }
         $errors = $errors ?? [];
-        require_once '/var/www/html/src/Views/add_product.php';
+        $this->catalog();
     }
 
 }

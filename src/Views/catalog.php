@@ -8,6 +8,11 @@
     <body>
         <div class="container">
             <a href="./profile" target="_blank">Мой профиль</a>
+            <div class="menu-item">
+                <a href="/logout" class="edit-mode-btn">
+                    <i class="fa fa fa-xs"></i> Выйти из профиля
+                </a>
+            </div>
             <h3>Catalog</h3>
             <div class="card-deck">
                 <?php foreach ($products as $product): ?>
@@ -22,7 +27,7 @@
                                 </div>
                             </div>
                         </a>
-                        <form action="/add_product" method = "POST">
+                        <form action="/catalog" method = "POST">
                             <div class="container">
 
                                 <input type="hidden" placeholder="Enter product-id" name="product_id" value="<?php echo $product['id'] ?>" id="product_id" required>

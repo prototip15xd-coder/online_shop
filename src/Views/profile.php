@@ -91,14 +91,32 @@
         <img src="https://imdezcode.files.wordpress.com/2020/02/imdezcode-logo.png" alt="" width="100" height="100">
 
         <div class="name">
-            <?php echo $user['name']?>
+            <?php require_once '../Controllers/UserController.php'; ?>
+            <?php echo $_SERVER['REQUEST_METHOD']; ?>
+            <?php echo $user['name'];?>
         </div>
     </div>
 
     <div class="sidenav-url">
         <div class="url">
-            <a href="#profile" class="active">Profile</a>
+            <div class="menu-item">
+                <a href="/profile" class="active">Profile</a>
+            </div>
             <hr align="center">
+
+            <div class="menu-item">
+                <a href="/catalog" class="edit-mode-btn">
+                    <i class="fa fa fa-xs"></i> Перейти в каталог
+                </a>
+            </div>
+
+            <hr align="center">
+
+            <div class="menu-item">
+                <a href="/logout" class="edit-mode-btn">
+                    <i class="fa fa fa-xs"></i> Выйти из профиля
+                </a>
+            </div>
         </div>
     </div>
 </div>
@@ -107,63 +125,34 @@
     <h2>IDENTITY</h2>
     <div class="card">
         <div class="card-body">
-            <?php if (!$isEditing): ?>
-                <a href="/profile" class="edit-mode-btn">
+                <a href="/profile-edit" class="edit-mode-btn" >
                     <i class="fa fa-pen fa-xs"></i> Редактировать профиль
                 </a>
-            <?php endif; ?>
-            <?php if ($isEditing): ?>
-                <form method="POST">
-            <?php endif; ?>
             <table>
                 <tbody>
                 <tr>
                     <td>Name</td>
                     <td>:</td>
                     <td>
-                        <?php if ($isEditing): ?>
-                            <input type="text" name="name" class="edit-input" value="<?php echo $user['name'] ?>">
-                        <?php else: ?>
                             <?php echo $user['name'] ?>
-                        <?php endif; ?>
                 </tr>
                 <tr>
                     <td>Email</td>
                     <td>:</td>
                     <td>
-                        <?php if ($isEditing): ?>
-                            <input type="email" name="email" class="edit-input" value="<?php echo $user['email'] ?>">
-                        <?php else: ?>
                             <?php echo $user['email'] ?>
-                        <?php endif; ?>
                 </tr>
                 <tr>
                     <td>password</td>
                     <td>:</td>
                     <td>
-                        <?php if ($isEditing): ?>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <input type="password" name="password" class="edit-input"
-                                       placeholder="Новый пароль (не заполняйте, если не меняете)">
-                                <div style="font-size: 12px; color: #666;">
-                                    ⓘ Оставьте пустым, чтобы сохранить текущий пароль
-                                </div>
-                            </div>
-                        <?php else: ?>
                             ********
-                        <?php endif; ?>
                 </tr>
-
                 </tbody>
             </table>
 
-            <?php if ($isEditing): ?>
-                <div style="text-align: center; margin-top: 20px;">
-                    <a href="/profile" class="save-btn">Сохранить</a>
-                    <a href="/profile" class="cancel-btn">Отмена</a>
-                </div>
-                </form>
-            <?php endif; ?>
+
+
         </div>
     </div>
 </div>
@@ -173,6 +162,16 @@
 <style>
 /* Import Font Dancing Script */
 @import url(https://fonts.googleapis.com/css?family=Dancing+Script);
+
+.menu-item {
+    margin: 8px 0;
+    padding: 5px 0;
+}
+
+.menu-item a {
+    display: block;
+    padding: 8px 15px;
+}
 
 * {
 margin: 0;

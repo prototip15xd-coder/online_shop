@@ -35,7 +35,7 @@ if (isset($_SESSION['userid'])) {
     $stmt->execute(['id' => $_SESSION['userid']]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    require_once './profile_page.php';
+    require_once '../Views/profile.php';
 } else {
     header("Location: /src/public/login_page.php");
 
