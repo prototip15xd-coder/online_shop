@@ -1,17 +1,10 @@
 <?php
 
 $autoload = function(string $className) {
-    $path = "../Core/$className.php";
-    $path1 = "../Controller/$className.php";
-    $path2 = "../Model/$className.php";
+    $className = str_replace('\\', '/', $className);
+    $path = "../$className.php";
     if (file_exists($path)) {
         require_once $path;
-        return true;
-    } elseif (file_exists($path1)) {
-        require_once $path1;
-        return true;
-    } elseif (file_exists($path2)) {
-        require_once $path2;
         return true;
     }
     return false;
@@ -19,5 +12,5 @@ $autoload = function(string $className) {
 
 spl_autoload_register($autoload);
 
-$app = new App();
+$app = new \Core\App();
 $app->Run();

@@ -1,4 +1,7 @@
 <?php
+
+namespace Model;
+
 class Cart extends Model
 {
     public function cartbyDB()
@@ -13,7 +16,7 @@ class Cart extends Model
                JOIN products ON user_products.product_id = products.id
                WHERE user_products.user_id = :user_id");
         $stms->execute(['user_id' => $us_id]);
-        $all_products = $stms->fetchAll(PDO::FETCH_ASSOC);
+        $all_products = $stms->fetchAll(\PDO::FETCH_ASSOC);
         return $all_products;
     }
 }

@@ -1,4 +1,7 @@
 <?php
+
+namespace Model;
+
 class User extends Model
 {
 
@@ -51,7 +54,7 @@ class User extends Model
     {
         $stmt = $this->connection->prepare("SELECT name, email, password FROM users WHERE id = :id");
         $stmt->execute(['id' => $_SESSION['userid']]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $user;
     }
     public function UpdateName($newName)

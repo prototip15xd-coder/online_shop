@@ -1,6 +1,9 @@
 <?php
 
+namespace Controllers;
 
+use Model\User;
+use Controllers\ProductController;
 
 class UserController
 {
@@ -17,7 +20,6 @@ class UserController
     {
         $errors = $this->validate($_POST);
         if (empty($errors)) {
-            require_once '../Model/User.php';
             $userModel = new User();
             $chekemail = $userModel->count_getbyEmail($_POST['email']);
             if ($chekemail > 0) {
@@ -27,6 +29,8 @@ class UserController
                 $userModel-> password_hash($password);
 
                 $user = $userModel->getByEmail($_POST['email']);
+                header("Location: /catalog");
+                exit;
             }
         }
 
@@ -79,8 +83,7 @@ class UserController
                 $email = $_POST['login'];
                 $PASSWORD = $_POST['password'];
 
-                require_once '../Model/User.php';
-                $userModel = new User();
+                $userModel = new \Model\User();
                 $user = $userModel->getByEmail($email);
 
                 if ($user === false) {
@@ -89,10 +92,8 @@ class UserController
                     $passworddb = $user['password'];
                     if (password_verify($PASSWORD, $passworddb)) {
                         $_SESSION['userid'] = $user['id'];
-                        require_once '/var/www/html/src/Controllers/ProductController.php';
                         $products = new ProductController();
                         $products->catalog();
-                        //require_once '/var/www/html/src/Views/catalog.php';     // вызываем класс/функцию
                     } else {
                         $errors['PASSWORD'] = 'логин или пароль указаны неверно';
                     }
@@ -106,7 +107,6 @@ class UserController
     public function profile()
     {
         if (isset($_SESSION['userid'])) {
-            require_once '../Model/User.php';
             $userModel = new User();
             $user = $userModel->UserbyDB();
             require_once '/var/www/html/src/Views/profile.php';
@@ -116,7 +116,6 @@ class UserController
     }
     public function profileEdit() {
         if (isset($_SESSION['userid'])) {
-            require_once '../Model/User.php';
             $userModel = new User();
             $user = $userModel->UserbyDB();
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -1,67 +1,69 @@
 <?php
 
+namespace Core;
+
 class App
 {
     private array $routes = [
         '/registration' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' => \Controllers\UserController::class, //'UserController',
                 'method' => 'getRegistration',
             ],
             'POST' => [
-                'class' => 'UserController',
+                'class' => \Controllers\UserController::class, //'UserController',
                 'method' => 'registration',
             ]
         ],
         '/login' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' => \Controllers\UserController::class,//'UserController',
                 'method' => 'login',
             ],
             'POST' => [
-                'class' => 'UserController',
+                'class' => \Controllers\UserController::class, //'UserController',
                 'method' => 'login',
             ]
         ],
         '/catalog' => [
             'GET' => [
-                'class' => 'ProductController',
+                'class' => \Controllers\ProductController::class,//'ProductController',
                 'method' => 'catalog',
             ],
             'POST' => [
-                'class' => 'ProductController',
+                'class' => \Controllers\ProductController::class,//'ProductController',
                 'method' => 'add_product',
             ]
         ],
         '/profile' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' => \Controllers\UserController::class,//'UserController',
                 'method' => 'profile',
             ],
             'POST' => [
-                'class' => 'UserController',
+                'class' => \Controllers\UserController::class,//'UserController',
                 'method' => 'profile',
             ]
         ],
         '/profile-edit' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' => \Controllers\UserController::class,//'UserController',
                 'method' => 'profileEdit',
             ],
             'POST' => [
-                'class' => 'UserController',
+                'class' => \Controllers\UserController::class,//'UserController',
                 'method' => 'profileEdit',
             ]
         ],
         '/cart' => [
             'GET' => [
-                'class' => 'CartController',
+                'class' => \Controllers\CartController::class,//'CartController',
                 'method' => 'cart',
             ]
         ],
         '/logout' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' => \Controllers\UserController::class,//'UserController',
                 'method' => 'logout',
             ]
         ]
@@ -82,7 +84,6 @@ class App
                 $class = $handler['class'];
                 $method = $handler['method'];
 
-                require_once "../Controllers/{$class}.php";
                 $controller = new $class();
                 $controller->$method();
             } else {

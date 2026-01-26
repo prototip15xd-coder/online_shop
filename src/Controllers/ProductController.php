@@ -1,5 +1,8 @@
 <?php
 
+namespace Controllers;
+use Model\Product;
+
 class ProductController
 {
     public function catalog()

@@ -1,5 +1,8 @@
 <?php
 
+namespace Controllers;
+
+use Model\Cart;
 
 class CartController
 {
