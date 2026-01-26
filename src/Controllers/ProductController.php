@@ -5,11 +5,15 @@ use Model\Product;
 
 class ProductController
 {
+    private Product $productModel;
+
+    public function __construct() {
+        $this->productModel = new Product();
+    }
     public function catalog()
     {
         if (isset($_SESSION['userid'])) {
-            $productModel = new Product();
-            $products = $productModel->productByDB();
+            $products = $this->productModel->productByDB();
             require_once '/var/www/html/src/Views/catalog.php';
         } else {
             require_once '/var/www/html/src/Views/login.php';
@@ -41,12 +45,11 @@ class ProductController
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors = $this->add_product_validate();
             if (empty($errors)) {
-                $productModel = new Product();
-                $productModel->validate_product();
-                if ($productModel === 0) {
+                $this->productModel->validate_product();
+                if ($this->productModel === 0) {
                     $errors['product_id'] = 'Такого товара не существует';
                 } else {
-                    $productModel->add_productDB();
+                    $this->productModel->add_productDB();
                 }
             }
 

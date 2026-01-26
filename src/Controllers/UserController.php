@@ -2,15 +2,23 @@
 
 namespace Controllers;
 
+use Model\Product;
 use Model\User;
 use Controllers\ProductController;
 
 class UserController
 {
+    private User $userModel;
+    private ProductController $productController;
+
+    public function __construct() {
+        $this->userModel = new User();
+        $this->productController = new ProductController();
+    }
     public function getRegistration()
     {
         if (isset($_SESSION['userid'])) {
-            header("Location: /catalog");   //// вызов класса!!!??
+            header("Location: /catalog");
             exit;
         }
         require_once '/var/www/html/src/Views/registration.php';
@@ -20,15 +28,14 @@ class UserController
     {
         $errors = $this->validate($_POST);
         if (empty($errors)) {
-            $userModel = new User();
-            $chekemail = $userModel->count_getbyEmail($_POST['email']);
+            $chekemail = $this->userModel->count_getbyEmail($_POST['email']);
             if ($chekemail > 0) {
                 $errors['email'] = 'Такой email уже существует';
             } else {
                 $password = password_hash($_POST['psw'], PASSWORD_DEFAULT);
-                $userModel-> password_hash($password);
+                $this->userModel-> password_hash($password);
 
-                $user = $userModel->getByEmail($_POST['email']);
+                $user = $this->userModel->getByEmail($_POST['email']);
                 header("Location: /catalog");
                 exit;
             }
@@ -83,8 +90,7 @@ class UserController
                 $email = $_POST['login'];
                 $PASSWORD = $_POST['password'];
 
-                $userModel = new \Model\User();
-                $user = $userModel->getByEmail($email);
+                $user = $this->userModel->getByEmail($email);
 
                 if ($user === false) {
                     $errors['PASSWORD'] = 'логин или пароль указаны неверно';
@@ -92,8 +98,7 @@ class UserController
                     $passworddb = $user['password'];
                     if (password_verify($PASSWORD, $passworddb)) {
                         $_SESSION['userid'] = $user['id'];
-                        $products = new ProductController();
-                        $products->catalog();
+                        $this->productController->catalog();
                     } else {
                         $errors['PASSWORD'] = 'логин или пароль указаны неверно';
                     }
@@ -107,8 +112,7 @@ class UserController
     public function profile()
     {
         if (isset($_SESSION['userid'])) {
-            $userModel = new User();
-            $user = $userModel->UserbyDB();
+            $user = $this->userModel->UserbyDB();
             require_once '/var/www/html/src/Views/profile.php';
         } else {
             require_once '/var/www/html/src/Views/login.php';
@@ -116,8 +120,7 @@ class UserController
     }
     public function profileEdit() {
         if (isset($_SESSION['userid'])) {
-            $userModel = new User();
-            $user = $userModel->UserbyDB();
+            $user = $this->userModel->UserbyDB();
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $newName = $_POST['name'] ?? $user['name'];
                 $newEmail = $_POST['email'] ?? $user['email'];
@@ -129,13 +132,13 @@ class UserController
 
                 if ($passwordChanged) {
                     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-                    $userModel->UpdateByPassword($newName, $newEmail, $hashedPassword);
+                    $this->userModel->UpdateByPassword($newName, $newEmail, $hashedPassword);
                 } else if ($nameChanged && $emailChanged) {
-                    $userModel->UpdateByName_Email($newName, $newEmail);
+                    $this->userModel->UpdateByName_Email($newName, $newEmail);
                 } else if ($nameChanged) {
-                    $userModel->UpdateName($newName);
+                    $this->userModel->UpdateName($newName);
                 } else if ($emailChanged) {
-                    $userModel->UpdateEmail($newEmail);
+                    $this->userModel->UpdateEmail($newEmail);
                 }
 
                 header('Location: /profile');
