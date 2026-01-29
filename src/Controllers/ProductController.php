@@ -29,12 +29,8 @@ class ProductController
             require_once '/var/www/html/src/Views/login';
         } else {
             $amount = $_POST['amount'];
-            if (empty($_POST['product_id']) || empty($_POST['amount'])) {
-                $errors['product_id'] = 'Выберите товар и количество';
-            } else {
-                if (!is_numeric($amount) || $amount <= 0) {
-                    $errors['amount'] = 'Количество товаров должно быть корректным числом';
-                }
+            if (empty($_POST['amount'] || !is_numeric($amount) || $amount <= 0)) {
+                $errors['product_id'] = 'Количество товаров должно быть корректным числом';
             }
         }
         return $errors;
@@ -46,13 +42,8 @@ class ProductController
             $errors = $this->add_product_validate();
             if (empty($errors)) {
                 $this->productModel->validate_product();
-                if ($this->productModel === 0) {
-                    $errors['product_id'] = 'Такого товара не существует';
-                } else {
-                    $this->productModel->add_productDB();
+                $this->productModel->add_productDB();
                 }
-            }
-
         }
         $errors = $errors ?? [];
         $this->catalog();

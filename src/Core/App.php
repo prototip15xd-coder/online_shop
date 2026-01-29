@@ -18,7 +18,7 @@ class App
         '/login' => [
             'GET' => [
                 'class' => \Controllers\UserController::class,//'UserController',
-                'method' => 'login',
+                'method' => 'getLogin',
             ],
             'POST' => [
                 'class' => \Controllers\UserController::class, //'UserController',
@@ -66,6 +66,22 @@ class App
                 'class' => \Controllers\UserController::class,//'UserController',
                 'method' => 'logout',
             ]
+        ],
+        '/create-order' => [
+            'GET' => [
+                'class' => \Controllers\OrderController::class,
+                'method' => 'getCheckoutForm',
+            ],
+            'POST' => [
+                'class' => \Controllers\OrderController::class,
+                'method' => 'handleCheckoutOrder',
+            ]
+        ],
+        '/orders' => [
+            'GET' => [
+                'class' => \Controllers\OrderController::class,
+                'method' => 'getAllOrders',
+            ]
         ]
 
     ];
@@ -93,5 +109,11 @@ class App
             http_response_code(404);
             require_once '../Views/404.php';
         }
+    }
+
+    public function addRoute(string $route, string $routeMethod, string $className, string $classMethod){
+        $this->routes[$route][$routeMethod] = [
+                'class' => $className,
+                'method' => $classMethod ];
     }
 }

@@ -4,14 +4,52 @@ namespace Model;
 
 class User extends Model
 {
+    private int $id;
+    private string $name;
+    private string $email;
+    private string $password;
 
-    public function getbyEmail($email)
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function objUser(array $user) {
+        $obj = new self();
+        $obj->id = $user["id"];
+        $obj->name = $user["name"];
+        $obj->email = $user["email"];
+        $obj->password = $user["password"];
+        return $obj;
+    }
+
+
+
+    public function getbyEmail(string $email): User|null
     {
         $stms = $this->connection->prepare("SELECT * FROM users WHERE email = :email");
         $stms->execute(['email' => $email]);
         $result = $stms->fetch();
-
-        return $result;
+        if ($result === false) {
+            return null;
+        }
+        $obj = $self->objUser($result);
+        return $obj;
     }
 
     public function count_getbyEmail(string $email)
@@ -55,7 +93,8 @@ class User extends Model
         $stmt = $this->connection->prepare("SELECT name, email, password FROM users WHERE id = :id");
         $stmt->execute(['id' => $_SESSION['userid']]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
-        return $user;
+        $obj = $self->objUser($user);
+        return $obj;
     }
     public function UpdateName($newName)
     {

@@ -1,5 +1,7 @@
 <?php
 
+use Controllers\UserController;
+
 $autoload = function(string $className) {
     $className = str_replace('\\', '/', $className);
     $path = "../$className.php";
@@ -13,4 +15,19 @@ $autoload = function(string $className) {
 spl_autoload_register($autoload);
 
 $app = new \Core\App();
+$app->addRoute('/registration', 'GET', \Controllers\UserController::class , 'getRegistration');
+$app->addRoute('/registration', 'POST', \Controllers\UserController::class , 'registration');
+$app->addRoute('/login', 'GET', \Controllers\UserController::class , 'getLogin');
+$app->addRoute('/login', 'POST', \Controllers\UserController::class , 'login');
+$app->addRoute('/catalog', 'GET', \Controllers\ProductController::class , 'catalog');
+$app->addRoute('/catalog', 'POST', \Controllers\ProductController::class, 'getLogin');
+$app->addRoute('/profile', 'GET', \Controllers\UserController::class , 'profile');
+$app->addRoute('/profile', 'POST', \Controllers\UserController::class , 'profile');
+$app->addRoute('/profile-edit', 'GET', \Controllers\UserController::class , 'profileEdit');
+$app->addRoute('/profile-edit', 'POST', \Controllers\UserController::class , 'profileEdit');
+$app->addRoute('/cart', 'GET', \Controllers\CartController::class , 'cart');
+$app->addRoute('/logout', 'GET', \Controllers\UserController::class , 'logout');
+$app->addRoute('/create-order', 'GET', \Controllers\OrderController::class , 'getCheckoutForm');
+$app->addRoute('/create-order', 'POST', \Controllers\OrderController::class , 'handleCheckoutOrder');
+$app->addRoute('/orders', 'GET', \Controllers\OrderController::class , 'getAllOrders');
 $app->Run();

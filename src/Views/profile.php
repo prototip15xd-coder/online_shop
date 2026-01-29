@@ -92,7 +92,6 @@
 
         <div class="name">
             <?php require_once '../Controllers/UserController.php'; ?>
-            <?php echo $_SERVER['REQUEST_METHOD']; ?>
             <?php echo $user['name'];?>
         </div>
     </div>
@@ -105,8 +104,20 @@
             <hr align="center">
 
             <div class="menu-item">
-                <a href="/catalog" class="edit-mode-btn">
+                <a href="/catalog" class="catalog">
                     <i class="fa fa fa-xs"></i> Перейти в каталог
+                </a>
+            </div>
+            <hr align="center">
+            <div class="menu-item">
+                <a href="/cart" class="cart">
+                    <i class="fa fa fa-xs"></i> Корзина
+                </a>
+            </div>
+            <hr align="center">
+            <div class="menu-item">
+                <a href="/user-orders" class="user-orders">
+                    <i class="fa fa fa-xs"></i> Мои заказы
                 </a>
             </div>
 
@@ -117,6 +128,7 @@
                     <i class="fa fa fa-xs"></i> Выйти из профиля
                 </a>
             </div>
+
         </div>
     </div>
 </div>
