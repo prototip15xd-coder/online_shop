@@ -8,6 +8,7 @@
     <div class="container">
         <a href="/profile" target="_blank">Мой профиль<br></a>
         <a href="/cart" class="Cart">Корзина<br></a>
+        <a href="/orders" class="Cart">Мои заказы<br></a>
         <a href="/logout" class="edit-mode-btn">Выйти из профиля<br></a>
         <h3>Catalog</h3>
         <div class="card-deck">
@@ -38,12 +39,40 @@
                                    id="amount_<?php echo $product->getId(); ?>"
                                    required>
                         </div>
+                        <button type="submit" class="AddProdbtn">Add Product</button>
                     </form>
                 </div> <!-- закрываем div.card -->
             <?php endforeach; ?>
-            <button type="submit" class="AddProdbtn">Add Product</button>
         </div> <!-- закрываем div.card-deck -->
     </div> <!-- закрываем div.container -->
 </div>
 </body>
 </html>
+<style>
+    /* Set a style for the submit/register button */
+    .registerbtn {
+        background-color: #04AA6D;
+        color: white;
+        padding: 16px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+    .registerbtn:hover {
+        opacity:1;
+    }
+
+    /* Add a blue text color to links */
+    a {
+        color: dodgerblue;
+    }
+
+    /* Set a grey background color and center the text of the "sign in" section */
+    .signin {
+        background-color: #f1f1f1;
+        text-align: center;
+    }
+</style>

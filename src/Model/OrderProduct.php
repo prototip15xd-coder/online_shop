@@ -6,7 +6,40 @@ use Model\Model;
 
 class OrderProduct extends Model
 {
-    public function create(int $orderId, int $productId, int $amount) {
+    private int $id;
+    private int $order_id;
+    private int $product_id;
+    private int $amount;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getOrderId(): int
+    {
+        return $this->order_id;
+    }
+
+    public function getProductId(): int
+    {
+        return $this->product_id;
+    }
+
+    public function getAmount(): int
+    {
+        return $this->amount;
+    }
+
+    public function objOrderProduct($product){
+        $obj = new self();
+        $obj->id = $product["id"];
+        $obj->order_id = $product["order_id"];
+        $obj->product_id = $product["product_id"];
+        $obj->amount = $product["amount"];
+        return $obj;
+    }
+    public function createOrderProduct(int $orderId, int $productId, int $amount) {
         $stmt=$this->connection->prepare("INSERT INTO order_products (order_id, product_id, amount) 
         VALUES (:order_id, :product_id, :amount)");
 
@@ -17,8 +50,17 @@ class OrderProduct extends Model
         ]);
     }
 
-
-
+    public function getAllProductFromOrderByOrderId(int $orderId): array {
+        $stmt=$this->connection->prepare("SELECT * FROM order_products WHERE order_id = :order_id");
+        $stmt->execute(['order_id' => $orderId]);
+        $products= $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $all_products_from_order=[];
+        foreach ($products as $product) {
+            $obj = $this->objOrderProduct($product);
+            $all_products_from_order[] = $obj;
+        }
+        return $all_products_from_order;
+    }
 
 
 }

@@ -48,7 +48,7 @@ class User extends Model
         if ($result === false) {
             return null;
         }
-        $obj = $self->objUser($result);
+        $obj = $this->objUser($result);
         return $obj;
     }
 
@@ -90,10 +90,10 @@ class User extends Model
     }
     public function UserbyDB()
     {
-        $stmt = $this->connection->prepare("SELECT name, email, password FROM users WHERE id = :id");
+        $stmt = $this->connection->prepare("SELECT id, name, email, password FROM users WHERE id = :id");
         $stmt->execute(['id' => $_SESSION['userid']]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
-        $obj = $self->objUser($user);
+        $obj = $this->objUser($user);
         return $obj;
     }
     public function UpdateName($newName)

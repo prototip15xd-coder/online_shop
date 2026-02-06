@@ -19,7 +19,7 @@
         <input type="text" placeholder="Enter phone" name="phone" id="phone" required>
 
         <label for="comm"><b>Комментарий</b></label>
-        <input type="text" placeholder="Enter comm" name="comm" id="comm" required>
+        <input type="text" placeholder="Enter comm" name="comm" id="comm" >
 
         <label for="address"><b>Адрес получателя</b></label>
         <?php if (isset($errors['address'])): ?>

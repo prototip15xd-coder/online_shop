@@ -15,13 +15,13 @@
         <?php foreach ($all_products as $product): ?>
             <div class="card text-center">
                 <a href="#">
-                    <img class="card-img-top" src="<?php echo $product['image_url']; ?>">
+                    <img class="card-img-top" src="<?php echo $product->getImageUrl(); ?>">
                     <div class="card-body">
-                        <p class="card-text text-muted"><?php echo $product['name'];?></p>
-                        <p class="card-text text-muted"><?php echo $product['amount'];?></p>
-                        <a href="#"><h5 class="card-title"><?php echo $product['description']; ?></h5></a>
+                        <p class="card-text text-muted"><?php echo $product->getName();?></p>
+                        <p class="card-text text-muted"><?php echo $product->getAmount();?></p>
+                        <a href="#"><h5 class="card-title"><?php echo $product->getDescription(); ?></h5></a>
                         <div class="card-footer">
-                            <?php echo $product['price'];?>
+                            <?php echo $product->getPrice();?>
                         </div>
                     </div>
                 </a>
