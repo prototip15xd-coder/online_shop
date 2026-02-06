@@ -44,6 +44,7 @@ class UserController
                 $this->userModel-> password_hash($password);
 
                 $user = $this->userModel->getByEmail($_POST['email']);
+
                 header("Location: /catalog");
                 exit;
             }
@@ -99,7 +100,7 @@ class UserController
 
             $user = $this->userModel->getByEmail($email);
 
-            if ($user === false) {
+            if ($user === false or $user == null) {
                 $errors['PASSWORD'] = 'логин или пароль указаны неверно';
             } else {
                 $passworddb = $user->getPassword();
@@ -128,12 +129,12 @@ class UserController
         if (isset($_SESSION['userid'])) {
             $user = $this->userModel->UserbyDB();
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $newName = $_POST['name'] ?? $user->getName['name'];
-                $newEmail = $_POST['email'] ?? $user['email'];
+                $newName = $_POST['name'] ?? $user->getName();
+                $newEmail = $_POST['email'] ?? $user->getEmail();
                 $newPassword = $_POST['password'] ?? '';
 
-                $nameChanged = ($newName !== $user['name']);
-                $emailChanged = ($newEmail !== $user['email']);
+                $nameChanged = ($newName !== $user->getName());
+                $emailChanged = ($newEmail !== $user->getEmail());
                 $passwordChanged = !empty($newPassword);
 
                 if ($passwordChanged) {

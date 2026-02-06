@@ -92,7 +92,7 @@
 
         <div class="name">
             <?php require_once '../Controllers/UserController.php'; ?>
-            <?php echo $user['name'];?>
+            <?php echo $user->getName();?>
         </div>
     </div>
 
@@ -116,7 +116,7 @@
             </div>
             <hr align="center">
             <div class="menu-item">
-                <a href="/user-orders" class="user-orders">
+                <a href="/orders" class="user-orders">
                     <i class="fa fa fa-xs"></i> Мои заказы
                 </a>
             </div>
@@ -146,13 +146,13 @@
                     <td>Name</td>
                     <td>:</td>
                     <td>
-                            <?php echo $user['name'] ?>
+                            <?php echo $user->getName(); ?>
                 </tr>
                 <tr>
                     <td>Email</td>
                     <td>:</td>
                     <td>
-                            <?php echo $user['email'] ?>
+                            <?php echo $user->getEmail(); ?>
                 </tr>
                 <tr>
                     <td>password</td>

@@ -5,17 +5,22 @@ namespace Controllers;
 use Model\Cart;
 use Model\Order;
 use Model\OrderProduct;
+use Model\Product;
 
-class OrderController {
+class OrderController
+{
     private Cart $cartModel;
     private Order $orderModel;
     private OrderProduct $orderProductModel;
+    private Product $productModel;
 
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->cartModel = new Cart();
         $this->orderModel = new Order();
         $this->orderProductModel = new OrderProduct();
+        $this->productModel = new Product();
     }
 
     public function getCheckoutForm()
@@ -27,7 +32,7 @@ class OrderController {
         }
     }
 
-    public function handleCheckoutOrder()
+    public function handleCheckoutOrder()     ///НЕ РАБОТАЕТ?
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -41,7 +46,7 @@ class OrderController {
         $errors = $this->validate($_POST);
 
         if (empty($errors)) {
-            $contactName= $_POST['name'];
+            $contactName = $_POST['name'];
             $contactPhone = $_POST['phone'];
             $contactComm = $_POST['comm'];
             $address = $_POST['address'];
@@ -54,11 +59,13 @@ class OrderController {
             foreach ($user_products as $user_product) {
                 $productId = $user_product['product_id'];
                 $amount = $user_product['amount'];
-                $orderProduct= $this->orderProductModel->create($orderId, $productId, $amount);
+                $orderProduct = $this->orderProductModel->createOrderProduct(
+                    $orderId,
+                    $productId,
+                    $amount);
             }
-
             $this->cartModel->deleteByUserId($userId);
-            header('Location: /my-orders');
+            header('Location: /orders');
 
 
         } else {
@@ -66,6 +73,7 @@ class OrderController {
         }
 
     }
+
     private function validate(array $data): array
     {
         $errors = [];
@@ -94,7 +102,8 @@ class OrderController {
         return $errors;
     }
 
-    public function getAllOrders() {
+    public function getAllOrders()
+    {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
@@ -103,7 +112,37 @@ class OrderController {
             exit;
         }
         $orders = $this->orderModel->getOrders($_SESSION['userid']);
+        foreach ($orders as $order) {
+            $orderId = $order->getId();
+            $orderProducts = $this->orderProductModel->getAllProductFromOrderByOrderId($orderId);
+            $productsData = [];
+
+            foreach ($orderProducts as $orderProduct) {
+                $productId = $orderProduct->getProductId();
+                $product = $this->productModel->productByproductId($productId);
+                $order->addProduct($product, $orderProduct->getAmount());
+            }
+        }
         require_once '/var/www/html/src/Views/user_orders.php';
     }
 
+    public function getOrderByOrderID(): array
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+        if (!isset($_SESSION['userid'])) {
+            header('Location: /login');
+        }
+        $orders = $this->orderModel->getOrders($_SESSION['userid']);
+        $userOrder = [];
+        foreach ($orders as $order) {
+            $orderId = $order->getId();
+            $orderProducts = $this->orderProductModel->getAllProductFromOrderByOrderId($orderId);
+            $userOrder['orderProducts'] = $orderProducts;
+        }
+        $newUserOrder[] = $userOrder;
+        return $newUserOrder;
+    }
 }
+
