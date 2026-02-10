@@ -116,4 +116,24 @@ class App
                 'class' => $className,
                 'method' => $classMethod ];
     }
+    public function get(string $route, string $className, string $classMethod){
+        $this->routes[$route]['GET'] = [
+            'class' => $className,
+            'method' => $classMethod ];
+    }
+    public function post(string $route, string $className, string $classMethod){
+        $this->routes[$route]['POST'] = [
+            'class' => $className,
+            'method' => $classMethod ];
+    }
+    public function put(string $route, string $className, string $classMethod){
+        $this->routes[$route]['PUT'] = [
+            'class' => $className,
+            'method' => $classMethod ];
+    }
+    public function delete(string $route, string $className, string $classMethod){
+        $this->routes[$route]['DELETE'] = [
+            'class' => $className,
+            'method' => $classMethod ];
+    }
 }

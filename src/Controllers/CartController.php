@@ -3,14 +3,17 @@
 namespace Controllers;
 
 use Model\Cart;
+use Model\Product;
 
 class CartController
 {
     private Cart $cartModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->cartModel = new Cart();
     }
+
     public function cart()
     {
         if (isset($_SESSION['userid'])) {

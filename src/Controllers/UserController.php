@@ -113,7 +113,6 @@ class UserController
                 }
             }
         }
-        require_once '/var/www/html/src/Views/login.php';
     }
 
     public function profile()

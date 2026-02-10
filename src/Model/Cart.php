@@ -72,6 +72,8 @@ class Cart extends Model
         return $all_products;
     }
 
+
+
     public function getAllByUserId(int $us_id): Cart|array
     {
         $stmt = $this->connection->prepare("SELECT * FROM user_products WHERE user_id = :user_id");
