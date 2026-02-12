@@ -4,20 +4,12 @@ namespace Model;
 
 class Product extends Model
 {
-     private int $id;
-     private string $name;
-     private string $description;
-     private int $price;
-     private string $image_url;
-     private int $amount;
-    public function getAmount(): int
-    {
-        return $this->amount ?? 0;
-    }
-    public function setAmount(int $amount): void
-    {
-        $this->amount = $amount;
-    }
+     private $id;
+     private $name;
+     private $description;
+     private $price;
+     private $image_url;
+
 
     public function getId()
     {
@@ -57,7 +49,7 @@ class Product extends Model
     }
 
 
-    public function productByDB(): array | null
+        public function productByDB(): array | null
     {
         $stms = $this->connection->query('SELECT * FROM products');
         $products_array = $stms->fetchAll();
@@ -96,31 +88,14 @@ class Product extends Model
         $user_p->execute(['user_id' => $_SESSION['userid'], 'product_id' => $_POST['product_id']]);
         $existingRecord = $user_p->fetch(\PDO::FETCH_ASSOC);
         if ($existingRecord) {
+            $result = $this->objUserProduct($existingRecord);
             $stmt = $this->connection->prepare("UPDATE user_products SET amount = amount + :amount WHERE user_id = :user_id AND product_id = :product_id");
         }
-        $amount = 1;
         $stmt->execute([
             'user_id' => $_SESSION['userid'],
             'product_id' => $_POST['product_id'],
-            'amount' => $amount
+            'amount' => $_POST['amount']
         ]);
-    }
-    public function delete_productDB()
-    {
-        $stms = $this->connection->prepare("SELECT id FROM products WHERE id = :product_id");
-        $stms->execute(['product_id' => $_POST['product_id']]);
-        $stmt = $this->connection->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
-        $user_p = $this->connection->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id ");
-        $user_p->execute(['user_id' => $_SESSION['userid'], 'product_id' => $_POST['product_id']]);
-        $existingRecord = $user_p->fetch(\PDO::FETCH_ASSOC);
-        if ($existingRecord) {
-            $stmt = $this->connection->prepare("UPDATE user_products SET amount = amount - :amount WHERE user_id = :user_id AND product_id = :product_id");
-        }
-        $amount = 1;
-        $stmt->execute([
-            'user_id' => $_SESSION['userid'],
-            'product_id' => $_POST['product_id'],
-            'amount' => $amount
-        ]);
+
     }
 }

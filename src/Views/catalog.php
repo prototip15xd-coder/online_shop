@@ -23,25 +23,25 @@
                         </div>
                     </div>
 
-                    <table><tr>
-                            <td>
-                                <form action="/catalog" method="POST" style="display:inline;">
-                                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" required>
-                                    <input type="hidden" name="action" value="plus">
-                                    <button type="submit">+</button>
-                                </form>
-                            </td>
-                            <td><?php echo $product->getAmount(); ?></td>
-                            <td>
-                                <form action="/catalog" method="POST" style="display:inline;">
-                                    <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" required>
-                                    <input type="hidden" name="action" value="minus">
-                                    <button type="submit">-</button>
-                                </form>
-                            </td>
-                        </tr></table>
+                    <!-- Форма для этого конкретного товара -->
+                    <form action="/catalog" method="POST">
+                        <div class="container">
+                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" required>
+
+                            <?php if (isset($errors['amount'])): ?>
+                                <label style="color:red"><?php echo $errors['amount']; ?></label>
+                            <?php endif; ?>
+
+                            <input type="text"
+                                   placeholder="Enter amount"
+                                   name="amount"
+                                   id="amount_<?php echo $product->getId(); ?>"
+                                   required>
+                        </div>
+                    </form>
                 </div> <!-- закрываем div.card -->
             <?php endforeach; ?>
+            <button type="submit" class="AddProdbtn">Add Product</button>
         </div> <!-- закрываем div.card-deck -->
     </div> <!-- закрываем div.container -->
 </div>
