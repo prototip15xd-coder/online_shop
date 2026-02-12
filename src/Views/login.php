@@ -6,11 +6,11 @@
         <p>Please fill in this form to create an account.</p>
         <hr>
 
-        <label for="login"><b>Login</b></label>
+        <label for="email"><b>Email</b></label>
         <?php if (isset($errors['USERNAME'])): ?>
             <label style="color: red"><?php echo $errors['USERNAME']; ?></label>
         <?php endif; ?>
-        <input type="text" placeholder="Enter login" name="login" id="login" required>
+        <input type="text" placeholder="Enter email" name="email" id="email" required>
 
         <label for="password"><b>Password</b></label>
         <?php if (isset($errors['PASSWORD'])): ?>

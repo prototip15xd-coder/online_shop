@@ -4,8 +4,9 @@ namespace Controllers;
 
 use Model\Cart;
 use Model\Product;
+use Service\AuthService;
 
-class CartController
+class CartController extends BaseController
 {
     private Cart $cartModel;
 
@@ -16,7 +17,7 @@ class CartController
 
     public function cart()
     {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->check()) {
             $all_products = $this->cartModel->cartbyDB();
             require_once '/var/www/html/src/Views/cart.php';
         } else {

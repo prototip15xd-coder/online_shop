@@ -5,31 +5,31 @@ namespace Controllers;
 use Model\Product;
 use Model\User;
 use Controllers\ProductController;
+use Service\AuthService;
 
-class UserController
+class UserController extends BaseController
 {
-    private User $userModel;
     private ProductController $productController;
 
     public function __construct() {
-        $this->userModel = new User();
+        parent::__construct();
         $this->productController = new ProductController();
     }
     public function getRegistration()
     {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->check()) {
             header("Location: /catalog");
-            exit;
+        } else {
+            require_once '/var/www/html/src/Views/registration.php';
         }
-        require_once '/var/www/html/src/Views/registration.php';
     }
     public function getLogin()
     {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->check()) {
             header("Location: /catalog");
-            exit;
+        } else {
+            require_once '/var/www/html/src/Views/login.php';
         }
-        require_once '/var/www/html/src/Views/login.php';
     }
 
     function registration()
@@ -89,35 +89,28 @@ class UserController
         }
     }
 
+
     public function login()
     {
         $errors = [];
-        if (empty($_POST['login']) || empty($_POST['password'])) {
+
+        if (empty($_POST['email']) || empty($_POST['password'])) {
             $errors['USERNAME'] = 'Все поля должны быть заполнены';
         } else {
-            $email = $_POST['login'];
-            $PASSWORD = $_POST['password'];
-
-            $user = $this->userModel->getByEmail($email);
-
-            if ($user === false or $user == null) {
-                $errors['PASSWORD'] = 'логин или пароль указаны неверно';
+            $result = $this->authService->auth($_POST['email'], $_POST['password']);
+            if ($result) {
+                header("Location: /catalog");
+                exit();
             } else {
-                $passworddb = $user->getPassword();
-                if (password_verify($PASSWORD, $passworddb)) {
-                    $_SESSION['userid'] = $user->getId();
-                    $this->productController->catalog();
-                    require_once '/var/www/html/src/Views/catalog.php';
-                } else {
-                    $errors['PASSWORD'] = 'логин или пароль указаны неверно';
-                }
+                $errors['PASSWORD'] = 'логин или пароль указаны неверно';
             }
         }
+        require_once '/var/www/html/src/Views/login.php';
     }
 
     public function profile()
     {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->check()) {
             $user = $this->userModel->UserbyDB();
             require_once '/var/www/html/src/Views/profile.php';
         } else {
@@ -125,7 +118,7 @@ class UserController
         }
     }
     public function profileEdit() {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->check()) {
             $user = $this->userModel->UserbyDB();
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $newName = $_POST['name'] ?? $user->getName();
@@ -161,8 +154,9 @@ class UserController
 
     public function logout()
     {
-        session_destroy();
+        parent::logout();
         header('Location: /login');
+        exit();
     }
 }
 

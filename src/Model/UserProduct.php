@@ -43,29 +43,14 @@ class UserProduct extends Model
         $stms->execute([":user_id" => $user_id, ":product_id" => $product_id]);
         $product = $stms->fetch(\PDO::FETCH_ASSOC);
         if ($product=== false) {
-            $product['id'] = 0;
-            $product['user_id'] = $user_id;
-            $product['product_id'] = $product_id;
-            $product['amount'] = 0;
+            $product = [
+                'id' => 0,
+                'user_id' => $user_id,
+                'product_id' => $product_id,
+                'amount' => 0
+            ];
         }
         $obj = $this->objUserProduct($product);
         return $obj;
     }
-    public function userProductByDB1()////для случая когда добавляем!
-    {
-        $user_id = $_SESSION["userid"];
-        $product_id = $_POST["product_id"];
-        $stms = $this->connection->prepare('SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id');
-        $stms->execute([":user_id" => $user_id, ":product_id" => $product_id]);
-        $product = $stms->fetch(\PDO::FETCH_ASSOC);
-        if ($product=== false) {
-            $product['id'] = 0;
-            $product['user_id'] = $user_id;
-            $product['product_id'] = $product_id;
-            $product['amount'] = 0;
-        }
-        $obj = $this->objUserProduct($product);
-        return $obj;
-    }
-
 }

@@ -4,8 +4,9 @@ namespace Controllers;
 use Model\OrderProduct;
 use Model\Product;
 use Model\UserProduct;
+use Service\AuthService;
 
-class ProductController
+class ProductController extends BaseController
 {
     private Product $productModel;
     private OrderProduct $orderProductModel;
@@ -13,13 +14,14 @@ class ProductController
 
 
     public function __construct() {
+        parent::__construct();
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
         $this->userProductModel = new UserProduct();
     }
     public function catalog()
     {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->check()) {
             $products = $this->productModel->productByDB();
             $productsAmount = [];
             foreach ($products as $product) {
@@ -41,9 +43,7 @@ class ProductController
         $product_id = $_POST["product_id"];
         $objUserProduct = $this->userProductModel->userProductByDB($product_id);
         $amount = $objUserProduct->getAmount();
-        if (!isset($_SESSION['userid'])) {
-            require_once '/var/www/html/src/Views/login';
-        } else {
+        if ($this->authService->check()) {
             $res = $this->productModel->validate_product();
             if (!isset($res)) {
                 $errors['product_id'] = 'Данный товар не существует или закончился';
@@ -55,6 +55,8 @@ class ProductController
                     }
                 }
             }
+        } else {
+        require_once '/var/www/html/src/Views/login';
         }
         return $errors;
     }
@@ -63,12 +65,13 @@ class ProductController
     {
         $errors = $this->add_product_validate($_POST['action']);
         if (empty($errors)) {
-            $action = $_POST['action'] ?? $_POST['what'] ?? '';
-            print_r($action);
+            $action = $_POST['action'];
             if ($action === 'plus') {
                 $this->productModel->add_productDB();
+                $action = false;  /// когда отправляю запрос на +- то после обновления страницы запрос в перемнной action сохраняется  а не сбрасывается
             } else if ($action === 'minus' || $action === 'remove') {
                 $this->productModel->delete_productDB();
+                $action = false;
             }
             $products = $this->catalog();
             require_once '/var/www/html/src/Views/catalog.php';

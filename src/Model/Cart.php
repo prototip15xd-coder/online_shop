@@ -74,7 +74,7 @@ class Cart extends Model
 
 
 
-    public function getAllByUserId(int $us_id): Cart|array
+    public function getAllUserProductsByUser(int $us_id): Cart|array
     {
         $stmt = $this->connection->prepare("SELECT * FROM user_products WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $us_id]);
@@ -82,7 +82,7 @@ class Cart extends Model
         return $all_products;
     }
 
-    public function deleteByUserId(int $us_id)
+    public function deleteByUser(int $us_id)
     {
         $stmt = $this->connection->prepare("DELETE FROM user_products WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $us_id]);
