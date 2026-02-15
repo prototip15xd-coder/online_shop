@@ -33,7 +33,7 @@
                         <span style="margin: 0 10px; min-width: 30px; text-align: center;">
                         <?php echo $productsAmount[$product->getId()] ?? 0; ?>
                         </span>
-
+jhhjhj
                         <!-- Кнопка + -->
                         <form action="/catalog" method="POST" style="margin: 0;">
                             <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
