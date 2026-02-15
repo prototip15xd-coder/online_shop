@@ -15,20 +15,22 @@ $autoload = function(string $className) {
 spl_autoload_register($autoload);
 
 $app = new \Core\App();
-$app->addRoute('/registration', 'GET', \Controllers\UserController::class , 'getRegistration');
-$app->addRoute('/registration', 'POST', \Controllers\UserController::class , 'registration');
-$app->addRoute('/login', 'GET', \Controllers\UserController::class , 'getLogin');
-$app->addRoute('/login', 'POST', \Controllers\UserController::class , 'login');
-$app->addRoute('/catalog', 'GET', \Controllers\ProductController::class , 'catalog');
-$app->addRoute('/catalog', 'POST', \Controllers\ProductController::class, 'add_product');
-$app->addRoute('/profile', 'GET', \Controllers\UserController::class , 'profile');
-$app->addRoute('/profile', 'POST', \Controllers\UserController::class , 'profile');
-$app->addRoute('/profile-edit', 'GET', \Controllers\UserController::class , 'profileEdit');
-$app->addRoute('/profile-edit', 'POST', \Controllers\UserController::class , 'profileEdit');
-$app->addRoute('/cart', 'GET', \Controllers\CartController::class , 'cart');
-$app->addRoute('/logout', 'GET', \Controllers\UserController::class , 'logout');
-$app->addRoute('/create-order', 'GET', \Controllers\OrderController::class , 'getCheckoutForm');
-$app->addRoute('/create-order', 'POST', \Controllers\OrderController::class , 'handleCheckoutOrder');
-$app->addRoute('/orders', 'GET', \Controllers\OrderController::class , 'getAllOrders');
-$app->addRoute('/order', 'GET', \Controllers\OrderController::class , 'getOrderByOrderID');
+$app->get('/registration', \Controllers\UserController::class , 'getRegistration');
+$app->post('/registration', \Controllers\UserController::class , 'registration');
+$app->get('/login', \Controllers\UserController::class , 'getLogin');
+$app->post('/login', \Controllers\UserController::class , 'login');
+$app->get('/catalog', \Controllers\ProductController::class , 'catalog');
+$app->post('/catalog', \Controllers\ProductController::class, 'add_product');
+$app->get('/profile', \Controllers\UserController::class , 'profile');
+$app->post('/profile', \Controllers\UserController::class , 'profile');
+$app->get('/profile-edit', \Controllers\UserController::class , 'profileEdit');
+$app->post('/profile-edit', \Controllers\UserController::class , 'profileEdit');
+$app->get('/cart', \Controllers\CartController::class , 'cart');
+$app->get('/logout', \Controllers\UserController::class , 'logout');
+$app->get('/create-order', \Controllers\OrderController::class , 'getCheckoutForm');
+$app->post('/create-order', \Controllers\OrderController::class , 'handleCheckoutOrder');
+$app->get('/orders', \Controllers\OrderController::class , 'getAllOrders');
+$app->get('/order', \Controllers\OrderController::class , 'getOrderByOrderID');
+$app->post('/product', \Controllers\ProductController::class , 'product');
+///ПЕРЕДЕЛАЙ НА ГЕТ И ПОСТ
 $app->Run();

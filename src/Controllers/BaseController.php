@@ -25,6 +25,7 @@ abstract class BaseController
     public function check(): bool
     {
         //$this->session();
+        print_r($_SESSION['userid']);
         return isset($_COOKIE['userid']);
     }
 
@@ -40,6 +41,7 @@ abstract class BaseController
                 $_SESSION['userid'] = $user->getId();
                 return true;
             } else {
+                echo "333333";
                 return false;
             }
         }

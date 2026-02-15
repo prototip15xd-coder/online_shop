@@ -23,8 +23,8 @@ class AuthService
     }
     public function check(): bool
     {
-        //$this->session();
-        return isset($_COOKIE['userid']);
+        $this->session();
+        return isset($_SESSION['userid']);
     }
 
     public function auth(string $email, string $password): bool

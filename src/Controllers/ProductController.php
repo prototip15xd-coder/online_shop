@@ -21,6 +21,9 @@ class ProductController extends BaseController
     }
     public function catalog()
     {
+        if (isset($_POST['action'])) {
+            $errors = $this->add_product_validate($_POST['action']);
+        }
         if ($this->authService->check()) {
             $products = $this->productModel->productByDB();
             $productsAmount = [];
@@ -28,12 +31,11 @@ class ProductController extends BaseController
                 $product_id = $product->getId();
                 $user_product = $this->userProductModel->userProductByDB($product_id);
                 $amount = $user_product->getAmount();
-                $product->setAmount($amount);
+                $productsAmount[$product_id] = $user_product->getAmount();
             }
             require_once '/var/www/html/src/Views/catalog.php';
         } else {
             require_once '/var/www/html/src/Views/login.php';
-
         }
     }
 
@@ -55,8 +57,6 @@ class ProductController extends BaseController
                     }
                 }
             }
-        } else {
-        require_once '/var/www/html/src/Views/login';
         }
         return $errors;
     }
@@ -73,11 +73,30 @@ class ProductController extends BaseController
                 $this->productModel->delete_productDB();
                 $action = false;
             }
-            $products = $this->catalog();
+        }
+        $products = $this->catalog();
+    }
+    public function product()
+    {
+//        if (isset($_POST['action'])) {
+//            $errors = $this->add_product_validate($_POST['action']);
+//        } попоробуй реализовать +- на странице товара
+        if ($this->authService->check()) {
+            $product_id = $_POST["product_id"];
+            $product = $this->productModel->productByproductId($product_id);
+            //$productsAmount = []; это нужно для +-
+            $productReviews = $this->productModel->product_reviews($product_id);
+
+//            foreach ($products as $product) {
+//                $product_id = $product->getId();
+//                $user_product = $this->userProductModel->userProductByDB($product_id);
+//                $amount = $user_product->getAmount();
+//                $productsAmount[$product_id] = $user_product->getAmount();
+//            }
+
             require_once '/var/www/html/src/Views/catalog.php';
         } else {
-            return $errors;
+            require_once '/var/www/html/src/Views/login.php';
         }
-
     }
 }

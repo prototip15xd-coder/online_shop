@@ -11,7 +11,6 @@
         <a href="/logout" class="edit-mode-btn">Выйти из профиля<br></a>
         <h3>Catalog</h3>
         <div class="card-deck">
-            <?php foreach ($products as $product): ?>
                 <!-- Каждая карточка товара с формой -->
                 <div class="card text-center">
                     <img class="card-img-top" src="<?php echo $product->getImageUrl(); ?>">
@@ -44,6 +43,8 @@
                         <?php if (isset($errors['amount'])): print_r($errors['amount']); endif; ?>
                         <?php if (isset($errors['product_id'])): print_r($errors['product_id']); endif; ?>
                     </div>
+                    <?php if (isset($productReviews)): foreach ($productReviews as $review): ?>
+                    <?php endforeach; ?>
                     <div>
                         <form action="/product" method="POST" style="margin: 0;">   <!--а точно пост а не гет?-->
                             <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
@@ -51,7 +52,6 @@
                         </form>
                     </div>
                 </div>
-            <?php endforeach; ?>
         </div> <!-- закрываем div.card-deck -->
     </div> <!-- закрываем div.container -->
 </div>

@@ -6,13 +6,12 @@ use Model\Product;
 use Model\User;
 use Controllers\ProductController;
 
-class UserController
+class UserController extends BaseController
 {
-    private User $userModel;
     private ProductController $productController;
 
     public function __construct() {
-        $this->userModel = new User();
+        parent::__construct();
         $this->productController = new ProductController();
     }
     public function getRegistration()
@@ -92,28 +91,21 @@ class UserController
     public function login()
     {
         $errors = [];
-        if (empty($_POST['login']) || empty($_POST['password'])) {
+        if (empty($_POST['email']) || empty($_POST['password'])) {
             $errors['USERNAME'] = 'Все поля должны быть заполнены';
         } else {
-            $email = $_POST['login'];
+            $email = $_POST['email'];
             $PASSWORD = $_POST['password'];
 
-            $user = $this->userModel->getByEmail($email);
-
+            $user = $this->auth($email, $PASSWORD);
             if ($user === false or $user == null) {
                 $errors['PASSWORD'] = 'логин или пароль указаны неверно';
             } else {
-                $passworddb = $user->getPassword();
-                if (password_verify($PASSWORD, $passworddb)) {
-                    $_SESSION['userid'] = $user->getId();
-                    $this->productController->catalog();
-                    require_once '/var/www/html/src/Views/catalog.php';
-                } else {
-                    $errors['PASSWORD'] = 'логин или пароль указаны неверно';
-                }
+                header("Location: /catalog");
+                exit();
             }
+            require_once '/var/www/html/src/Views/login.php';
         }
-        require_once '/var/www/html/src/Views/login.php';
     }
 
     public function profile()

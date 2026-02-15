@@ -2,6 +2,8 @@
 
 namespace Model;
 
+use PDO;
+
 class User extends Model
 {
     private int $id;
@@ -44,7 +46,7 @@ class User extends Model
     {
         $stms = $this->connection->prepare("SELECT * FROM users WHERE email = :email");
         $stms->execute(['email' => $email]);
-        $result = $stms->fetch();
+        $result = $stms->fetch(PDO::FETCH_ASSOC);
         if ($result === false) {
             return null;
         }
