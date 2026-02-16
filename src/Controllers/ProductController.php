@@ -4,17 +4,20 @@ namespace Controllers;
 use Model\OrderProduct;
 use Model\Product;
 use Model\UserProduct;
+use Model\User;
 use Service\AuthService;
 
 class ProductController extends BaseController
 {
-    private Product $productModel;
-    private OrderProduct $orderProductModel;
-    private UserProduct $userProductModel;
+    protected User $userModel;
+    protected Product $productModel;
+    protected OrderProduct $orderProductModel;
+    protected UserProduct $userProductModel;
 
 
     public function __construct() {
         parent::__construct();
+        $this->userModel = new User();
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
         $this->userProductModel = new UserProduct();
@@ -22,7 +25,7 @@ class ProductController extends BaseController
     public function catalog()
     {
         if (isset($_POST['action'])) {
-            $errors = $this->add_product_validate($_POST['action']);
+            $errors->add_product();
         }
         if ($this->authService->check()) {
             $products = $this->productModel->productByDB();
@@ -74,27 +77,28 @@ class ProductController extends BaseController
                 $action = false;
             }
         }
-        $products = $this->catalog();
+        //$products = $this->catalog();
     }
     public function product()
     {
-//        if (isset($_POST['action'])) {
-//            $errors = $this->add_product_validate($_POST['action']);
-//        } попоробуй реализовать +- на странице товара
+        if (isset($_POST['action'])) {
+            $errors = $this->add_product();
+        } //попоробуй реализовать +- на странице товара   НУЖНО ПРИДУМАТЬ КАК СВЯЗАТЬ ДАННЫЕ
+        // КАТАЛОГА ПОПРОБУЙ ВЫНЕСТИ +- В ОТДЕЛЬНУЮ ФУНКЦИЮ! ЧТОБЫ ИСП В КАТ И ПРОД
         if ($this->authService->check()) {
             $product_id = $_POST["product_id"];
             $product = $this->productModel->productByproductId($product_id);
-            //$productsAmount = []; это нужно для +-
+            $productsAmount = []; //это нужно для +-
             $productReviews = $this->productModel->product_reviews($product_id);
-
-//            foreach ($products as $product) {
-//                $product_id = $product->getId();
-//                $user_product = $this->userProductModel->userProductByDB($product_id);
-//                $amount = $user_product->getAmount();
-//                $productsAmount[$product_id] = $user_product->getAmount();
-//            }
-
-            require_once '/var/www/html/src/Views/catalog.php';
+            if (isset($productReviews)) {
+                foreach ($productReviews as &$productReview) {
+                    $user_id = $productReview['user_id'];
+                    $user = $this->userModel->UserbyDB(); ////здесь возможно стоит обратиться к getName()
+                    $userName = $user->getName();
+                    $productReview['user_name'] = $userName;
+                }//// теперь продукт ревью сод массив с отзывами где еще есть ключ изер нейм
+            }
+            require_once '/var/www/html/src/Views/product.php';
         } else {
             require_once '/var/www/html/src/Views/login.php';
         }

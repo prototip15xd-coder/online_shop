@@ -20,7 +20,7 @@ $app->post('/registration', \Controllers\UserController::class , 'registration')
 $app->get('/login', \Controllers\UserController::class , 'getLogin');
 $app->post('/login', \Controllers\UserController::class , 'login');
 $app->get('/catalog', \Controllers\ProductController::class , 'catalog');
-$app->post('/catalog', \Controllers\ProductController::class, 'add_product');
+$app->post('/catalog', \Controllers\ProductController::class, 'catalog');
 $app->get('/profile', \Controllers\UserController::class , 'profile');
 $app->post('/profile', \Controllers\UserController::class , 'profile');
 $app->get('/profile-edit', \Controllers\UserController::class , 'profileEdit');
@@ -32,5 +32,4 @@ $app->post('/create-order', \Controllers\OrderController::class , 'handleCheckou
 $app->get('/orders', \Controllers\OrderController::class , 'getAllOrders');
 $app->get('/order', \Controllers\OrderController::class , 'getOrderByOrderID');
 $app->post('/product', \Controllers\ProductController::class , 'product');
-///ПЕРЕДЕЛАЙ НА ГЕТ И ПОСТ
 $app->Run();

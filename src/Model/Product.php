@@ -122,9 +122,9 @@ class Product extends Model
     }
     public function product_reviews($productId)
     {
-        $stms = $this->connection->prepare("SELECT * FROM products_review WHERE id = :product_id");
+        $stms = $this->connection->prepare("SELECT * FROM products_review WHERE product_id = :product_id");
         $stms->execute(['product_id' => $productId]);
-        $result = $stms->fetch(\PDO::FETCH_ASSOC);
+        $result = $stms->fetchAll(\PDO::FETCH_ASSOC);
         if (!$result) {
             return null;
         }
