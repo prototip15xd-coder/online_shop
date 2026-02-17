@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class Model
+abstract class Model
 {
     protected \PDO $connection;
 
@@ -10,4 +10,6 @@ class Model
     {
         $this->connection = new \PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
     }
+
+    abstract protected function getTableName(): string;
 }

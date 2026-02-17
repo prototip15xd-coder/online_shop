@@ -30,6 +30,10 @@ class OrderProduct extends Model
     {
         return $this->amount;
     }
+    protected function getTableName(): string
+    {
+        return "order_products";
+    }
 
     public function objOrderProduct($product){
         $obj = new self();
@@ -40,7 +44,7 @@ class OrderProduct extends Model
         return $obj;
     }
     public function createOrderProduct(int $orderId, int $productId, int $amount) {
-        $stmt=$this->connection->prepare("INSERT INTO order_products (order_id, product_id, amount) 
+        $stmt=$this->connection->prepare("INSERT INTO {$this->getTableName()} (order_id, product_id, amount) 
         VALUES (:order_id, :product_id, :amount)");
 
         $stmt->execute([
@@ -51,7 +55,7 @@ class OrderProduct extends Model
     }
 
     public function getAllProductFromOrderByOrderId(int $orderId): array {
-        $stmt=$this->connection->prepare("SELECT * FROM order_products WHERE order_id = :order_id");
+        $stmt=$this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE order_id = :order_id");
         $stmt->execute(['order_id' => $orderId]);
         $products= $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $all_products_from_order=[];

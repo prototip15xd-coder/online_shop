@@ -6,7 +6,7 @@ namespace Model;
 use Model\Product;
 use Controllers\ProductController;
 
-class Cart extends Model
+class Cart extends Model /// ПЕРЕНЕСИ В ЮЗЕР ПРОДУКТ ТАМ НАДО ЧТО ТО ПРИДУМАТЬ
 {
     private string $name;
     private string $description;
@@ -38,6 +38,7 @@ class Cart extends Model
     {
         return $this->amount;
     }
+
 
 
     public function objCartProduct(array $Product)

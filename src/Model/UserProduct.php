@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class UserProduct extends Model
+class UserProduct extends Model // ДОБАВЬ СЮДА МЕТОДЫ ИЗ КАРТ!
 {
     private int $id;
     private int $user_id;
@@ -28,6 +28,10 @@ class UserProduct extends Model
     {
         return $this->amount ?? 0;
     }
+    protected function getTableName(): string
+    {
+        return "user_products";
+    }
     public function objUserProduct($userProduct) {
         $obj = new self();
         $obj->id = $userProduct["id"];
@@ -39,7 +43,7 @@ class UserProduct extends Model
     public function userProductByDB($product_id) ///для случая когда запрос гет и мы просто заходим в каталог
     {
         $user_id = $_SESSION["userid"];
-        $stms = $this->connection->prepare('SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id');
+        $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id AND product_id = :product_id");
         $stms->execute([":user_id" => $user_id, ":product_id" => $product_id]);
         $product = $stms->fetch(\PDO::FETCH_ASSOC);
         if ($product=== false) {

@@ -2,7 +2,7 @@
 
 namespace Model;
 #[\AllowDynamicProperties]
-class Product extends Model
+class Product extends Model // сделай другю модель для отзывов
 {
      private $id;
      private $name;
@@ -33,6 +33,10 @@ class Product extends Model
     {
         return $this->price;
     }
+    public function getImageUrl()
+    {
+        return $this->image_url;
+    }
     public function objProduct(array $product) {
         $obj = new self();
         $obj->id = $product["id"];
@@ -43,15 +47,13 @@ class Product extends Model
         return $obj;
     }
 
-    public function getImageUrl()
+    protected function getTableName(): string
     {
-        return $this->image_url;
+        return "products";
     }
-
-
-        public function productByDB(): array | null
+    public function productByDB(): array | null
     {
-        $stms = $this->connection->query('SELECT * FROM products');
+        $stms = $this->connection->query("SELECT * FROM {$this->getTableName()}");
         $products_array = $stms->fetchAll();
         $products = [];
         foreach ($products_array as $product) {
@@ -62,7 +64,7 @@ class Product extends Model
     }
     public function productByproductId($productId): ?Product
     {
-        $stms = $this->connection->prepare('SELECT * FROM products WHERE id = :id');
+        $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :id");
         $stms -> execute([':id' => $productId]);
         $product_array = $stms->fetch(\PDO::FETCH_ASSOC);
         if (!$product_array) {
@@ -75,13 +77,13 @@ class Product extends Model
 
     public function validate_product()
     {
-        $stms = $this->connection->prepare("SELECT id FROM products WHERE id = :product_id");
+        $stms = $this->connection->prepare("SELECT id FROM {$this->getTableName()} WHERE id = :product_id");
         $stms->execute(['product_id' => $_POST['product_id']]);
         return $stms->rowCount();
     }
-    public function add_productDB()
+    public function add_productDB() /// нужно выяснить как сократить этот метод и оптимизировать в юзер_продукт
     {
-        $stms = $this->connection->prepare("SELECT id FROM products WHERE id = :product_id");
+        $stms = $this->connection->prepare("SELECT id FROM {$this->getTableName()} WHERE id = :product_id");
         $stms->execute(['product_id' => $_POST['product_id']]);
         $stmt = $this->connection->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
         $user_p = $this->connection->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id ");
@@ -101,7 +103,7 @@ class Product extends Model
     }
     public function delete_productDB()
     {
-        $stms = $this->connection->prepare("SELECT id FROM products WHERE id = :product_id");
+        $stms = $this->connection->prepare("SELECT id FROM {$this->getTableName()} WHERE id = :product_id");
         $stms->execute(['product_id' => $_POST['product_id']]);
         $stmt = $this->connection->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
         $user_p = $this->connection->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id ");
@@ -120,7 +122,7 @@ class Product extends Model
         ]);
 
     }
-    public function product_reviews($productId)
+    public function product_reviews($productId)// нужно создать модель продукт ревью
     {
         $stms = $this->connection->prepare("SELECT * FROM products_review WHERE product_id = :product_id");
         $stms->execute(['product_id' => $productId]);
