@@ -115,4 +115,23 @@ class UserProduct extends Model
         $stmt = $this->connection->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $us_id]);
     }
+    public function add_productDB()
+    {
+        $result = $this->userProductByDB($_POST["product_id"]);
+        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET amount = amount + 1 WHERE user_id = :user_id AND product_id = :product_id");
+        $stmt->execute([
+            'user_id' => $_SESSION['userid'],
+            'product_id' => $_POST['product_id'],
+        ]);
+    }
+    public function delete_productDB()
+    {
+
+        $result = $this->userProductByDB($_POST["product_id"]);
+        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET amount = amount - 1 WHERE user_id = :user_id AND product_id = :product_id");
+        $stmt->execute([
+            'user_id' => $_SESSION['userid'],
+            'product_id' => $_POST['product_id'],
+        ]);
+    }
 }

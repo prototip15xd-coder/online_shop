@@ -70,10 +70,10 @@ class ProductController extends BaseController
         if (empty($errors)) {
             $action = $_POST['action'];
             if ($action === 'plus') {
-                $this->productModel->add_productDB();
+                $this->userProductModel->add_productDB();
                 $action = false;  /// когда отправляю запрос на +- то после обновления страницы запрос в перемнной action сохраняется  а не сбрасывается
             } else if ($action === 'minus' || $action === 'remove') {
-                $this->productModel->delete_productDB();
+                $this->userProductModel->delete_productDB();
                 $action = false;
             }
         }

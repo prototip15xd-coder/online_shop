@@ -81,47 +81,7 @@ class Product extends Model // сделай другю модель для от�
         $stms->execute(['product_id' => $_POST['product_id']]);
         return $stms->rowCount();
     }
-    public function add_productDB() /// нужно выяснить как сократить этот метод и оптимизировать в юзер_продукт
-    {
-        $stms = $this->connection->prepare("SELECT id FROM {$this->getTableName()} WHERE id = :product_id");
-        $stms->execute(['product_id' => $_POST['product_id']]);
-        $stmt = $this->connection->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
-        $user_p = $this->connection->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id ");
-        $user_p->execute(['user_id' => $_SESSION['userid'], 'product_id' => $_POST['product_id']]);
-        $existingRecord = $user_p->fetch(\PDO::FETCH_ASSOC);
-        $amount = 1;
-        $userProductModel = new UserProduct();
-        if ($existingRecord) {
-            $result = $userProductModel->objUserProduct($existingRecord);
-            $stmt = $this->connection->prepare("UPDATE user_products SET amount = amount + :amount WHERE user_id = :user_id AND product_id = :product_id");
-        }
-        $stmt->execute([
-            'user_id' => $_SESSION['userid'],
-            'product_id' => $_POST['product_id'],
-            'amount' => + $amount
-        ]);
-    }
-    public function delete_productDB()
-    {
-        $stms = $this->connection->prepare("SELECT id FROM {$this->getTableName()} WHERE id = :product_id");
-        $stms->execute(['product_id' => $_POST['product_id']]);
-        $stmt = $this->connection->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
-        $user_p = $this->connection->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id ");
-        $user_p->execute(['user_id' => $_SESSION['userid'], 'product_id' => $_POST['product_id']]);
-        $existingRecord = $user_p->fetch(\PDO::FETCH_ASSOC);
-        $amount = 1;
-        $userProductModel = new UserProduct();
-        if ($existingRecord) {
-            $result = $userProductModel->objUserProduct($existingRecord);
-            $stmt = $this->connection->prepare("UPDATE user_products SET amount = amount - :amount WHERE user_id = :user_id AND product_id = :product_id");
-        }
-        $stmt->execute([
-            'user_id' => $_SESSION['userid'],
-            'product_id' => $_POST['product_id'],
-            'amount' => $amount
-        ]);
 
-    }
     public function product_reviews($productId)// нужно создать модель продукт ревью
     {
         $stms = $this->connection->prepare("SELECT * FROM products_review WHERE product_id = :product_id");
