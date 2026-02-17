@@ -6,6 +6,7 @@ use Model\Cart;
 use Model\Order;
 use Model\OrderProduct;
 use Model\Product;
+use Model\UserProduct;
 
 class OrderController
 {
@@ -13,6 +14,7 @@ class OrderController
     private Order $orderModel;
     private OrderProduct $orderProductModel;
     private Product $productModel;
+    private UserProduct $userProductModel;
 
 
     public function __construct()
@@ -21,6 +23,7 @@ class OrderController
         $this->orderModel = new Order();
         $this->orderProductModel = new OrderProduct();
         $this->productModel = new Product();
+        $this->userProductModel = new UserProduct();
     }
 
     public function getCheckoutForm()
@@ -54,7 +57,7 @@ class OrderController
 
             $orderId = $this->orderModel->create($contactName, $contactPhone, $contactComm, $address, $userId);
 
-            $user_products = $this->cartModel->getAllByUserId($userId);
+            $user_products = $this->userProductModel->getAllByUserId($userId);
 
             foreach ($user_products as $user_product) {
                 $productId = $user_product['product_id'];
@@ -64,7 +67,7 @@ class OrderController
                     $productId,
                     $amount);
             }
-            $this->cartModel->deleteByUserId($userId);
+            $this->userProductModel->deleteByUserId($userId);
             header('Location: /orders');
 
 

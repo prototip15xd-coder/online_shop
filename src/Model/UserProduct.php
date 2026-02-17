@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class UserProduct extends Model // ДОБАВЬ СЮДА МЕТОДЫ ИЗ КАРТ!
+class UserProduct extends Model
 {
     private int $id;
     private int $user_id;
@@ -40,7 +40,20 @@ class UserProduct extends Model // ДОБАВЬ СЮДА МЕТОДЫ ИЗ КА�
         $obj->amount = $userProduct["amount"];
         return $obj;
     }
-    public function userProductByDB($product_id) ///для случая когда запрос гет и мы просто заходим в каталог
+    public function userProducts(): array
+    {
+        $user_id = $_SESSION["userid"];
+        $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
+        $stms->execute([":user_id" => $user_id]);
+        $products = $stms->fetchAll(\PDO::FETCH_ASSOC);
+        $objUserProducts =[];
+        foreach ($products as $product) {
+            $obj = $this->objUserProduct($product);
+            $objUserProducts[] = $obj;
+        }
+        return $objUserProducts;
+    }
+    public function userProductByDB($product_id): UserProduct ///для случая когда запрос гет и мы просто заходим в каталог
     {
         $user_id = $_SESSION["userid"];
         $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id AND product_id = :product_id");
@@ -56,5 +69,50 @@ class UserProduct extends Model // ДОБАВЬ СЮДА МЕТОДЫ ИЗ КА�
         }
         $obj = $this->objUserProduct($product);
         return $obj;
+    }
+//    public function objCartProduct(array $Product)
+//    {
+//        $obj = new self();
+//        $obj->name = $Product["name"];
+//        $obj->description = $Product["description"];
+//        $obj->price = $Product["price"];
+//        $obj->image_url = $Product["image_url"];
+//        $obj->amount = $Product["amount"];
+//        return $obj;
+//    }
+//    public function cartbyDB() ///старый и громоздний оставлю для кайфа
+//    {
+//        $us_id = $_SESSION['userid'];
+//
+//        $stms = $this->connection->prepare("SELECT products.name,
+//               products.description,
+//               products.price,
+//               products.image_url,
+//               user_products.amount
+//               FROM user_products
+//               JOIN products ON user_products.product_id = products.id
+//               WHERE user_products.user_id = :user_id");
+//        $stms->execute([':user_id' => $us_id]);
+//        $products = $stms->fetchAll(\PDO::FETCH_ASSOC);
+//        $all_products = [];
+//        foreach ($products as $product) {
+//            $obj = $this->objCartProduct($product);
+//            $all_products[] = $obj;
+//        }
+//        return $all_products;
+//    }
+
+    public function getAllByUserId(int $us_id): UserProduct|array
+    {
+        $stmt = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
+        $stmt->execute([':user_id' => $us_id]);
+        $all_products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $all_products;
+    }
+
+    public function deleteByUserId(int $us_id)
+    {
+        $stmt = $this->connection->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :user_id");
+        $stmt->execute([':user_id' => $us_id]);
     }
 }

@@ -25,7 +25,7 @@ class ProductController extends BaseController
     public function catalog()
     {
         if (isset($_POST['action'])) {
-            $errors->add_product();
+            $errors = $this->add_product();
         }
         if ($this->authService->check()) {
             $products = $this->productModel->productByDB();
