@@ -30,6 +30,6 @@ $app->get('/logout', \Controllers\UserController::class , 'logout');
 $app->get('/create-order', \Controllers\OrderController::class , 'getCheckoutForm');
 $app->post('/create-order', \Controllers\OrderController::class , 'handleCheckoutOrder');
 $app->get('/orders', \Controllers\OrderController::class , 'getAllOrders');
-$app->get('/order', \Controllers\OrderController::class , 'getOrderByOrderID');
+$app->post('/order', \Controllers\OrderController::class , 'getOrderByOrderID');
 $app->post('/product', \Controllers\ProductController::class , 'product');
 $app->Run();

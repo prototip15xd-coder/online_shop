@@ -2,15 +2,13 @@
 
 namespace Controllers;
 
-use Model\Cart;
 use Model\Order;
 use Model\OrderProduct;
 use Model\Product;
 use Model\UserProduct;
 
-class OrderController
+class OrderController extends BaseController /// здесь повторяется только проверка, как отделить часть цикла я не совсем понимаю
 {
-    private Cart $cartModel;
     private Order $orderModel;
     private OrderProduct $orderProductModel;
     private Product $productModel;
@@ -19,7 +17,7 @@ class OrderController
 
     public function __construct()
     {
-        $this->cartModel = new Cart();
+        parent::__construct();
         $this->orderModel = new Order();
         $this->orderProductModel = new OrderProduct();
         $this->productModel = new Product();
@@ -28,56 +26,25 @@ class OrderController
 
     public function getCheckoutForm()
     {
-        if (isset($_SESSION['userid'])) {
-            require_once '/var/www/html/src/Views/create-order.php';
-        } else {
-            require_once '/var/www/html/src/Views/login.php';
-        }
+        $this->checkUser();
+        require_once '/var/www/html/src/Views/create-order.php';
     }
 
-    public function handleCheckoutOrder()     ///НЕ РАБОТАЕТ?
+    public function handleCheckoutOrder()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['userid'])) {
-            header('Location: /login');
-            exit;
-        }
-
-        $errors = $this->validate($_POST);
-
+        $this->checkUser();
+        $errors = $this->validate();
         if (empty($errors)) {
-            $contactName = $_POST['name'];
-            $contactPhone = $_POST['phone'];
-            $contactComm = $_POST['comm'];
-            $address = $_POST['address'];
-            $userId = $_SESSION['userid'];
-
-            $orderId = $this->orderModel->create($contactName, $contactPhone, $contactComm, $address, $userId);
-
-            $user_products = $this->userProductModel->getAllByUserId($userId);
-
-            foreach ($user_products as $user_product) {
-                $productId = $user_product['product_id'];
-                $amount = $user_product['amount'];
-                $orderProduct = $this->orderProductModel->createOrderProduct(
-                    $orderId,
-                    $productId,
-                    $amount);
-            }
-            $this->userProductModel->deleteByUserId($userId);
+            $data = $_POST;
+            $user = $this->authService->getCurrentUser();
+            $this->orderService->createOrder($data, $user);
             header('Location: /orders');
-
-
         } else {
             require_once '/var/www/html/src/Views/create-order.php';
         }
-
     }
 
-    private function validate(array $data): array
+    private function validate(): array
     {
         $errors = [];
         if (isset($_POST['name'])) {
@@ -107,16 +74,10 @@ class OrderController
 
     public function getAllOrders()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-        if (!isset($_SESSION['userid'])) {
-            header('Location: /login');
-            exit;
-        }
+        $this->checkUser();
         $orders = $this->orderModel->getOrders($_SESSION['userid']);
         foreach ($orders as $order) {
-            $orderId = $order->getId();
+            $orderId = $order->getOrderId();
             $orderProducts = $this->orderProductModel->getAllProductFromOrderByOrderId($orderId);
             $productsData = [];
 
@@ -129,23 +90,43 @@ class OrderController
         require_once '/var/www/html/src/Views/user_orders.php';
     }
 
-    public function getOrderByOrderID(): array
+    public function getOrderByOrderID()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
+        $this->checkUser();
+        $data = $_POST;
+        $order = $this->orderModel->getOrder($data['order_id']); /// содержит объект заказа (имя,адрес,тел)
+        //// содержит массив объектов user_product
+        $orderProducts = $this->orderProductModel->getAllProductFromOrderByOrderId($data['order_id']);
+        /// содержит массив объектов продуктов
+        $products = [];
+        foreach ($orderProducts as $orderProduct) {
+            $productId = $orderProduct->getProductId();
+            $product = $this->productModel->productByproductId($productId);
+            $order->products[] = $products;
+            $order->amount = $orderProduct->getAmount();
         }
-        if (!isset($_SESSION['userid'])) {
+
+
+
+
+
+//        //var_dump($orders);
+//        $userOrder = [];
+//        foreach ($orders as $order) {
+//            $orderId = $order->getOrderId();
+//            $orderProducts = $this->orderProductModel->getAllProductFromOrderByOrderId($orderId);
+//            $userOrder['orderProducts'] = $orderProducts;
+//        }
+//        //$newUserOrder[] = $userOrder;
+//        //var_dump($userOrder);
+        require_once '/var/www/html/src/Views/order.php';
+    }
+    public function checkUser()
+    {
+        if (!$this->authService->getCurrentUser()) {
             header('Location: /login');
+            exit;
         }
-        $orders = $this->orderModel->getOrders($_SESSION['userid']);
-        $userOrder = [];
-        foreach ($orders as $order) {
-            $orderId = $order->getId();
-            $orderProducts = $this->orderProductModel->getAllProductFromOrderByOrderId($orderId);
-            $userOrder['orderProducts'] = $orderProducts;
-        }
-        $newUserOrder[] = $userOrder;
-        return $newUserOrder;
     }
 }
 

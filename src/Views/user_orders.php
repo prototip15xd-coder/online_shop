@@ -16,9 +16,12 @@
                     <!-- Каждая карточка товара с формой -->
                     <div class="card text-center">
                         <tr>
-                            <button type="submit" class="registerbtn">Посмотреть заказ</button>
+                            <form action="/order" method="POST" style="margin: 0;">   <!--а точно пост а не гет?-->
+                                <input type="hidden" name="order_id" value="<?php echo $order->getOrderId(); ?>">
+                                <button type="submit">Посмотреть заказ</button>
+                            </form>
                             <td>Номер заказа: </td>
-                            <td><?php echo  $order->getId(); ?></td>
+                            <td><?php echo  $order->getOrderId(); ?></td>
                             <td>Количество товаров:</td>
                             <td><?php echo  $order->getAmount(); ?></td>
                             <td>Имя получателя:</td>
@@ -32,13 +35,13 @@
                             <td>Товары:</td>
                             <?php foreach ($order->getProducts() as $product): ?>
                             <div class="card text-center">
-                                <td><?php echo $product->getName(); ?></td>
+                                <td><?php echo $product->getProductName(); ?></td>
                                 <td>Количество товара:</td>
                                 <td><?php echo $o[$c]; ?></td>
                                 <td><?php $c += 1; ?></td>
                                 <td>Стоимость товара:</td>
-                                <td><?php echo $product->getPrice(); ?></td>
-                                <img class="card-img-top" src="<?php echo $product->getImageUrl(); ?>">
+                                <td><?php echo $product->getProductPrice(); ?></td>
+                                <img class="card-img-top" src="<?php echo $product->getProductImageUrl(); ?>">
                             </div>
                             <?php endforeach; ?>
                         </tr>

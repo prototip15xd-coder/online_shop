@@ -40,6 +40,12 @@ class UserProduct extends Model
         $obj->amount = $userProduct["amount"];
         return $obj;
     }
+//    public function userProduct() {
+//        $user_p = $this->connection->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id ");
+//        $user_p->execute(['user_id' => $_SESSION['userid'], 'product_id' => $_POST['product_id']]);
+//        $existingRecord = $user_p->fetch(\PDO::FETCH_ASSOC);
+//        return $existingRecord;
+//    }
     public function userProducts(): array
     {
         $user_id = $_SESSION["userid"];
@@ -55,14 +61,13 @@ class UserProduct extends Model
     }
     public function userProductByDB($product_id): UserProduct ///для случая когда запрос гет и мы просто заходим в каталог
     {
-        $user_id = $_SESSION["userid"];
-        $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id AND product_id = :product_id");
-        $stms->execute([":user_id" => $user_id, ":product_id" => $product_id]);
-        $product = $stms->fetch(\PDO::FETCH_ASSOC);
+        $user_p = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id AND product_id = :product_id ");
+        $user_p->execute(['user_id' => $_SESSION['userid'], 'product_id' => $product_id]);
+        $product  = $user_p->fetch(\PDO::FETCH_ASSOC);
         if ($product=== false) {
             $product = [
                 'id' => 0,
-                'user_id' => $user_id,
+                'user_id' => $_SESSION['userid'],
                 'product_id' => $product_id,
                 'amount' => 0
             ];
@@ -107,7 +112,12 @@ class UserProduct extends Model
         $stmt = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $us_id]);
         $all_products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        return $all_products;
+        $user_products = [];
+        foreach ($all_products as $product) {
+            $obj = $this->objUserProduct($product);
+            $user_products[] = $obj;
+        }
+        return $user_products;
     }
 
     public function deleteByUserId(int $us_id)
@@ -115,23 +125,31 @@ class UserProduct extends Model
         $stmt = $this->connection->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $us_id]);
     }
-    public function add_productDB()
+    public function add_productDB($amount)
     {
-        $result = $this->userProductByDB($_POST["product_id"]);
-        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET amount = amount + 1 WHERE user_id = :user_id AND product_id = :product_id");
+        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET amount = amount + :amount WHERE user_id = :user_id AND product_id = :product_id");
         $stmt->execute([
             'user_id' => $_SESSION['userid'],
             'product_id' => $_POST['product_id'],
+            'amount' => $amount
         ]);
+        if ($stmt->rowCount() == 0) {
+            $stmt = $this->connection->prepare("INSERT INTO {$this->getTableName()} (user_id, product_id, amount) 
+            VALUES (:user_id, :product_id, :amount)");
+            $stmt->execute([
+                'user_id' => $_SESSION['userid'],
+                'product_id' => $_POST['product_id'],
+                'amount' => $amount
+            ]);
+        }
     }
-    public function delete_productDB()
-    {
-
-        $result = $this->userProductByDB($_POST["product_id"]);
-        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET amount = amount - 1 WHERE user_id = :user_id AND product_id = :product_id");
-        $stmt->execute([
-            'user_id' => $_SESSION['userid'],
-            'product_id' => $_POST['product_id'],
-        ]);
-    }
+//    public function delete_productDB($amount)
+//    {
+//        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET amount = amount - :amount WHERE user_id = :user_id AND product_id = :product_id");
+//        $stmt->execute([
+//            'user_id' => $_SESSION['userid'],
+//            'product_id' => $_POST['product_id'],
+//            'amount' => $amount
+//        ]);
+//    }
 }

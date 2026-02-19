@@ -7,14 +7,13 @@ use Model\UserProduct;
 use Service\AuthService;
 use Service\CartService;
 
-class CartController
+class CartController extends BaseController
 {
     private UserProduct $userProductModel;
     private Product $productModel;
-    private CartService $cartService;
-    private AuthService $authService;
 
     public function __construct() {
+        parent::__construct();
         $this->userProductModel = new UserProduct();
         $this->productModel = new Product();
         $this->cartService = new CartService();
@@ -31,9 +30,9 @@ class CartController
 //
 //    }
 
-    public function cart() /// новая где нет совмещения двух таблиц!
+    public function cart()
     {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->check()) {
             $user_products= $this->userProductModel->userProducts($_SESSION['userid']);  //здесь храниться массив объектов
             $all_products = [];
             foreach ($user_products as $user_product) {

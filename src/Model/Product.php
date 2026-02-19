@@ -9,33 +9,38 @@ class Product extends Model // сделай другю модель для от�
      private $description;
      private $price;
      private $image_url;
+     private $value;
 
 
-    public function getId()
+    public function getProductId()
     {
         return $this->id;
     }
 
 
-    public function getName()
+    public function getProductName()
     {
         return $this->name;
     }
 
 
-    public function getDescription()
+    public function getProductDescription()
     {
         return $this->description;
     }
 
 
-    public function getPrice()
+    public function getProductPrice()
     {
         return $this->price;
     }
-    public function getImageUrl()
+    public function getProductImageUrl()
     {
         return $this->image_url;
+    }
+    public function getProductValue()
+    {
+        return $this->value;
     }
     public function objProduct(array $product) {
         $obj = new self();
@@ -44,6 +49,7 @@ class Product extends Model // сделай другю модель для от�
         $obj->description = $product["description"];
         $obj->price = $product["price"];
         $obj->image_url = $product["image_url"];
+        $obj->value = $product["value"];
         return $obj;
     }
 
@@ -54,7 +60,7 @@ class Product extends Model // сделай другю модель для от�
     public function productByDB(): array | null
     {
         $stms = $this->connection->query("SELECT * FROM {$this->getTableName()}");
-        $products_array = $stms->fetchAll();
+        $products_array = $stms->fetchAll(\PDO::FETCH_ASSOC);
         $products = [];
         foreach ($products_array as $product) {
             $obj = $this->objProduct($product);

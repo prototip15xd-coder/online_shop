@@ -11,7 +11,7 @@ class OrderProduct extends Model
     private int $product_id;
     private int $amount;
 
-    public function getId(): int
+    public function getOrderProductId(): int
     {
         return $this->id;
     }
@@ -44,14 +44,22 @@ class OrderProduct extends Model
         return $obj;
     }
     public function createOrderProduct(int $orderId, int $productId, int $amount) {
-        $stmt=$this->connection->prepare("INSERT INTO {$this->getTableName()} (order_id, product_id, amount) 
-        VALUES (:order_id, :product_id, :amount)");
-
+        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()}  SET amount = amount + :amount 
+         WHERE order_id = :order_id AND product_id = :product_id");
         $stmt->execute([
             ':order_id' => $orderId,
             ':product_id' => $productId,
             ':amount' => $amount
         ]);
+        if ($stmt->rowCount() == 0) {
+            $stmt = $this->connection->prepare("INSERT INTO {$this->getTableName()} (order_id, product_id, amount) 
+            VALUES (:order_id, :product_id, :amount)");
+            $stmt->execute([
+                ':order_id' => $orderId,
+                ':product_id' => $productId,
+                ':amount' => $amount
+            ]);
+        }
     }
 
     public function getAllProductFromOrderByOrderId(int $orderId): array {

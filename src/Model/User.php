@@ -11,22 +11,22 @@ class User extends Model
     private string $email;
     private string $password;
 
-    public function getId(): int
+    public function getUserId(): int
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function getUserName(): string
     {
         return $this->name;
     }
 
-    public function getEmail(): string
+    public function getUserEmail(): string
     {
         return $this->email;
     }
 
-    public function getPassword(): string
+    public function getUserPassword(): string
     {
         return $this->password;
     }

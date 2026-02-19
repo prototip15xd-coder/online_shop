@@ -14,30 +14,30 @@
             <?php foreach ($products as $product): ?>
                 <!-- Каждая карточка товара с формой -->
                 <div class="card text-center">
-                    <img class="card-img-top" src="<?php echo $product->getImageUrl(); ?>">
+                    <img class="card-img-top" src="<?php echo $product->getProductImageUrl(); ?>">
                     <div class="card-body">
-                        <p class="card-text text-muted"><?php echo $product->getName();?></p>
-                        <h5 class="card-title"><?php echo $product->getDescription(); ?></h5>
+                        <p class="card-text text-muted"><?php echo $product->getProductName();?></p>
+                        <h5 class="card-title"><?php echo $product->getProductDescription(); ?></h5>
                         <div class="card-footer">
-                            <?php echo $product->getPrice();?>
+                            <?php echo $product->getProductPrice();?>
                         </div>
                     </div>
                     <div style="display: flex; margin: 10px;">
                         <!-- Кнопка - -->
                         <form action="/catalog" method="POST" style="margin: 0;">
-                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                            <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <input type="hidden" name="action" value="minus">
                             <button type="submit" style="width: 30px; height: 30px;">-</button>
                         </form>
 
                         <!-- Количество -->
                         <span style="margin: 0 10px; min-width: 30px; text-align: center;">
-                        <?php echo $productsAmount[$product->getId()] ?? 0; ?>
+                        <?php echo $productsAmount[$product->getProductId()] ?? 0; ?>
                         </span>
 
                         <!-- Кнопка + -->
                         <form action="/catalog" method="POST" style="margin: 0;">
-                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                            <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <input type="hidden" name="action" value="plus">
                             <button type="submit" style="width: 30px; height: 30px;">+</button>
                         </form>
@@ -46,7 +46,7 @@
                     </div>
                     <div>
                         <form action="/product" method="POST" style="margin: 0;">   <!--а точно пост а не гет?-->
-                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
+                            <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <button type="submit">Посмотреть товар</button>
                         </form>
                     </div>

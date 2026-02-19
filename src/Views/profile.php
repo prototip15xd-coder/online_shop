@@ -92,7 +92,7 @@
 
         <div class="name">
             <?php require_once '../Controllers/UserController.php'; ?>
-            <?php echo $user->getName();?>
+            <?php echo $user->getUserName();?>
         </div>
     </div>
 
@@ -146,13 +146,13 @@
                     <td>Name</td>
                     <td>:</td>
                     <td>
-                            <?php echo $user->getName(); ?>
+                            <?php echo $user->getUserName(); ?>
                 </tr>
                 <tr>
                     <td>Email</td>
                     <td>:</td>
                     <td>
-                            <?php echo $user->getEmail(); ?>
+                            <?php echo $user->getUserEmail(); ?>
                 </tr>
                 <tr>
                     <td>password</td>

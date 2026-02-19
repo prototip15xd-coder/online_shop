@@ -91,7 +91,7 @@
         <img src="https://imdezcode.files.wordpress.com/2020/02/imdezcode-logo.png" alt="" width="100" height="100">
 
         <div class="name">
-            <?php echo $user->getName();?>
+            <?php echo $user->getUserName();?>
         </div>
     </div>
 
@@ -114,14 +114,14 @@
                         <td>Name</td>
                         <td>:</td>
                         <td>
-                                <input type="text" name="name" class="edit-input" value="<?php echo $user->getName(); ?>">
+                                <input type="text" name="name" class="edit-input" value="<?php echo $user->getUserName(); ?>">
                         </td>
                     </tr>
                     <tr>
                         <td>Email</td>
                         <td>:</td>
                         <td>
-                                <input type="email" name="email" class="edit-input" value="<?php echo $user->getEmail(); ?>">
+                                <input type="email" name="email" class="edit-input" value="<?php echo $user->getUserEmail(); ?>">
                         </td>
                     </tr>
                     <tr>

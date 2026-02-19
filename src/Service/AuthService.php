@@ -33,10 +33,10 @@ class AuthService
         if (!$user) {
             return false;//$errors['USERNAME'] = 'Все поля должны быть заполнены';
         } else {
-            $passwordDB = $user->getPassword();
+            $passwordDB = $user->getUserPassword();
             if (password_verify($password, $passwordDB)) {
                 $this->session();
-                $_SESSION['userid'] = $user->getId();
+                $_SESSION['userid'] = $user->getUserId();
                 return true;
             } else {
                 return false;

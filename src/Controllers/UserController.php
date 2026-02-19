@@ -97,7 +97,7 @@ class UserController extends BaseController
             $email = $_POST['email'];
             $PASSWORD = $_POST['password'];
 
-            $user = $this->auth($email, $PASSWORD);
+            $user = $this->authService->auth($email, $PASSWORD);
             if ($user === false or $user == null) {
                 $errors['PASSWORD'] = 'логин или пароль указаны неверно';
             } else {
@@ -121,12 +121,12 @@ class UserController extends BaseController
         if (isset($_SESSION['userid'])) {
             $user = $this->userModel->UserbyDB();
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $newName = $_POST['name'] ?? $user->getName();
-                $newEmail = $_POST['email'] ?? $user->getEmail();
+                $newName = $_POST['name'] ?? $user->getUserName();
+                $newEmail = $_POST['email'] ?? $user->getUserEmail();
                 $newPassword = $_POST['password'] ?? '';
 
-                $nameChanged = ($newName !== $user->getName());
-                $emailChanged = ($newEmail !== $user->getEmail());
+                $nameChanged = ($newName !== $user->getUserName());
+                $emailChanged = ($newEmail !== $user->getUserEmail());
                 $passwordChanged = !empty($newPassword);
 
                 if ($passwordChanged) {

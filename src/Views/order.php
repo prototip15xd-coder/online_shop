@@ -10,40 +10,29 @@
         <a href="/cart" class="Cart">Корзина<br></a>
         <a href="/orders" class="Cart">Мои заказы<br></a>
         <a href="/logout" class="edit-mode-btn">Выйти из профиля<br></a>
-        <h3>Catalog</h3>
+        <h3>Order</h3>
         <div class="card-deck">
+            <td>Номер заказа: </td>
+            <td><?php echo  $order->getOrderId(); ?></td>
+            <td>Имя получателя:</td>
+            <td><?php echo  $order->getContactName(); ?></td>
+            <td>Адрес доставки:</td>
+            <td><?php echo  $order->getAddress(); ?></td>
+            <td>Комментарий:</td>
+            <td><?php echo  $order->getComment(); ?></td>
+<!--            <td>--><?php //$c = 0; ?><!--</td>-->
+<!--            <td>--><?php //$o = $order->getAmountProduct(); ?><!--</td>-->
+            <td>Товары:</td>
             <?php foreach ($products as $product): ?>
-                <!-- Каждая карточка товара с формой -->
                 <div class="card text-center">
-                    <img class="card-img-top" src="<?php echo $product->getImageUrl(); ?>">
-                    <div class="card-body">
-                        <p class="card-text text-muted"><?php echo $product->getName();?></p>
-                        <h5 class="card-title"><?php echo $product->getDescription(); ?></h5>
-                        <div class="card-footer">
-                            <?php echo $product->getPrice();?>
-                        </div>
-                    </div>
-
-                    <!-- Форма для этого конкретного товара -->
-                    <form action="/catalog" method="POST">
-                        <div class="container">
-                            <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>" required>
-
-                            <?php if (isset($errors['amount'])): ?>
-                                <label style="color:red"><?php echo $errors['amount']; ?></label>
-                            <?php endif; ?>
-
-                            <input type="text"
-                                   placeholder="Enter amount"
-                                   name="amount"
-                                   id="amount_<?php echo $product->getId(); ?>"
-                                   required>
-                        </div>
-                        <button type="submit" class="AddProdbtn">Add Product</button>
-                    </form>
-                </div> <!-- закрываем div.card -->
+                    <td><?php echo $product->getProductName(); ?></td>
+                    <td>Стоимость товара:</td>
+                    <td><?php echo $product->getProductPrice(); ?></td>
+                    <img class="card-img-top" src="<?php echo $product->getProductImageUrl(); ?>">
+                </div>
             <?php endforeach; ?>
-        </div> <!-- закрываем div.card-deck -->
+            </tr>
+        </div> <!-- закрываем div.card -->
     </div> <!-- закрываем div.container -->
 </div>
 </body>
