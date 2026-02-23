@@ -5,6 +5,7 @@ use Model\OrderProduct;
 use Model\Product;
 use Model\UserProduct;
 use Model\User;
+use Request\AddProductRequest;
 use Service\AuthService;
 
 class ProductController extends BaseController
@@ -24,10 +25,10 @@ class ProductController extends BaseController
         $this->userProductModel = new UserProduct();
 
     }
-    public function catalog()
+    public function catalog(AddProductRequest $request)
     {
-        if (isset($_POST['action'])) {
-            $errors = $this->addProductValidate($_POST['action']);
+        if ($request->getAction() !== null) {
+            $errors = $this->addProductValidate($request);
             if (empty($errors)) {
                 $this->cartService->add_product();
             }
@@ -35,16 +36,10 @@ class ProductController extends BaseController
         if ($this->authService->check()) {
             $products = $this->productModel->productByDB();
             $productsAmount = [];
-            //var_dump($products);
             foreach ($products as $product) {
-                //var_dump($product);
                 $product_id = $product->getProductId();
-                //print_r($product_id);
                 $user_product = $this->userProductModel->userProductByDB($product_id);
-                //var_dump($user_product);
-                //$amount = $user_product->getAmount();
                 $productsAmount[$product_id] = $user_product->getAmount();
-                //print_r($user_product->getAmount());
             }
             require_once '/var/www/html/src/Views/catalog.php';
         } else {
@@ -52,10 +47,10 @@ class ProductController extends BaseController
         }
     }
 
-    public function addProductValidate($action)
+    public function addProductValidate(AddProductRequest $request) //// уместно ли его перевести в AddProductRequest?
     {
         $errors = [];
-        $product_id = $_POST["product_id"];
+        $product_id = $request->getProductId();
         $objUserProduct = $this->userProductModel->userProductByDB($product_id);
         $amount = $objUserProduct->getAmount();
         if ($this->authService->check()) {
@@ -63,7 +58,7 @@ class ProductController extends BaseController
             if (!isset($res)) {
                 $errors['product_id'] = 'Данный товар не существует или закончился';
             } else {
-                if ($action === 'minus' || $action === 'remove') {
+                if ($request->getAction() === 'minus') {
                     $amount -= 1;
                     if ($amount < 0) {
                         $errors['amount'] = 'Количество товаров должно быть больше нуля';
@@ -89,17 +84,17 @@ class ProductController extends BaseController
 //        }
 //        //$products = $this->catalog();
 //    }
-    public function product()
+    public function product(AddProductRequest $request)
     {
-        if (isset($_POST['action'])) {
-            $errors = $this->addProductValidate($_POST['action']);
+        if ($request->getAction() !== null) {
+            $errors = $this->addProductValidate($request->getAction());
             if (empty($errors)) {
                 $this->cartService->add_product();
             }
         } //попоробуй реализовать +- на странице товара   НУЖНО ПРИДУМАТЬ КАК СВЯЗАТЬ ДАННЫЕ
         // КАТАЛОГА ПОПРОБУЙ ВЫНЕСТИ +- В ОТДЕЛЬНУЮ ФУНКЦИЮ! ЧТОБЫ ИСП В КАТ И ПРОД
         if ($this->authService->check()) {
-            $product_id = $_POST["product_id"];
+            $product_id = $request->getProductId();
             $product = $this->productModel->productByproductId($product_id);
             $productsAmount = []; //это нужно для +-
             $productReviews = $this->productModel->product_reviews($product_id);

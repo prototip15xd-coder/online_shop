@@ -22,23 +22,25 @@
                             </form>
                             <td>Номер заказа: </td>
                             <td><?php echo  $order->getOrderId(); ?></td>
-                            <td>Количество товаров:</td>
-                            <td><?php echo  $order->getAmount(); ?></td>
+<!--                            <td>Количество товаров:</td>-->
+<!--                            <td>--><?php //echo  $order->amount; ?><!--</td>-->
                             <td>Имя получателя:</td>
                             <td><?php echo  $order->getContactName(); ?></td>
                             <td>Адрес доставки:</td>
                             <td><?php echo  $order->getAddress(); ?></td>
                             <td>Комментарий:</td>
                             <td><?php echo  $order->getComment(); ?></td>
-                            <td><?php $c = 0; ?></td>
-                            <td><?php $o = $order->getAmountProduct(); ?></td>
+<!--                            <td>--><?php //$c = 0; ?><!--</td>-->
+<!--                            <td>--><?php //$o = $order->getAmountProduct(); ?><!--</td>-->
                             <td>Товары:</td>
-                            <?php foreach ($order->getProducts() as $product): ?>
+                            <?php foreach ($order->products as $product): ?>
                             <div class="card text-center">
                                 <td><?php echo $product->getProductName(); ?></td>
                                 <td>Количество товара:</td>
-                                <td><?php echo $o[$c]; ?></td>
-                                <td><?php $c += 1; ?></td>
+                                <td><?php echo $product->amount; ?></td>
+<!--                                <td>--><?php //$c += 1; ?><!--</td>-->
+<!--                                <td>--><?php //echo $o[$c]; ?><!--</td>-->
+<!--                                <td>--><?php //$c += 1; ?><!--</td>-->
                                 <td>Стоимость товара:</td>
                                 <td><?php echo $product->getProductPrice(); ?></td>
                                 <img class="card-img-top" src="<?php echo $product->getProductImageUrl(); ?>">

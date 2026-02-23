@@ -47,34 +47,34 @@ class CartController extends BaseController
             require_once '/var/www/html/src/Views/login.php';
         }
     }
-    public function add_product_validate($action)
-    {
-        $errors = [];
-        $product_id = $_POST["product_id"];
-        $objUserProduct = $this->userProductModel->userProductByDB($product_id);
-        $amount = $objUserProduct->getAmount();
-        if ($this->authService->check()) {
-            $res = $this->productModel->validate_product();
-            if (!isset($res)) {
-                $errors['product_id'] = 'Данный товар не существует или закончился';
-            } else {
-                if ($action === 'minus' || $action === 'remove') {
-                    $amount -= 1;
-                    if ($amount < 0) {
-                        $errors['amount'] = 'Количество товаров должно быть больше нуля';
-                    }
-                }
-            }
-        }
-        return $errors;
-    }
-
-    public function add_product()
-    {
-        $errors = $this->add_product_validate($_POST['action']);
-        if (empty($errors)) {
-            $this->cartService->add_product();
-        }
-    }
+//    public function add_product_validate($action)   /// сделать реализацию +- в самой корзине?
+//    {
+//        $errors = [];
+//        $product_id = $_POST["product_id"];
+//        $objUserProduct = $this->userProductModel->userProductByDB($product_id);
+//        $amount = $objUserProduct->getAmount();
+//        if ($this->authService->check()) {
+//            $res = $this->productModel->validate_product();
+//            if (!isset($res)) {
+//                $errors['product_id'] = 'Данный товар не существует или закончился';
+//            } else {
+//                if ($action === 'minus' || $action === 'remove') {
+//                    $amount -= 1;
+//                    if ($amount < 0) {
+//                        $errors['amount'] = 'Количество товаров должно быть больше нуля';
+//                    }
+//                }
+//            }
+//        }
+//        return $errors;
+//    }
+//
+//    public function add_product()
+//    {
+//        $errors = $this->add_product_validate($_POST['action']);
+//        if (empty($errors)) {
+//            $this->cartService->add_product();
+//        }
+//    }
 
 }

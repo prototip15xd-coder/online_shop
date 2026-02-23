@@ -2,21 +2,20 @@
 
 namespace Controllers;
 
-use Model\Product;
-use Model\User;
-use Controllers\ProductController;
+
+use Request\LoginRequest;
+use Request\ProfileEditRequest;
+use Request\RegistrateRequest;
 
 class UserController extends BaseController
 {
-    private ProductController $productController;
 
     public function __construct() {
         parent::__construct();
-        $this->productController = new ProductController();
     }
     public function getRegistration()
     {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->getCurrentUser()) {
             header("Location: /catalog");
             exit;
         }
@@ -24,106 +23,62 @@ class UserController extends BaseController
     }
     public function getLogin()
     {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->getCurrentUser()) {
             header("Location: /catalog");
             exit;
         }
         require_once '/var/www/html/src/Views/login.php';
     }
 
-    function registration()
+    function registration(RegistrateRequest $request)
     {
-        $errors = $this->validate($_POST);
+        $errors = $request->validate();
         if (empty($errors)) {
-            $chekemail = $this->userModel->count_getbyEmail($_POST['email']);
+            $chekemail = $this->userModel->count_getbyEmail($request->getEmail());
             if ($chekemail > 0) {
                 $errors['email'] = 'Такой email уже существует';
             } else {
-                $password = password_hash($_POST['psw'], PASSWORD_DEFAULT);
+                $password = password_hash($request->getPassword(), PASSWORD_DEFAULT); //['psw']
                 $this->userModel-> password_hash($password);
-
-                $user = $this->userModel->getByEmail($_POST['email']);
+                $user = $this->userModel->getByEmail($request->getEmail());
 
                 header("Location: /catalog");
                 exit;
             }
         }
-
         $errors = $errors ?? [];
         require_once '/var/www/html/src/Views/registration.php';
     }
 
-    private function validate(array $POST_DATA)
+    public function login(LoginRequest $request)
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $errors = [];
-            if (isset($POST_DATA['name'])) {
-                $name = $POST_DATA['name'];
-                if (strlen($name) < 4) {
-                    $errors['name'] = 'Имя должно быть длинее 4 символов';
-                }
-            } else {
-                $errors['name'] = 'Имя должно быть заполнено';
-            }
-
-            if (isset($POST_DATA['email'])) {
-                $email = $POST_DATA['email'];
-                if (strpos($email, '@') === false) {
-                    $errors['email'] = 'email должен содержать знак @';
-                }
-            } else {
-                $errors['email'] = 'email должен быть заполнен';
-            }
-
-            if (isset($POST_DATA['psw'])) {
-                $password = $POST_DATA['psw'];
-                $psw_repeat = $POST_DATA['psw-repeat'];
-                if ($password !== $psw_repeat) {
-                    $errors['psw-repeat'] = "Пароли не совпадают\n";
-                }
-            } else {
-                $errors['password'] = 'пароли должны быть заполнены';
-            }
-            return $errors;
-        }
-    }
-
-    public function login()
-    {
-        $errors = [];
-        if (empty($_POST['email']) || empty($_POST['password'])) {
-            $errors['USERNAME'] = 'Все поля должны быть заполнены';
+        $errors = $request->validate();
+        $user = $this->authService->auth($request->getEmail(), $request->getPassword());
+        if ($user === false or $user == null) {
+            $errors['PASSWORD'] = 'логин или пароль указаны неверно';
         } else {
-            $email = $_POST['email'];
-            $PASSWORD = $_POST['password'];
-
-            $user = $this->authService->auth($email, $PASSWORD);
-            if ($user === false or $user == null) {
-                $errors['PASSWORD'] = 'логин или пароль указаны неверно';
-            } else {
-                header("Location: /catalog");
-                exit();
-            }
-            require_once '/var/www/html/src/Views/login.php';
+            header("Location: /catalog");
+            exit();
         }
+        require_once '/var/www/html/src/Views/login.php';
     }
 
     public function profile()
     {
-        if (isset($_SESSION['userid'])) {
+        if ($this->authService->getCurrentUser()) {
             $user = $this->userModel->UserbyDB();
             require_once '/var/www/html/src/Views/profile.php';
         } else {
             require_once '/var/www/html/src/Views/login.php';
         }
     }
-    public function profileEdit() {
-        if (isset($_SESSION['userid'])) {
+    public function profileEdit(ProfileEditRequest $request) {
+        if ($this->authService->getCurrentUser()) {
             $user = $this->userModel->UserbyDB();
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $newName = $_POST['name'] ?? $user->getUserName();
-                $newEmail = $_POST['email'] ?? $user->getUserEmail();
-                $newPassword = $_POST['password'] ?? '';
+                $newName = $request->getName() ?? $user->getUserName();
+                $newEmail = $request->getEmail() ?? $user->getUserEmail();
+                $newPassword = $request->getPassword() ?? '';
 
                 $nameChanged = ($newName !== $user->getUserName());
                 $emailChanged = ($newEmail !== $user->getUserEmail());
@@ -139,7 +94,6 @@ class UserController extends BaseController
                 } else if ($emailChanged) {
                     $this->userModel->UpdateEmail($newEmail);
                 }
-
                 header('Location: /profile');
                 exit;
             } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -148,7 +102,6 @@ class UserController extends BaseController
                 header('Location: /login');
                 exit;
             }
-
         }
     }
 

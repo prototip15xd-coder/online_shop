@@ -11,18 +11,7 @@ class Order extends Model
     private string $contact_phone;
     private string $comment;
     private string $address;
-    public array $products;
-//    private array $amountProduct;
-//
-//    public function getAmountProduct(): array
-//    {
-//        return $this->amountProduct;
-//    }
 
-    public function getProducts(): array
-    {
-        return $this->products;
-    }
 
     public function getOrderId(): int
     {
@@ -62,24 +51,21 @@ class Order extends Model
         return $obj;
     }
 
-    public function create( array $data, int $userId)
-
+    public function create( string $name, $phone, $comm, string $address, int $userId)
     {
         $stmt = $this->connection->prepare(
             "INSERT INTO {$this->getTableName()} (contact_name, contact_phone, comment, address, user_id) 
                     VALUES (:name, :phone, :comment, :address, :user_id) RETURNING id"
         );
         $stmt->execute([
-            'name'=>$data['name'],
-            'phone'=>$data['phone'],
-            'comment'=>$data['comm'],
-            'address'=>$data['address'],
+            'name'=>$name,
+            'phone'=>$phone,
+            'comment'=>$comm,
+            'address'=>$address,
             'user_id'=>$userId
         ]);
-
         $res = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $res['id'];
-
     }
     public function getOrder(int $orderId): Order
     {
@@ -87,7 +73,18 @@ class Order extends Model
         $stmt->execute(['order_id' => $orderId]);
         $order = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $this->objOrder($order);
-
+    }
+    public function getOrders(int $us_id): array
+    {
+        $stmt = $this->connection->prepare("SELECT * FROM orders WHERE user_id = :user_id");
+        $stmt->execute([':user_id' => $us_id]);
+        $orders = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $all_orders = [];
+        foreach ($orders as $order) {
+            $obj = $this->objOrder($order);
+            $all_orders[] = $obj;
+        }
+        return $all_orders;
     }
 //    public function getOrders(int $us_id): array
 //    {
@@ -110,23 +107,10 @@ class Order extends Model
 //        }
 //        return $all_orders;
 //    }
+//    public function addProduct(Product $product, $amount_product) {///// что делать с этой чепухой?
+//        $this->products[] = $product;
+//        $this->amountProduct[] = $amount_product;
+//    }
 
-    public function addProduct(Product $product, $amount_product) {
-        $this->products[] = $product;
-        $this->amountProduct[] = $amount_product;
-    }
-
-    public function getOrders(int $us_id): array
-    {
-        $stmt = $this->connection->prepare("SELECT * FROM orders WHERE user_id = :user_id");
-        $stmt->execute([':user_id' => $us_id]);
-        $orders = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $all_orders = [];
-        foreach ($orders as $order) {
-            $obj = $this->objOrder($order);
-            $all_orders[] = $obj;
-        }
-        return $all_orders;
-    }
 
 }

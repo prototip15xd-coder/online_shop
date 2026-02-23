@@ -101,7 +101,19 @@ class App
                 $method = $handler['method'];
 
                 $controller = new $class();
-                $controller->$method();
+                $requestClass = $handler['request'];
+                if ($requestClass !== null) {
+                    $request = new $requestClass($_POST);
+                    $controller->$method($request);
+                } else {
+                    $controller->$method();
+                }
+//                if ($method === 'GET') {
+//                    $controller->$method();
+//                } elseif ($method === 'POST') {
+//                    $controller->$method($_POST);
+//                }
+                $controller->$method($_POST);
             } else {
                 echo "$requestMethod не поддерживается для $requestUri";
             }
@@ -114,17 +126,19 @@ class App
     public function addRoute(string $route, string $routeMethod, string $className, string $classMethod){
         $this->routes[$route][$routeMethod] = [
                 'class' => $className,
-                'method' => $classMethod ];
+                'method' => $classMethod, ];
     }
-    public function get(string $route, string $className, string $classMethod){
+    public function get(string $route, string $className, string $classMethod, string $request = null){
         $this->routes[$route]['GET'] = [
             'class' => $className,
-            'method' => $classMethod ];
+            'method' => $classMethod,
+            'request' => $request, ];
     }
-    public function post(string $route, string $className, string $classMethod){
+    public function post(string $route, string $className, string $classMethod, string $request = null){
         $this->routes[$route]['POST'] = [
             'class' => $className,
-            'method' => $classMethod ];
+            'method' => $classMethod,
+            'request' => $request ];
     }
     public function put(string $route, string $className, string $classMethod){
         $this->routes[$route]['PUT'] = [

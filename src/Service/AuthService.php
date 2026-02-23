@@ -55,5 +55,12 @@ class AuthService
         $this->session();
         session_destroy();
     }
+    public function checkUser()
+    {
+        if (!$this->getCurrentUser()) {
+            header('Location: /login');
+            exit;
+        }
+    }
 
 }
