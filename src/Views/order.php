@@ -23,14 +23,16 @@
 <!--            <td>--><?php //$c = 0; ?><!--</td>-->
 <!--            <td>--><?php //$o = $order->getAmountProduct(); ?><!--</td>-->
             <td>Товары:</td>
-            <?php foreach ($order->products as $product): ?>
+            <?php foreach ($order->getOrderProducts() as $orderProduct): ?>
                 <div class="card text-center">
-                    <td><?php echo $product->getProductName(); ?></td>
-                    <td>Стоимость товара:</td>
-                    <td><?php echo $product->getProductPrice(); ?></td>
+                    <td><?php echo $orderProduct->getProduct()->getProductName(); ?></td>
+                    <img class="card-img-top" src="<?php echo $orderProduct->getProduct()->getProductImageUrl(); ?>">
                     <td>Количество товара:</td>
-                    <td><?php echo $product->amount; ?></td>
-                    <img class="card-img-top" src="<?php echo $product->getProductImageUrl(); ?>">
+                    <td><?php echo $orderProduct->getAmount(); ?></td>
+                    <td>Стоимость товара:</td>
+                    <td><?php echo $orderProduct->getProduct()->getProductPrice(); ?></td>
+                    <td>Общая стоимость товара:</td>
+                    <td><?php echo $orderProduct->getTotalSum(); ?></td>
                 </div>
             <?php endforeach; ?>
             </tr>

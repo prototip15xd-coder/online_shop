@@ -2,12 +2,14 @@
 
 namespace Model;
 
-class UserProduct extends Model
+class UserProduct extends Model ///тут уже объявлены новые св-ва нужно довести до ума
 {
     private int $id;
     private int $user_id;
     private int $product_id;
     private int $amount;
+    private ?Product $product = null;
+    private ?int $totalSum = null;
 
     public function getId(): int
     {
@@ -28,6 +30,22 @@ class UserProduct extends Model
     {
         return $this->amount ?? 0;
     }
+    public function getTotalSum(): ?int
+    {
+        return $this->totalSum;
+    }
+    public function setTotalSum(int $totalSum): void
+    {
+        $this->totalSum = $totalSum;
+    }
+    public function getProduct(): ?Product
+    {
+        return $this->product;
+    }
+    public function setProduct(Product $product): void
+    {
+        $this->product = $product;
+    }
     protected function getTableName(): string
     {
         return "user_products";
@@ -46,9 +64,8 @@ class UserProduct extends Model
 //        $existingRecord = $user_p->fetch(\PDO::FETCH_ASSOC);
 //        return $existingRecord;
 //    }
-    public function userProducts(): array
+    public function getUserProducts($user_id): array
     {
-        $user_id = $_SESSION["userid"];
         $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
         $stms->execute([":user_id" => $user_id]);
         $products = $stms->fetchAll(\PDO::FETCH_ASSOC);

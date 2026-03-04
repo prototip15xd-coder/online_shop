@@ -24,28 +24,30 @@
                     </div>
                     <div style="display: flex; margin: 10px;">
                         <!-- Кнопка - -->
-                        <form action="/catalog" method="POST" style="margin: 0;">
+                        <form action="/add-product" method="POST" style="margin: 0;">
                             <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <input type="hidden" name="action" value="minus">
+                            <input type="hidden" name="redirect_url" value="<?= $_SERVER['REQUEST_URI'] ?>">
                             <button type="submit" style="width: 30px; height: 30px;">-</button>
                         </form>
 
                         <!-- Количество -->
                         <span style="margin: 0 10px; min-width: 30px; text-align: center;">
-                        <?php echo $productsAmount[$product->getProductId()] ?? 0; ?>
+                        <?php echo $product->getProductAmount() ?? 0; ?>
                         </span>
 
                         <!-- Кнопка + -->
-                        <form action="/catalog" method="POST" style="margin: 0;">
+                        <form action="/add-product" method="POST" style="margin: 0;">
                             <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <input type="hidden" name="action" value="plus">
+                            <input type="hidden" name="redirect_url" value="<?= $_SERVER['REQUEST_URI'] ?>">
                             <button type="submit" style="width: 30px; height: 30px;">+</button>
                         </form>
                         <?php if (isset($errors['amount'])): print_r($errors['amount']); endif; ?>
                         <?php if (isset($errors['product_id'])): print_r($errors['product_id']); endif; ?>
                     </div>
                     <div>
-                        <form action="/product" method="POST" style="margin: 0;">   <!--а точно пост а не гет?-->
+                        <form action="/product" method="POST" style="margin: 0;">
                             <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <button type="submit">Посмотреть товар</button>
                         </form>

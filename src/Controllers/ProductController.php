@@ -3,10 +3,11 @@
 namespace Controllers;
 use Model\OrderProduct;
 use Model\Product;
+use Model\ProductReview;
 use Model\UserProduct;
 use Model\User;
 use Request\AddProductRequest;
-use Service\AuthService;
+use Request\ProductRequest;
 
 class ProductController extends BaseController
 {
@@ -14,6 +15,7 @@ class ProductController extends BaseController
     protected Product $productModel;
     protected OrderProduct $orderProductModel;
     protected UserProduct $userProductModel;
+    protected ProductReview $productReviewModel;
 
 
 
@@ -23,23 +25,17 @@ class ProductController extends BaseController
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
         $this->userProductModel = new UserProduct();
+        $this->productReviewModel = new ProductReview();
 
     }
-    public function catalog(AddProductRequest $request)
+    public function catalog() ////вьюху переделай
     {
-        if ($request->getAction() !== null) {
-            $errors = $this->addProductValidate($request);
-            if (empty($errors)) {
-                $this->cartService->add_product();
-            }
-        }
         if ($this->authService->check()) {
             $products = $this->productModel->productByDB();
-            $productsAmount = [];
             foreach ($products as $product) {
                 $product_id = $product->getProductId();
                 $user_product = $this->userProductModel->userProductByDB($product_id);
-                $productsAmount[$product_id] = $user_product->getAmount();
+                $product->setProductAmount($user_product->getAmount());
             }
             require_once '/var/www/html/src/Views/catalog.php';
         } else {
@@ -47,27 +43,27 @@ class ProductController extends BaseController
         }
     }
 
-    public function addProductValidate(AddProductRequest $request) //// уместно ли его перевести в AddProductRequest?
-    {
-        $errors = [];
-        $product_id = $request->getProductId();
-        $objUserProduct = $this->userProductModel->userProductByDB($product_id);
-        $amount = $objUserProduct->getAmount();
-        if ($this->authService->check()) {
-            $res = $this->productModel->validate_product();
-            if (!isset($res)) {
-                $errors['product_id'] = 'Данный товар не существует или закончился';
-            } else {
-                if ($request->getAction() === 'minus') {
-                    $amount -= 1;
-                    if ($amount < 0) {
-                        $errors['amount'] = 'Количество товаров должно быть больше нуля';
-                    }
-                }
-            }
-        }
-        return $errors;
-    }
+//    public function addProductValidate(AddProductRequest $request) //// уместно ли его перевести в AddProductRequest?
+//    {
+//        $errors = [];
+//        $product_id = $request->getProductId();
+//        $objUserProduct = $this->userProductModel->userProductByDB($product_id);
+//        $amount = $objUserProduct->getAmount();
+//        if ($this->authService->check()) {
+//            $res = $this->productModel->validate_product();
+//            if (!isset($res)) {
+//                $errors['product_id'] = 'Данный товар не существует или закончился';
+//            } else {
+//                if ($request->getAction() === 'minus') {
+//                    $amount -= 1;
+//                    if ($amount < 0) {
+//                        $errors['amount'] = 'Количество товаров должно быть больше нуля';
+//                    }
+//                }
+//            }
+//        }
+//        return $errors;
+//    }
 //
 //    public function add_product()
 //    {
@@ -84,31 +80,49 @@ class ProductController extends BaseController
 //        }
 //        //$products = $this->catalog();
 //    }
-    public function product(AddProductRequest $request)
+    public function product(ProductRequest $request)  ///отдельный rout add-product
     {
-        if ($request->getAction() !== null) {
-            $errors = $this->addProductValidate($request->getAction());
-            if (empty($errors)) {
-                $this->cartService->add_product();
-            }
-        } //попоробуй реализовать +- на странице товара   НУЖНО ПРИДУМАТЬ КАК СВЯЗАТЬ ДАННЫЕ
-        // КАТАЛОГА ПОПРОБУЙ ВЫНЕСТИ +- В ОТДЕЛЬНУЮ ФУНКЦИЮ! ЧТОБЫ ИСП В КАТ И ПРОД
         if ($this->authService->check()) {
             $product_id = $request->getProductId();
-            $product = $this->productModel->productByproductId($product_id);
-            $productsAmount = []; //это нужно для +-
-            $productReviews = $this->productModel->product_reviews($product_id);
-            if (isset($productReviews)) {
-                foreach ($productReviews as &$productReview) {
-                    $user_id = $productReview['user_id'];
-                    $user = $this->userModel->UserbyDB(); ////здесь возможно стоит обратиться к getName()
-                    $userName = $user->getUserName();
-                    $productReview['user_name'] = $userName;
-                }//// теперь продукт ревью сод массив с отзывами где еще есть ключ изер нейм
+            if ($product_id === 0) {
+                header("Location: /catalog");
+                exit;
             }
+            $product = $this->productModel->productByproductId($product_id);
+            if (!$product) {
+                header("Location: /catalog");
+                exit;
+            }
+            $user_product = $this->userProductModel->userProductByDB($product_id);
+            $product->setProductAmount($user_product->getAmount());
+            $productReviews = $this->productReview($request->getProductId());
+
             require_once '/var/www/html/src/Views/product.php';
         } else {
             require_once '/var/www/html/src/Views/login.php';
         }
     }
+    public function productReview($product_id)
+    {
+        $productReviews = $this->productReviewModel->product_reviews($product_id);
+        if (isset($productReviews)) {
+            foreach ($productReviews as $productReview) {
+                $user_id = $productReview->getUserId();
+                $user = $this->userModel->UserbyID($user_id);
+                $productReview->setUserName($user->getUserName());
+            }
+        }
+        return $productReviews;
+
+    }
+//    public function addProduct(AddProductRequest $request)
+//    {
+//        if ($request->getAction() !== null) {
+//            $errors = $this->addProductValidate($request);
+//            if (empty($errors)) {
+//                $this->cartService->add_product();
+//            }
+//            header("Location: /catalog");
+//        }
+//    }
 }

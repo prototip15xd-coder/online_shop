@@ -101,6 +101,14 @@ class User extends Model
         $obj = $this->objUser($user);
         return $obj;
     }
+    public function UserbyID(int $user_id)
+    {
+        $stmt = $this->connection->prepare("SELECT id, name, email, password FROM {$this->getTableName()} WHERE id = :id");
+        $stmt->execute(['id' => $user_id]);
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $obj = $this->objUser($user);
+        return $obj;
+    }
     public function UpdateName($newName)
     {
         $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = :id");
@@ -118,4 +126,6 @@ class User extends Model
             'id' => $_SESSION['userid']
         ]);
     }
+
+
 }

@@ -1,15 +1,16 @@
 <?php
 
 namespace Model;
-#[\AllowDynamicProperties]
-class Product extends Model // сделай другю модель для отзывов
+
+class Product extends Model // НИКАКОЙ БЛЯТЬ ДИНАМИКИ НАХУЙ
 {
-     private $id;
-     private $name;
-     private $description;
-     private $price;
-     private $image_url;
-     private $value;
+     private int $id;
+     private string $name;
+     private string $description;
+     private int $price;
+     private string $image_url;
+     private string $value;
+     private ?int $amount = null;
 
 
     public function getProductId()
@@ -18,29 +19,37 @@ class Product extends Model // сделай другю модель для от�
     }
 
 
-    public function getProductName()
+    public function getProductName(): string
     {
         return $this->name;
     }
 
 
-    public function getProductDescription()
+    public function getProductDescription(): string
     {
         return $this->description;
     }
 
 
-    public function getProductPrice()
+    public function getProductPrice(): int
     {
         return $this->price;
     }
-    public function getProductImageUrl()
+    public function getProductImageUrl(): string
     {
         return $this->image_url;
     }
-    public function getProductValue()
+    public function getProductValue(): string
     {
         return $this->value;
+    }
+    public function getProductAmount(): ?int
+    {
+        return $this->amount;
+    }
+    public function setProductAmount(?int $amount): void
+    {
+        $this->amount = $amount;
     }
     public function objProduct(array $product) {
         $obj = new self();
@@ -50,6 +59,7 @@ class Product extends Model // сделай другю модель для от�
         $obj->price = $product["price"];
         $obj->image_url = $product["image_url"];
         $obj->value = $product["value"];
+        $obj->amount = $product["amount"] ?? null;
         return $obj;
     }
 
@@ -81,21 +91,12 @@ class Product extends Model // сделай другю модель для от�
     }
 
 
-    public function validate_product()
+    public function validate_product($productId): int
     {
         $stms = $this->connection->prepare("SELECT id FROM {$this->getTableName()} WHERE id = :product_id");
-        $stms->execute(['product_id' => $_POST['product_id']]);
+        $stms->execute(['product_id' => $productId]);
         return $stms->rowCount();
     }
 
-    public function product_reviews($productId)// нужно создать модель продукт ревью
-    {
-        $stms = $this->connection->prepare("SELECT * FROM products_review WHERE product_id = :product_id");
-        $stms->execute(['product_id' => $productId]);
-        $result = $stms->fetchAll(\PDO::FETCH_ASSOC);
-        if (!$result) {
-            return null;
-        }
-        return $result; //должен содержать массив отзывов
-    }
+
 }

@@ -33,17 +33,17 @@
 <!--                            <td>--><?php //$c = 0; ?><!--</td>-->
 <!--                            <td>--><?php //$o = $order->getAmountProduct(); ?><!--</td>-->
                             <td>Товары:</td>
-                            <?php foreach ($order->products as $product): ?>
+                            <?php foreach ($order->getOrderProducts() as $orderProduct): ?>
                             <div class="card text-center">
-                                <td><?php echo $product->getProductName(); ?></td>
+                                <td><?php echo $orderProduct->getProduct()->getProductName(); ?></td>
                                 <td>Количество товара:</td>
-                                <td><?php echo $product->amount; ?></td>
+                                <td><?php echo $orderProduct->getProduct()->getProductAmount(); ?></td>
 <!--                                <td>--><?php //$c += 1; ?><!--</td>-->
 <!--                                <td>--><?php //echo $o[$c]; ?><!--</td>-->
 <!--                                <td>--><?php //$c += 1; ?><!--</td>-->
-                                <td>Стоимость товара:</td>
-                                <td><?php echo $product->getProductPrice(); ?></td>
-                                <img class="card-img-top" src="<?php echo $product->getProductImageUrl(); ?>">
+                                <td>Итоговая стоимость товара:</td>
+                                <td><?php echo $orderProduct->getTotalsum(); ?></td>
+                                <img class="card-img-top" src="<?php echo $orderProduct->getProduct()->getProductImageUrl(); ?>">
                             </div>
                             <?php endforeach; ?>
                         </tr>

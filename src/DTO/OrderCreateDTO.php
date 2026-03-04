@@ -11,7 +11,7 @@ class OrderCreateDTO
     private string $contact_phone,
     private string $comment,
     private string $address,
-    private User $user){}
+    private ?int $userId= null){}
 
 
     public function getContactName(): string
@@ -34,9 +34,9 @@ class OrderCreateDTO
         return $this->address;
     }
 
-    public function getUser(): User
+    public function getUserId(): int
     {
-        return $this->user;
+        return $this->userId;
     }
 
 

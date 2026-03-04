@@ -28,16 +28,16 @@ class OrderController extends BaseController /// здесь повторяетс
     {
         $this->authService->checkUser();
         $errors = $request->validate();
-        $user = $this->userModel->UserbyDB();
+        //$user = $this->userModel->UserbyDB();
         if (empty($errors)) {
-            $dto = new OrderCreateDTO($request->getContactName(),
+            $dto = new OrderCreateDTO($request->getContactName(), ////зачем здесь dto если мы потом делаем тоже самое???
                 $request->getPhone(),
                 $request->getComment(),
-                $request->getAddress(),
-                $user);
+                $request->getAddress()); /// как здесь избежать передачи юзерИд?
             $this->orderService->createOrder($dto);
             header('Location: /orders');
         } else {
+            ///передай обратно товары и сумму заказа
             require_once '/var/www/html/src/Views/create-order.php';
         }
     }
@@ -67,30 +67,19 @@ class OrderController extends BaseController /// здесь повторяетс
 //    }
     public function getAllOrders()
     {
-        $this->authService->checkUser();
-        $ordersModel = $this->orderModel->getOrders($_SESSION['userid']); /// содержит масив заказов
-        $orders = [];
-        foreach ($ordersModel as $order) {
-            $orderId = $order->getOrderId();
-            $order = $this->orderService->getOrder($orderId,$order);
-            $orders[] = $order;
-        }
+        $orders = $this->orderService->getAllOrders();
         require_once '/var/www/html/src/Views/user_orders.php';
     }
 
     public function getOrderByOrderID(OrderRequest $request)
     {
         $this->authService->checkUser();
-        $orderModel = $this->orderModel->getOrder($request->getOrderId());
-        $order = $this->orderService->getOrder($request->getOrderId(),$orderModel);
+        $user = $this->authService->getCurrentUser();
+        $order= $this->orderModel->getOrder($request->getOrderId());
+        $order->setOrderProducts($this->orderService->getOrderProduct($request->getOrderId()));
+        /////добавь сюда тотал сум и вызов полной цены заказа
         require_once '/var/www/html/src/Views/order.php';
     }
-//    public function checkUser()
-//    {
-//        if (!$this->authService->getCurrentUser()) {
-//            header('Location: /login');
-//            exit;
-//        }
-//    }
+
 }
 

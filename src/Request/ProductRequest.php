@@ -2,15 +2,13 @@
 
 namespace Request;
 
-class AddProductRequest
+class ProductRequest
 {
     public function __construct(private array $data) {
 
     }
-    public function getAction() {
-        return $this->data['action'];
-    }
-    public function getProductId() {
+    public function getProductId(): string {
         return $this->data['product_id'];
     }
+
 }

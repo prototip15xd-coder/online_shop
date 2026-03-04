@@ -20,7 +20,8 @@ $app->post('/registration', \Controllers\UserController::class , 'registration',
 $app->get('/login', \Controllers\UserController::class , 'getLogin');
 $app->post('/login', \Controllers\UserController::class , 'login', \Request\LoginRequest::class );
 $app->get('/catalog', \Controllers\ProductController::class , 'catalog');
-$app->post('/catalog', \Controllers\ProductController::class, 'catalog', \Request\AddProductRequest::class );
+$app->post('/catalog', \Controllers\ProductController::class, 'catalog' );
+$app->post('/add-product', \Controllers\CartController::class, 'addProduct', \Request\AddProductRequest::class );
 $app->get('/profile', \Controllers\UserController::class , 'profile');
 $app->post('/profile', \Controllers\UserController::class , 'profile');
 $app->get('/profile-edit', \Controllers\UserController::class , 'profileEdit');
@@ -31,5 +32,7 @@ $app->get('/create-order', \Controllers\OrderController::class , 'getCheckoutFor
 $app->post('/create-order', \Controllers\OrderController::class , 'handleCheckoutOrder', \Request\AddOrderRequest::class );
 $app->get('/orders', \Controllers\OrderController::class , 'getAllOrders');
 $app->post('/order', \Controllers\OrderController::class , 'getOrderByOrderID', \Request\OrderRequest::class );
-$app->post('/product', \Controllers\ProductController::class , 'product');
+$app->post('/product', \Controllers\ProductController::class , 'product', \Request\ProductRequest::class);
+$app->get('/product', \Controllers\ProductController::class, 'product', \Request\ProductRequest::class);
+$app->get('/500', \Service\LoggerService::class , 'getError');
 $app->Run();

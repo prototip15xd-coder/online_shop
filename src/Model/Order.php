@@ -3,7 +3,7 @@
 namespace Model;
 
 use Model\Model;
-#[\AllowDynamicProperties]
+//НИКАКОЙ БЛЯТЬ ДИНАМИКИ НАХУЙ
 class Order extends Model
 {
     private int $id;
@@ -11,6 +11,8 @@ class Order extends Model
     private string $contact_phone;
     private string $comment;
     private string $address;
+    private ?array $orderProducts;
+    private ?int $orderCost; ////возможно только инт без нал
 
 
     public function getOrderId(): int
@@ -36,6 +38,22 @@ class Order extends Model
     {
         return $this->address;
     }
+    public function getOrderProducts(): array
+    {
+        return $this->orderProducts;
+    }
+    public function setOrderProducts(array $orderProducts): void
+    {
+        $this->orderProducts = $orderProducts;
+    }
+    public function getOrderCost(): int
+    {
+        return $this->orderCost;
+    }
+    public function setOrderCost(int $orderCost): void
+    {
+        $this->orderCost = $orderCost;
+    }
     protected function getTableName(): string
     {
         return "orders";
@@ -48,6 +66,8 @@ class Order extends Model
         $obj->contact_phone = $order['contact_phone'];
         $obj->comment = $order['comment'];
         $obj->address = $order['address'];
+        $obj->orderProducts = $order['orderProducts'] ?? null;
+        $obj->orderCost = $order['orderCost'] ?? null;
         return $obj;
     }
 

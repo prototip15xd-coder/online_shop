@@ -15,18 +15,22 @@
         <?php foreach ($all_products as $product): ?>
             <div class="card text-center">
                 <a href="#">
-                    <img class="card-img-top" src="<?php echo $product->getProductImageUrl(); ?>">
+                    <img class="card-img-top" src="<?php echo $product->getProduct()->getProductImageUrl(); ?>">
                     <div class="card-body">
-                        <p class="card-text text-muted"><?php echo $product->getProductName();?></p>
-                        <p class="card-text text-muted"><?php echo $product->amount;?></p>
-                        <a href="#"><h5 class="card-title"><?php echo $product->getProductDescription(); ?></h5></a>
+                        <p class="card-text text-muted"><?php echo $product->getProduct()->getProductName();?></p>
+                        <p class="card-text text-muted"><?php echo $product->getProduct()->getProductAmount();?></p>
+                        <a href="#"><h5 class="card-title"><?php echo $product->getProduct()->getProductDescription(); ?></h5></a>
                         <div class="card-footer">
-                            <?php echo $product->getProductPrice();?>
+                            <?php echo $product->getProduct()->getProductPrice();?>
                         </div>
                     </div>
                 </a>
             </div>
         <?php endforeach; ?>
+        <td>Итоговая сумма заказа</td>
+        <div class="card-footer">
+            <?php echo $cartTotalSum;?>
+        </div>
         <a href="/create-order" class="edit-mode-btn">Оформить заказ<br></a>
         <a href="/logout" class="edit-mode-btn">Выйти из профиля<br></a>
     </div>
