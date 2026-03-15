@@ -5,7 +5,9 @@ use Model\User;
 use Service\Auth\AuthSessionService;
 use Service\Auth\AuthInterface;
 use Service\CartService;
+use Service\LoggerDBService;
 use Service\OrderService;
+use Service\LoggerService;
 
 abstract class BaseController
 {
@@ -13,54 +15,15 @@ abstract class BaseController
     protected AuthInterface $authService;
     protected OrderService $orderService;
     protected CartService $cartService;
+    protected LoggerService $loggerService;
+    protected LoggerDBService $loggerDBService;
     public function __construct()
     {
         $this->userModel = new User();
         $this->authService = new AuthSessionService();
         $this->orderService = new OrderService();
         $this->cartService = new CartService();
+        $this->loggerService = new LoggerService();
+        $this->loggerDBService = new LoggerDBService();
     }
-//    public function getCurrentUser(): ?User
-//    {
-//        $this->session();
-//        if ($this->check()) {
-//            return $this->userModel->UserbyDB();
-//        } else {
-//            return null;
-//        }
-//    }
-//    public function check(): bool
-//    {
-//        $this->session();
-//        //print_r($_SESSION['userid']);
-//        return isset($_SESSION['userid']);
-//    }
-//    public function auth(string $email, string $password): bool
-//    {
-//        $user = $this->userModel->getByEmail($email);
-//        if (!$user) {
-//            return false;//$errors['USERNAME'] = 'Все поля должны быть заполнены';
-//        } else {
-//            $passwordDB = $user->getPassword();
-//            if (password_verify($password, $passwordDB)) {
-//                $this->session();
-//                $_SESSION['userid'] = $user->getId();
-//                return true;
-//            } else {
-//                echo "333333";
-//                return false;
-//            }
-//        }
-//    }
-//    private function session()
-//    {
-//        if (session_status() !== PHP_SESSION_ACTIVE) {
-//            session_start();
-//        }
-//    }
-//    public function logout()
-//    {
-//        $this->session();
-//        session_destroy();
-//    }
 }

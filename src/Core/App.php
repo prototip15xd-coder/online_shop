@@ -2,14 +2,15 @@
 
 namespace Core;
 use Service\LoggerService;
+use Service\LoggerDBService;
 
 class App
 {
     private array $routes = [];
-    private LoggerService $logger;
-    public function __construct()
+    private LoggerDBService $logger;
+    public function __construct(LoggerDBService $logger)
     {
-        $this->logger = new LoggerService();
+        $this->logger = $logger;
     }
 //        '/registration' => [
 //            'GET' => [

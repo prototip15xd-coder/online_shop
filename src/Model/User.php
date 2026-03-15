@@ -39,7 +39,7 @@ class User extends Model
         $obj->password = $user["password"];
         return $obj;
     }
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return "users";
     }
@@ -47,7 +47,7 @@ class User extends Model
 
     public function getbyEmail(string $email): User|null
     {
-        $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
+        $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
         $stms->execute(['email' => $email]);
         $result = $stms->fetch(PDO::FETCH_ASSOC);
         if ($result === false) {
@@ -59,7 +59,7 @@ class User extends Model
 
     public function count_getbyEmail(string $email)
     {
-        $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
+        $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
         $stms->execute(['email' => $email]);
         $stms->rowCount();
         return $stms;
@@ -67,7 +67,7 @@ class User extends Model
 
     public function password_hash($password)
     {
-        $stmt = $this->connection->prepare("INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
+        $stmt = static::getPDO()->prepare("INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
         $stmt->execute(['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $password]);
         return $stmt;
     }
@@ -75,7 +75,7 @@ class User extends Model
 
     public function UpdateByPassword($newName, $newEmail, $hashedPassword)  /// сделай опциональность для редактирования каждого парметра
     {
-        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email, password = :password WHERE id = :id");
+        $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email, password = :password WHERE id = :id");
         $stmt->execute([
             'name' => $newName,
             'email' => $newEmail,
@@ -86,7 +86,7 @@ class User extends Model
 
     public function UpdateByName_Email($newName, $newEmail)
     {
-        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email WHERE id = :id");
+        $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email WHERE id = :id");
         $stmt->execute([
             'name' => $newName,
             'email' => $newEmail,
@@ -95,7 +95,7 @@ class User extends Model
     }
     public function UserbyDB()
     {
-        $stmt = $this->connection->prepare("SELECT id, name, email, password FROM {$this->getTableName()} WHERE id = :id");
+        $stmt = static::getPDO()->prepare("SELECT id, name, email, password FROM {$this->getTableName()} WHERE id = :id");
         $stmt->execute(['id' => $_SESSION['userid']]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         $obj = $this->objUser($user);
@@ -103,7 +103,7 @@ class User extends Model
     }
     public function UserbyID(int $user_id)
     {
-        $stmt = $this->connection->prepare("SELECT id, name, email, password FROM {$this->getTableName()} WHERE id = :id");
+        $stmt = static::getPDO()->prepare("SELECT id, name, email, password FROM {$this->getTableName()} WHERE id = :id");
         $stmt->execute(['id' => $user_id]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         $obj = $this->objUser($user);
@@ -111,7 +111,7 @@ class User extends Model
     }
     public function UpdateName($newName)
     {
-        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = :id");
+        $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = :id");
         $stmt->execute([
             'name' => $newName,
             'id' => $_SESSION['userid']
@@ -120,7 +120,7 @@ class User extends Model
 
     public function UpdateEmail($newEmail)
     {
-        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = :id");
+        $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = :id");
         $stmt->execute([
             'email' => $newEmail,
             'id' => $_SESSION['userid']

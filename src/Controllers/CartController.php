@@ -34,7 +34,7 @@ class CartController extends BaseController
     public function cart()
     {
         if ($this->authService->check()) {
-            $all_products = $this->cartService->getUserProducts();//[];
+            $all_products = $this->cartService->getUserProducts();
             $cartTotalSum = $this->cartService->getCartSum();
 //            foreach ($user_products as $user_product) {
 //                $product_id = $user_product->getProductId();

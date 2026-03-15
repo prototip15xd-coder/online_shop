@@ -12,7 +12,6 @@ use Request\ProductRequest;
 class ProductController extends BaseController
 {
     protected User $userModel;
-    protected Product $productModel;
     protected OrderProduct $orderProductModel;
     protected UserProduct $userProductModel;
     protected ProductReview $productReviewModel;
@@ -22,7 +21,6 @@ class ProductController extends BaseController
     public function __construct() {
         parent::__construct();
         $this->userModel = new User();
-        $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
         $this->userProductModel = new UserProduct();
         $this->productReviewModel = new ProductReview();
@@ -31,7 +29,7 @@ class ProductController extends BaseController
     public function catalog() ////вьюху переделай
     {
         if ($this->authService->check()) {
-            $products = $this->productModel->productByDB();
+            $products = Product::productsByDB();
             foreach ($products as $product) {
                 $product_id = $product->getProductId();
                 $user_product = $this->userProductModel->userProductByDB($product_id);

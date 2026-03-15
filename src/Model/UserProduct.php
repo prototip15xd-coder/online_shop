@@ -46,16 +46,26 @@ class UserProduct extends Model ///тут уже объявлены новые �
     {
         $this->product = $product;
     }
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return "user_products";
     }
-    public function objUserProduct($userProduct) {
+    public static function objUserProduct($userProduct) {
         $obj = new self();
         $obj->id = $userProduct["id"];
         $obj->user_id = $userProduct["user_id"];
         $obj->product_id = $userProduct["product_id"];
         $obj->amount = $userProduct["amount"];
+        $productData = [
+            "id" => $userProduct["product_id"],
+            "name" => $userProduct["name"],
+            "price" => $userProduct["price"],
+            "description" => $userProduct["description"],
+            "image_url" => $userProduct["image_url"],
+            "value" => $userProduct["value"],
+        ];
+        $product = Product::objProduct($productData);
+        $obj->setProduct($product);
         return $obj;
     }
 //    public function userProduct() {
@@ -66,19 +76,34 @@ class UserProduct extends Model ///тут уже объявлены новые �
 //    }
     public function getUserProducts($user_id): array
     {
-        $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
+        $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
         $stms->execute([":user_id" => $user_id]);
-        $products = $stms->fetchAll(\PDO::FETCH_ASSOC);
+        $userProducts = $stms->fetchAll(\PDO::FETCH_ASSOC);
         $objUserProducts =[];
-        foreach ($products as $product) {
-            $obj = $this->objUserProduct($product);
+        foreach ($userProducts as $userProduct) {
+            $obj = $this->objUserProduct($userProduct);
             $objUserProducts[] = $obj;
         }
         return $objUserProducts;
     }
+    public static function getByUserIdWithProducts(int $user_id): array
+    {
+        $tableName = static::getTableName();
+        $stms = static::getPDO()->prepare("SELECT * FROM {$tableName} up 
+         INNER JOIN products p ON up.product_id = p.id WHERE up.user_id = :user_id");
+        $stms->execute([":user_id" => $user_id]);
+        $userProductsWithProducts = $stms->fetchAll(\PDO::FETCH_ASSOC);
+        $objUserProductsWithProducts = [];
+        foreach ($userProductsWithProducts as $userProduct) {
+            $obj = static::objUserProduct($userProduct);
+            $objUserProductsWithProducts[] = $obj;
+        }
+        return $objUserProductsWithProducts;
+
+    }
     public function userProductByDB($product_id): UserProduct ///для случая когда запрос гет и мы просто заходим в каталог
     {
-        $user_p = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id AND product_id = :product_id ");
+        $user_p = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id AND product_id = :product_id ");
         $user_p->execute(['user_id' => $_SESSION['userid'], 'product_id' => $product_id]);
         $product  = $user_p->fetch(\PDO::FETCH_ASSOC);
         if ($product=== false) {
@@ -126,7 +151,7 @@ class UserProduct extends Model ///тут уже объявлены новые �
 
     public function getAllByUserId(int $us_id): UserProduct|array
     {
-        $stmt = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
+        $stmt = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $us_id]);
         $all_products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $user_products = [];
@@ -139,19 +164,20 @@ class UserProduct extends Model ///тут уже объявлены новые �
 
     public function deleteByUserId(int $us_id)
     {
-        $stmt = $this->connection->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :user_id");
+        $stmt = static::getPDO()->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $us_id]);
     }
-    public function add_productDB($amount)
+    public static function add_productDB($amount)
     {
-        $stmt = $this->connection->prepare("UPDATE {$this->getTableName()} SET amount = amount + :amount WHERE user_id = :user_id AND product_id = :product_id");
+        $tableName = static::getTableName();
+        $stmt = static::getPDO()->prepare("UPDATE {$tableName} SET amount = amount + :amount WHERE user_id = :user_id AND product_id = :product_id");
         $stmt->execute([
             'user_id' => $_SESSION['userid'],
             'product_id' => $_POST['product_id'],
             'amount' => $amount
         ]);
         if ($stmt->rowCount() == 0) {
-            $stmt = $this->connection->prepare("INSERT INTO {$this->getTableName()} (user_id, product_id, amount) 
+            $stmt = static::getPDO()->prepare("INSERT INTO {$tableName} (user_id, product_id, amount) 
             VALUES (:user_id, :product_id, :amount)");
             $stmt->execute([
                 'user_id' => $_SESSION['userid'],

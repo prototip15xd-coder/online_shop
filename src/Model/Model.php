@@ -4,12 +4,13 @@ namespace Model;
 
 abstract class Model
 {
-    protected \PDO $connection;
+    protected static \PDO $connection;
 
-    public function __construct()
+    public static function getPDO()
     {
-        $this->connection = new \PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
+        static::$connection = new \PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'USER', 'PASS');
+        return static::$connection;
     }
 
-    abstract protected function getTableName(): string;
+    abstract static protected function getTableName(): string;
 }

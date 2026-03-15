@@ -11,10 +11,10 @@ $autoload = function(string $className) {
     }
     return false;
 };
-
+//внедрение зависимостей
 spl_autoload_register($autoload);
 
-$app = new \Core\App();
+$app = new \Core\App(new \Service\LoggerDBService());
 $app->get('/registration', \Controllers\UserController::class , 'getRegistration');
 $app->post('/registration', \Controllers\UserController::class , 'registration', \Request\RegistrateRequest::class );
 $app->get('/login', \Controllers\UserController::class , 'getLogin');

@@ -15,18 +15,9 @@ class LoggerService
             $exception->getFile(),
             $exception->getLine()
         );
-//        $logFile = __DIR__ . '/../../Storage/Log/errors.txt';
         $logFile = __DIR__ . '/../Storage/Log/errors.txt';
         file_put_contents($logFile, $message, FILE_APPEND);
-//        file_put_contents('/var/www/html/Storage/Log/errors.txt', $message, FILE_APPEND);
     }
-    public function getErrors(): string
-    {
-        if (!file_exists('errors.txt')) {
-            return 'Лог ошибок пуст.';
-        }
 
-        return file_get_contents('errors.txt');
-    }
 
 }

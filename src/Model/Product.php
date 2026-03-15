@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class Product extends Model // НИКАКОЙ БЛЯТЬ ДИНАМИКИ НАХУЙ
+class Product extends Model
 {
      private int $id;
      private string $name;
@@ -51,7 +51,38 @@ class Product extends Model // НИКАКОЙ БЛЯТЬ ДИНАМИКИ НАХ
     {
         $this->amount = $amount;
     }
-    public function objProduct(array $product) {
+
+    public function setProductId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function setProductName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function setProductDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function setProductImageUrl(string $image_url): void
+    {
+        $this->image_url = $image_url;
+    }
+
+    public function setProductPrice(int $price): void
+    {
+        $this->price = $price;
+    }
+
+    public function setProductValue(string $value): void
+    {
+        $this->value = $value;
+    }
+
+    public static function objProduct(array $product) {
         $obj = new self();
         $obj->id = $product["id"];
         $obj->name = $product["name"];
@@ -63,24 +94,25 @@ class Product extends Model // НИКАКОЙ БЛЯТЬ ДИНАМИКИ НАХ
         return $obj;
     }
 
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return "products";
     }
-    public function productByDB(): array | null
+    public static function productsByDB(): array | null
     {
-        $stms = $this->connection->query("SELECT * FROM {$this->getTableName()}");
+        $tableName = static::getTableName();
+        $stms = static::getPDO()->prepare("SELECT * FROM $tableName");
         $products_array = $stms->fetchAll(\PDO::FETCH_ASSOC);
         $products = [];
         foreach ($products_array as $product) {
-            $obj = $this->objProduct($product);
+            $obj = static::objProduct($product);
             $products[] = $obj;
         }
         return $products;
     }
     public function productByproductId($productId): ?Product
     {
-        $stms = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :id");
+        $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :id");
         $stms -> execute([':id' => $productId]);
         $product_array = $stms->fetch(\PDO::FETCH_ASSOC);
         if (!$product_array) {
@@ -89,11 +121,28 @@ class Product extends Model // НИКАКОЙ БЛЯТЬ ДИНАМИКИ НАХ
         $obj = $this->objProduct($product_array);
         return $obj;
     }
+    public static function getProductsByOrderID(int $order_id): ?array
+    {
+        $tableName = static::getTableName();
+        $stms = static::getPDO()->prepare("SELECT * FROM {$tableName} p 
+         INNER JOIN order_products op ON p.id = op.product_id WHERE op.order_id = :order_id");
+        $stms -> execute([':order_id' => $order_id]);
+        $products_array = $stms->fetch(\PDO::FETCH_ASSOC);
+        if (!$products_array) {
+            return null;
+        }
+        $obj_array =[];
+        foreach ($products_array as $product) {
+            $obj = static::objProduct($product);
+            $obj_array[] = $obj;
+        }
+        return $obj_array;
+    }
 
 
     public function validate_product($productId): int
     {
-        $stms = $this->connection->prepare("SELECT id FROM {$this->getTableName()} WHERE id = :product_id");
+        $stms = static::getPDO()->prepare("SELECT id FROM {$this->getTableName()} WHERE id = :product_id");
         $stms->execute(['product_id' => $productId]);
         return $stms->rowCount();
     }

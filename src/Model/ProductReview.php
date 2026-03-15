@@ -47,7 +47,7 @@ class ProductReview extends Model
     public function setUserName(?string $name): void {
         $this->name = $name;
     }
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return "products_review";
     }
@@ -67,7 +67,8 @@ class ProductReview extends Model
 
     public function product_reviews($productId)// нужно создать модель продукт ревью
     {
-        $stms = $this->connection->prepare("SELECT * FROM products_review WHERE product_id = :product_id");
+        $tableName = static::getTableName();
+        $stms = static::getPDO()->prepare("SELECT * FROM {$tableName} WHERE product_id = :product_id");
         $stms->execute(['product_id' => $productId]);
         $productReviews = $stms->fetchAll(\PDO::FETCH_ASSOC);
         $objProductReviews = [];

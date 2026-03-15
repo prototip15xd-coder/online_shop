@@ -3,7 +3,6 @@
 namespace Model;
 
 use Model\Model;
-//НИКАКОЙ БЛЯТЬ ДИНАМИКИ НАХУЙ
 class Order extends Model
 {
     private int $id;
@@ -54,7 +53,7 @@ class Order extends Model
     {
         $this->orderCost = $orderCost;
     }
-    protected function getTableName(): string
+    protected static function getTableName(): string
     {
         return "orders";
     }
@@ -73,7 +72,7 @@ class Order extends Model
 
     public function create( string $name, $phone, $comm, string $address, int $userId)
     {
-        $stmt = $this->connection->prepare(
+        $stmt = static::getPDO()->prepare(
             "INSERT INTO {$this->getTableName()} (contact_name, contact_phone, comment, address, user_id) 
                     VALUES (:name, :phone, :comment, :address, :user_id) RETURNING id"
         );
@@ -89,14 +88,14 @@ class Order extends Model
     }
     public function getOrder(int $orderId): Order
     {
-        $stmt = $this->connection->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :order_id");
+        $stmt = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :order_id");
         $stmt->execute(['order_id' => $orderId]);
         $order = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $this->objOrder($order);
     }
     public function getOrders(int $us_id): array
     {
-        $stmt = $this->connection->prepare("SELECT * FROM orders WHERE user_id = :user_id");
+        $stmt = static::getPDO()->prepare("SELECT * FROM orders WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $us_id]);
         $orders = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $all_orders = [];
@@ -106,31 +105,5 @@ class Order extends Model
         }
         return $all_orders;
     }
-//    public function getOrders(int $us_id): array
-//    {
-//        $stmt = $this->connection->prepare("SELECT {$this->getTableName()}.id,
-//                       SUM(order_products.amount) as amount,
-//                       MAX({$this->getTableName()}.contact_name) as contact_name,
-//                       MAX({$this->getTableName()}.contact_phone) as contact_phone,
-//                       MAX({$this->getTableName()}.comment) as comment,
-//                       MAX({$this->getTableName()}.address) as address
-//                       FROM order_products
-//                       JOIN {$this->getTableName()} ON order_products.order_id = {$this->getTableName()}.id
-//                       WHERE {$this->getTableName()}.user_id = :user_id
-//                       GROUP BY {$this->getTableName()}.id");
-//        $stmt->execute([':user_id' => $us_id]);
-//        $orders = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-//        $all_orders = [];
-//        foreach ($orders as $order) {
-//            $obj = $this->objOrder($order);
-//            $all_orders[] = $obj;
-//        }
-//        return $all_orders;
-//    }
-//    public function addProduct(Product $product, $amount_product) {///// что делать с этой чепухой?
-//        $this->products[] = $product;
-//        $this->amountProduct[] = $amount_product;
-//    }
-
 
 }

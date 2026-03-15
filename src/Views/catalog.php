@@ -24,7 +24,7 @@
                     </div>
                     <div style="display: flex; margin: 10px;">
                         <!-- Кнопка - -->
-                        <form action="/add-product" method="POST" style="margin: 0;">
+                        <form class="increase-form" method="POST" style="margin: 0;">
                             <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <input type="hidden" name="action" value="minus">
                             <input type="hidden" name="redirect_url" value="<?= $_SERVER['REQUEST_URI'] ?>">
@@ -37,7 +37,7 @@
                         </span>
 
                         <!-- Кнопка + -->
-                        <form action="/add-product" method="POST" style="margin: 0;">
+                        <form class="increase-form" method="POST" style="margin: 0;">
                             <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <input type="hidden" name="action" value="plus">
                             <input type="hidden" name="redirect_url" value="<?= $_SERVER['REQUEST_URI'] ?>">
@@ -59,3 +59,22 @@
 </div>
 </body>
 </html>
+<script>
+$("document").ready(function () {
+    form.submit(function () {
+        $.ajax({
+            type: "POST",
+            url: "/add-product",
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function (response) {
+                // Обновляем количество товаров в бейдже корзины
+                $('.badge').text(response.count);
+            },
+            error: function(xhr, status, error) {
+                console.error('Ошибка при добавлении товара:', error);
+            }
+            return false;
+        });
+    });
+});

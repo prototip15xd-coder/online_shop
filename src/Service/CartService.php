@@ -2,21 +2,16 @@
 
 namespace Service;
 
-use Model\Product;
 use Model\UserProduct;
 use Service\Auth\AuthInterface;
 use Service\Auth\AuthSessionService;
 
 class CartService
 {
-    private UserProduct $userProductModel;
-    private Product $productModel;
     private AuthInterface $authService;
 
     public function __construct()
     {
-        $this->userProductModel = new UserProduct();
-        $this->productModel = new Product();
         $this->authService = new AuthSessionService();
     }
     public function add_product()
@@ -29,23 +24,27 @@ class CartService
         } else {
             $amount = 0;
         }
-        $this->userProductModel->add_productDB($amount);
+        UserProduct::add_productDB($amount);
         $action = false;
     }
     public function getUserProducts(): array ////нужно исправить вьюху
     {
         $user = $this->authService->getCurrentUser();
-        $userProducts = $this->userProductModel->getUserProducts($user->getUserId()); /// содержит массив объектов продуктов
+        //$userProducts = $this->userProductModel->getUserProducts($user->getUserId()); /// содержит массив объектов продуктов
+        //$userProducts = $this->userProductModel->getByUserIdWithProducts($user->getUserId()); /// содержит массив объектов юзпродуктов со свойством продукт где есть продукт!
+//        $productId = [];
+//        foreach ($userProducts as $userProduct) {
+//            $productId[] = $userProduct->getProductId();
+//        }
+//        $products = $this->productModel->getByProductsId($productId);
+        $userProducts = UserProduct::getByUserIdWithProducts($user->getUserId());
         foreach ($userProducts as &$userProduct) {
-            $product = $this->productModel->productByproductId($userProduct->getProductId());
-            $totalSum = $userProduct->getAmount() * $product->getProductPrice(); ////ты обращается к продукту напрямую а в видео
-            ///  у юзер продукт есть св-во продукт и обращаются через юзпродукт-продукт-цена
+            $totalSum = $userProduct->getAmount() * $userProduct->getProduct()->getProductPrice();
             $userProduct->setTotalSum($totalSum);
-            $product->setProductAmount($userProduct->getAmount());
-            $userProduct->setProduct($product);////свойтсов не исп нужно переделать переменные?
         }
         return $userProducts;
     }
+
     public function getCartSum(): int   //25:48     цена заказа должно высвечиваться внизу в корзине!
     {
         $total = 0;

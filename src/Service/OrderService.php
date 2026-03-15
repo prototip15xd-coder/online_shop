@@ -3,39 +3,45 @@
 namespace Service;
 
 use DTO\OrderCreateDTO;
+use Model\Product;
 use Model\Order;
 use Model\OrderProduct;
-use Model\Product;
 use Model\UserProduct;
 use Service\Auth\AuthInterface;
 use Service\Auth\AuthSessionService;
-use Service\CartService;
+use Service\LoggerDBService;
+use Service\LoggerService;
+
 
 class OrderService
 {
     private Order $orderModel;
     private UserProduct $userProductModel;
     private OrderProduct $orderProductModel;
-    private Product $productModel;
     private AuthInterface $authService;
     private CartService $cartService;
+    protected LoggerService $loggerService;
+    protected LoggerDBService $loggerDBService;
+
     public function __construct()
     {
         $this->orderModel = new Order();
         $this->userProductModel = new UserProduct();
         $this->orderProductModel = new OrderProduct();
-        $this->productModel = new Product();
         $this->authService = new AuthSessionService();
         $this->cartService = new CartService();
-
+        $this->loggerService = new LoggerService();
+        $this->loggerDBService = new LoggerDBService();
     }
     public function createOrder(OrderCreateDTO $data)// ,array $data, User $user)
     {
         $orderSum = $this->cartService->getCartSum();
         if ($orderSum < 100)
         {
-            throw new \Exception('Сумма заказа должна превышать 100р рублей');
+            $exception = throw new \Exception('Сумма заказа должна превышать 100р рублей');
+            $this->loggerDBService->error($exception);/////????
         }
+
         $user = $this->authService->getCurrentUser();
         $orderId = $this->orderModel->create($data->getContactName(),
             $data->getContactPhone(),
@@ -51,15 +57,12 @@ class OrderService
 
     public function getOrderProduct(int $orderId): array ////надо оптимизировать
     {
-        $orderProducts = $this->orderProductModel->getAllProductFromOrderByOrderId($orderId); //массив ордер продукт(типо юзер продукт но уже заказанные, там есть и продукт и тотал сум)
-            foreach ($orderProducts as &$orderProduct) {
-            $productId = $orderProduct->getProductId();
-            $product = $this->productModel->productByproductId($productId);
-            $orderProduct->setProduct($product);
-            $totalSum = $orderProduct->getAmount() * $product->getProductPrice();
-            $orderProduct->setTotalSum($totalSum);
-            }
-        return $orderProducts;
+        $products = Product::getProductsByOrderID($orderId);
+        foreach ($products as &$product) {
+            $totalSum = $product->getAmount() * $product->getProductPrice();
+            $product->setTotalSum($totalSum);
+        }
+        return $products;
     }
     public function getAllOrders()///перенеси в сервис
     {
