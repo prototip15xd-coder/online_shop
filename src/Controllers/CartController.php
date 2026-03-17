@@ -74,26 +74,19 @@ class CartController extends BaseController
         $errors = $this->add_product_validate($request->getAction(), $request->getProductId());
         if (empty($errors)) {
             $this->cartService->add_product();
+            $products = Product::getWithAmount($this->authService->getCurrentUser()->getUserId());
+            var_dump($products);
+            // Отправляем только amount
+            $response = [
+                'amount' => $products->getProductAmount()
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit;
         }
+
         header('Location: /catalog');
     }
 
-//    public function getUserProducts(): array    ////вот это прикольная фича ее оставь
-//    {
-//        $user = $this->authService->getCurrentUser();
-//        if ($user === null) {
-//            return [];
-//        }
-//        $userProducts = $this->userProductModel->getUserProducts(); ////там глобальная перемеенная SESSION убери
-//        /// содержит массив объектов продуктов
-//        foreach ($userProducts as &$userProduct) {
-//            $product = $this->productModel->productByproductId($userProduct->getProductId());
-//            $userProduct->setProduct($product);
-//            $totalSum = $userProduct->getAmount() * $userProduct->getProduct()->getPrice();//    $product->getProductPrice(); ////ты обращается к продукту напрямую а в видео
-//            ///  у юзер продукт есть св-во продукт и обращаются через юзпродукт-продукт-цена
-//            $userProduct->setTotalSum($totalSum);
-//            $product->amount = $userProduct->getAmount();////свойтсов не исп нужно переделать переменные?
-//        }
-//        return $userProducts;
-//    }
 }

@@ -56,16 +56,18 @@ class UserProduct extends Model ///тут уже объявлены новые �
         $obj->user_id = $userProduct["user_id"];
         $obj->product_id = $userProduct["product_id"];
         $obj->amount = $userProduct["amount"];
-        $productData = [
-            "id" => $userProduct["product_id"],
-            "name" => $userProduct["name"],
-            "price" => $userProduct["price"],
-            "description" => $userProduct["description"],
-            "image_url" => $userProduct["image_url"],
-            "value" => $userProduct["value"],
-        ];
-        $product = Product::objProduct($productData);
-        $obj->setProduct($product);
+        if (isset($userProduct["name"])) {
+            $productData = [
+                "id" => $userProduct["product_id"],
+                "name" => $userProduct["name"],
+                "price" => $userProduct["price"],
+                "description" => $userProduct["description"],
+                "image_url" => $userProduct["image_url"],
+                "value" => $userProduct["value"],
+            ];
+            $product = Product::objProduct($productData);
+            $obj->setProduct($product);
+        }
         return $obj;
     }
 //    public function userProduct() {

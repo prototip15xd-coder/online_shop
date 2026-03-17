@@ -29,12 +29,7 @@ class ProductController extends BaseController
     public function catalog() ////вьюху переделай
     {
         if ($this->authService->check()) {
-            $products = Product::productsByDB();
-            foreach ($products as $product) {
-                $product_id = $product->getProductId();
-                $user_product = $this->userProductModel->userProductByDB($product_id);
-                $product->setProductAmount($user_product->getAmount());
-            }
+            $products = Product::getWithAmount($this->authService->getCurrentUser()->getUserId());
             require_once '/var/www/html/src/Views/catalog.php';
         } else {
             require_once '/var/www/html/src/Views/login.php';

@@ -7,7 +7,9 @@
 <div>
     <div class="container">
         <a href="/profile" target="_blank">Мой профиль<br></a>
-        <a href="/cart" class="Cart">Корзина<br></a>
+        <a href="/cart" class="Cart">
+            Корзина <span class="badge">0</span><br>
+        </a>
         <a href="/logout" class="edit-mode-btn">Выйти из профиля<br></a>
         <h3>Catalog</h3>
         <div class="card-deck">
@@ -24,7 +26,7 @@
                     </div>
                     <div style="display: flex; margin: 10px;">
                         <!-- Кнопка - -->
-                        <form class="increase-form" method="POST" style="margin: 0;">
+                        <form class="add-form" method="POST" onsubmit="return false" style="margin: 0;">
                             <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <input type="hidden" name="action" value="minus">
                             <input type="hidden" name="redirect_url" value="<?= $_SERVER['REQUEST_URI'] ?>">
@@ -37,7 +39,7 @@
                         </span>
 
                         <!-- Кнопка + -->
-                        <form class="increase-form" method="POST" style="margin: 0;">
+                        <form class="decrease-form" method="POST" onsubmit="return false" style="margin: 0;">
                             <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                             <input type="hidden" name="action" value="plus">
                             <input type="hidden" name="redirect_url" value="<?= $_SERVER['REQUEST_URI'] ?>">
@@ -59,15 +61,36 @@
 </div>
 </body>
 </html>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/IYI/Cxo=" crossorigin="anonymous"></script>
+<!--<script>-->
+<!--    $("document").ready(function () {-->
+<!--        $(.add-form).submit(function () {-->
+<!--            $.ajax({-->
+<!--                type: "POST",-->
+<!--                url: "/add-product",-->
+<!--                data: $(this).serialize(),-->
+<!--                dataType: 'json',-->
+<!--                success: function (response) {-->
+<!--                    var amountSpan = form.closest('.card').find('span');-->
+<!--                    amountSpan.text(response.amount);-->
+<!--                },-->
+<!--                error: function(xhr, status, error) {-->
+<!--                    console.error('Ошибка при добавлении товара:', error);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 <script>
 $("document").ready(function () {
-    form.submit(function () {
+    $('.add-form').submit(function () {
         $.ajax({
             type: "POST",
             url: "/add-product",
             data: $(this).serialize(),
             dataType: 'json',
             success: function (response) {
+                console.log('test');
                 // Обновляем количество товаров в бейдже корзины
                 $('.badge').text(response.count);
             },
@@ -78,3 +101,23 @@ $("document").ready(function () {
         });
     });
 });
+$("document").ready(function () {
+    $('.decrease-form').submit(function () {
+        $.ajax({
+            type: "POST",
+            url: "/add-product",
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function (response) {
+                console.log('test');
+                // Обновляем количество товаров в бейдже корзины
+                $('.badge').text(response.count);
+            },
+            error: function(xhr, status, error) {
+                console.error('Ошибка при добавлении товара:', error);
+            }
+            return false;
+        });
+    });
+});
+</script>

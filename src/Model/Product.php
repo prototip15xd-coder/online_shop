@@ -102,6 +102,7 @@ class Product extends Model
     {
         $tableName = static::getTableName();
         $stms = static::getPDO()->prepare("SELECT * FROM $tableName");
+        $stms->execute();
         $products_array = $stms->fetchAll(\PDO::FETCH_ASSOC);
         $products = [];
         foreach ($products_array as $product) {
@@ -128,6 +129,23 @@ class Product extends Model
          INNER JOIN order_products op ON p.id = op.product_id WHERE op.order_id = :order_id");
         $stms -> execute([':order_id' => $order_id]);
         $products_array = $stms->fetch(\PDO::FETCH_ASSOC);
+        if (!$products_array) {
+            return null;
+        }
+        $obj_array =[];
+        foreach ($products_array as $product) {
+            $obj = static::objProduct($product);
+            $obj_array[] = $obj;
+        }
+        return $obj_array;
+    }
+    public static function getWithAmount(int $user_id): ?array
+    {
+        $tableName = static::getTableName();
+        $stms = static::getPDO()->prepare("SELECT p.*, up.amount FROM {$tableName} p 
+            LEFT JOIN user_products up ON p.id = up.product_id AND up.user_id = :user_id");
+        $stms -> execute([":user_id" => $user_id]);
+        $products_array = $stms->fetchAll(\PDO::FETCH_ASSOC);
         if (!$products_array) {
             return null;
         }
