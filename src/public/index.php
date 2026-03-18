@@ -24,7 +24,7 @@ $app->post('/catalog', \Controllers\ProductController::class, 'catalog' );
 $app->post('/add-product', \Controllers\CartController::class, 'addProduct', \Request\AddProductRequest::class );
 $app->get('/profile', \Controllers\UserController::class , 'profile');
 $app->post('/profile', \Controllers\UserController::class , 'profile');
-$app->get('/profile-edit', \Controllers\UserController::class , 'profileEdit');
+$app->get('/profile-edit', \Controllers\UserController::class , 'profileEdit', \Request\ProfileEditRequest::class );
 $app->post('/profile-edit', \Controllers\UserController::class , 'profileEdit', \Request\ProfileEditRequest::class );
 $app->get('/cart', \Controllers\CartController::class , 'cart');
 $app->get('/logout', \Controllers\UserController::class , 'logout');

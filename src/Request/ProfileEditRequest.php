@@ -14,7 +14,7 @@ class ProfileEditRequest
         return $this->data['email'];
     }
     public function getPassword(): string {
-        return $this->data['psw'];
+        return $this->data['password'];
     }
 
 }

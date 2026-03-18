@@ -8,7 +8,7 @@ class Product extends Model
      private string $name;
      private string $description;
      private int $price;
-     private string $image_url;
+     private ?string $image_url = null;
      private string $value;
      private ?int $amount = null;
 
@@ -35,7 +35,7 @@ class Product extends Model
     {
         return $this->price;
     }
-    public function getProductImageUrl(): string
+    public function getProductImageUrl(): ?string
     {
         return $this->image_url;
     }
@@ -88,7 +88,7 @@ class Product extends Model
         $obj->name = $product["name"];
         $obj->description = $product["description"];
         $obj->price = $product["price"];
-        $obj->image_url = $product["image_url"];
+        $obj->image_url = $product["image_url"] ?? null;
         $obj->value = $product["value"];
         $obj->amount = $product["amount"] ?? null;
         return $obj;

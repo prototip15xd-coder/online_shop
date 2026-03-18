@@ -38,7 +38,7 @@ class OrderService
         $orderSum = $this->cartService->getCartSum();
         if ($orderSum < 100)
         {
-            $exception = throw new \Exception('Сумма заказа должна превышать 100р рублей');
+            $exception = throw new \Exception('Сумма заказа должна превышать 100р рублей', $this->authService->getCurrentUser()->getUserId());
             $this->loggerDBService->error($exception);/////????
         }
 

@@ -13,6 +13,7 @@ class ProductController extends BaseController
 {
     protected User $userModel;
     protected OrderProduct $orderProductModel;
+    protected Product $productModel;
     protected UserProduct $userProductModel;
     protected ProductReview $productReviewModel;
 
@@ -22,6 +23,7 @@ class ProductController extends BaseController
         parent::__construct();
         $this->userModel = new User();
         $this->orderProductModel = new OrderProduct();
+        $this->productModel = new Product();
         $this->userProductModel = new UserProduct();
         $this->productReviewModel = new ProductReview();
 
