@@ -33,8 +33,10 @@ class UserController extends BaseController
     function registration(RegistrateRequest $request)
     {
         $errors = $request->validate();
+
         if (empty($errors)) {
             $chekemail = $this->userModel->count_getbyEmail($request->getEmail());
+
             if ($chekemail > 0) {
                 $errors['email'] = 'Такой email уже существует';
             } else {
@@ -45,7 +47,9 @@ class UserController extends BaseController
                 header("Location: /catalog");
                 exit;
             }
+
         }
+
         $errors = $errors ?? [];
         require_once '/var/www/html/src/Views/registration.php';
     }
@@ -54,12 +58,14 @@ class UserController extends BaseController
     {
         $errors = $request->validate();
         $user = $this->authService->auth($request->getEmail(), $request->getPassword());
+
         if ($user === false or $user == null) {
             $errors['PASSWORD'] = 'логин или пароль указаны неверно';
         } else {
             header("Location: /catalog");
             exit();
         }
+
         require_once '/var/www/html/src/Views/login.php';
     }
 
@@ -75,6 +81,7 @@ class UserController extends BaseController
     public function profileEdit(ProfileEditRequest $request) {
         if ($this->authService->getCurrentUser()) {
             $user = $this->userModel->UserbyDB();
+
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $newName = $request->getName() ?? $user->getUserName();
                 $newEmail = $request->getEmail() ?? $user->getUserEmail();
@@ -94,6 +101,7 @@ class UserController extends BaseController
                 } else if ($emailChanged) {
                     $this->userModel->UpdateEmail($newEmail);
                 }
+
                 header('Location: /profile');
                 exit;
             } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {

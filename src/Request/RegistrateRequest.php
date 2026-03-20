@@ -4,24 +4,32 @@ namespace Request;
 
 class RegistrateRequest
 {
-    public function __construct(private array $data) {
+    public function __construct(private array $data) {}
 
-    }
-    public function getName(): string {
+    public function getName(): string
+    {
         return $this->data['name'];
     }
-    public function getEmail(): string {
+
+    public function getEmail(): string
+    {
         return $this->data['email'];
     }
-    public function getPassword(): string {
+
+    public function getPassword(): string
+    {
         return $this->data['psw'];
     }
-    public function getPasswordRepeat(): string {
+
+    public function getPasswordRepeat(): string
+    {
         return $this->data['psw-repeat'];
     }
+
     public function validate()
     {
         $errors = [];
+
         if ($this->getName() !== null) {  //['name']
             $name = $this->getName();
             if (strlen($name) < 4) {
@@ -49,6 +57,7 @@ class RegistrateRequest
         } else {
             $errors['password'] = 'пароли должны быть заполнены';
         }
+
         return $errors;
     }
 

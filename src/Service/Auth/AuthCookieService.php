@@ -11,6 +11,7 @@ class AuthCookieService implements AuthInterface
     {
         $this->userModel = new User();
     }
+
     public function getCurrentUser(): ?User
     {
         if ($this->check()) {
@@ -19,6 +20,7 @@ class AuthCookieService implements AuthInterface
             return null;
         }
     }
+
     public function check(): bool
     {
         return isset($_COOKIE['userid']);
@@ -27,6 +29,7 @@ class AuthCookieService implements AuthInterface
     public function auth(string $email, string $password): bool
     {
         $user = $this->userModel->getByEmail($email);
+
         if (!$user) {
             return false;//$errors['USERNAME'] = 'Все поля должны быть заполнены';
         } else {
@@ -38,6 +41,7 @@ class AuthCookieService implements AuthInterface
                 return false;
             }
         }
+
     }
 
     public function logout()
@@ -45,6 +49,7 @@ class AuthCookieService implements AuthInterface
         setcookie('userid', '', time() - 3600, '/');
         unset($_COOKIE['userid']);
     }
+
     public function checkUser()
     {
         if (!$this->getCurrentUser()) {

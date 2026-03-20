@@ -12,41 +12,45 @@ class ProductReview extends Model
     private ?string $review;
     private ?string $name;
 
-    public function getReviewId()
+    public function getReviewId(): int
     {
         return $this->id;
     }
 
-    public function getProductId()
+    public function getProductId(): int
     {
         return $this->product_id;
     }
 
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->user_id;
     }
 
-    public function getOrderId()
+    public function getOrderId(): int
     {
         return $this->order_id;
     }
 
-    public function getRating()
+    public function getRating(): int
     {
         return $this->rating;
     }
 
-    public function getReview()
+    public function getReview(): ?string
     {
         return $this->review;
     }
-    public function getUserName() {
+
+    public function getUserName(): string
+    {
         return $this->name;
     }
+
     public function setUserName(?string $name): void {
         $this->name = $name;
     }
+
     protected static function getTableName(): string
     {
         return "products_review";
@@ -64,23 +68,25 @@ class ProductReview extends Model
         return $obj;
     }
 
-
-    public function product_reviews($productId)// нужно создать модель продукт ревью
+    public function product_reviews($productId)
     {
         $tableName = static::getTableName();
         $stms = static::getPDO()->prepare("SELECT * FROM {$tableName} WHERE product_id = :product_id");
         $stms->execute(['product_id' => $productId]);
         $productReviews = $stms->fetchAll(\PDO::FETCH_ASSOC);
         $objProductReviews = [];
+
         if (!$productReviews) {
             return null;
-        } else {
-            foreach ($productReviews as $productReview) {
-                $obj = $this->objProductReview($productReview);
-                $objProductReviews[] = $obj;///попробуй убрать это
-            }
-            return $objProductReviews;
-        }//должен содержать массив объектов отзывов
+        }
+
+        foreach ($productReviews as $productReview) {
+            $obj = $this->objProductReview($productReview);
+            $objProductReviews[] = $obj;///попробуй убрать это
+        }
+
+        return $objProductReviews;
+
     }
 
 }

@@ -31,7 +31,8 @@ class User extends Model
         return $this->password;
     }
 
-    public function objUser(array $user) {
+    public function objUser(array $user)
+    {
         $obj = new self();
         $obj->id = $user["id"];
         $obj->name = $user["name"];
@@ -39,11 +40,11 @@ class User extends Model
         $obj->password = $user["password"];
         return $obj;
     }
+
     protected static function getTableName(): string
     {
         return "users";
     }
-
 
     public function getbyEmail(string $email): User|null
     {
@@ -72,7 +73,6 @@ class User extends Model
         return $stmt;
     }
 
-
     public function UpdateByPassword($newName, $newEmail, $hashedPassword)  /// сделай опциональность для редактирования каждого парметра
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email, password = :password WHERE id = :id");
@@ -93,22 +93,32 @@ class User extends Model
             'id' => $_SESSION['userid']
         ]);
     }
+
     public function UserbyDB()
     {
-        $stmt = static::getPDO()->prepare("SELECT id, name, email, password FROM {$this->getTableName()} WHERE id = :id");
+        $stmt = static::getPDO()->prepare("SELECT id, name, email, password 
+                                FROM {$this->getTableName()} 
+                                WHERE id = :id"
+                                );
         $stmt->execute(['id' => $_SESSION['userid']]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         $obj = $this->objUser($user);
         return $obj;
     }
+
     public function UserbyID(int $user_id)
     {
-        $stmt = static::getPDO()->prepare("SELECT id, name, email, password FROM {$this->getTableName()} WHERE id = :id");
+        $stmt = static::getPDO()->prepare("SELECT id, name, email, password 
+                                FROM {$this->getTableName()} 
+                                WHERE id = :id"
+                                );
         $stmt->execute(['id' => $user_id]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         $obj = $this->objUser($user);
+
         return $obj;
     }
+
     public function UpdateName($newName)
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = :id");

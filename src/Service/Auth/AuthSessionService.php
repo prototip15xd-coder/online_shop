@@ -11,15 +11,19 @@ class AuthSessionService implements AuthInterface
     {
         $this->userModel = new User();
     }
+
     public function getCurrentUser(): ?User
     {
         $this->session();
+
         if ($this->check()) {
             return $this->userModel->UserbyDB();
         } else {
             return null;
         }
+
     }
+
     public function check(): bool
     {
         $this->session();
@@ -29,10 +33,12 @@ class AuthSessionService implements AuthInterface
     public function auth(string $email, string $password): bool
     {
         $user = $this->userModel->getByEmail($email);
+
         if (!$user) {
             return false;//$errors['USERNAME'] = 'Все поля должны быть заполнены';
         } else {
             $passwordDB = $user->getUserPassword();
+
             if (password_verify($password, $passwordDB)) {
                 $this->session();
                 $_SESSION['userid'] = $user->getUserId();
@@ -40,7 +46,9 @@ class AuthSessionService implements AuthInterface
             } else {
                 return false;
             }
+
         }
+
     }
 
     private function session()
@@ -49,11 +57,13 @@ class AuthSessionService implements AuthInterface
             session_start();
         }
     }
+
     public function logout()
     {
         $this->session();
         session_destroy();
     }
+
     public function checkUser()
     {
         if (!$this->getCurrentUser()) {

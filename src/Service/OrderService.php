@@ -33,9 +33,11 @@ class OrderService
         $this->loggerService = new LoggerService();
         $this->loggerDBService = new LoggerDBService();
     }
+
     public function createOrder(OrderCreateDTO $data)// ,array $data, User $user)
     {
         $orderSum = $this->cartService->getCartSum();
+
         if ($orderSum < 100)
         {
             $exception = throw new \Exception('Сумма заказа должна превышать 100р рублей', $this->authService->getCurrentUser()->getUserId());
@@ -49,19 +51,23 @@ class OrderService
             $data->getAddress(),
             $user->getUserId());
         $user_products = $this->userProductModel->getAllByUserId($user->getUserId());
+
         foreach ($user_products as $user_product) {
             $this->orderProductModel->createOrderProduct($orderId, $user_product->getProductId(), $user_product->getAmount());
         }
+
         $this->userProductModel->deleteByUserId($user->getUserId());
     }
 
     public function getOrderProduct(int $orderId): array ////надо оптимизировать
     {
         $products = Product::getProductsByOrderID($orderId);
+
         foreach ($products as &$product) {
             $totalSum = $product->getAmount() * $product->getProductPrice();
             $product->setTotalSum($totalSum);
         }
+
         return $products;
     }
     public function getAllOrders()///перенеси в сервис
@@ -69,10 +75,12 @@ class OrderService
         $this->authService->checkUser();
         $user = $this->authService->getCurrentUser();
         $orders = $this->orderModel->getOrders($user->getUserId());
+
         foreach ($orders as $order) {
             $order->setOrderProducts($this->getOrderProduct($order->getOrderId()));
             /////добавь сюда тотал сум и вызов полной цены заказа
         }
+
         return $orders;
     }
 }

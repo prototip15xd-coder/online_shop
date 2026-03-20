@@ -8,10 +8,10 @@ class Order extends Model
     private int $id;
     private string $contact_name;
     private string $contact_phone;
-    private string $comment;
+    private ?string $comment;
     private string $address;
     private ?array $orderProducts;
-    private ?int $orderCost; ////возможно только инт без нал
+    private ?int $orderCost;
 
 
     public function getOrderId(): int
@@ -28,7 +28,7 @@ class Order extends Model
         return $this->contact_phone;
     }
 
-    public function getComment(): string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
@@ -63,7 +63,7 @@ class Order extends Model
         $obj->id = $order['id'];
         $obj->contact_name = $order['contact_name'];
         $obj->contact_phone = $order['contact_phone'];
-        $obj->comment = $order['comment'];
+        $obj->comment = $order['comment'] ?? null;
         $obj->address = $order['address'];
         $obj->orderProducts = $order['orderProducts'] ?? null;
         $obj->orderCost = $order['orderCost'] ?? null;
@@ -76,6 +76,7 @@ class Order extends Model
             "INSERT INTO {$this->getTableName()} (contact_name, contact_phone, comment, address, user_id) 
                     VALUES (:name, :phone, :comment, :address, :user_id) RETURNING id"
         );
+
         $stmt->execute([
             'name'=>$name,
             'phone'=>$phone,
@@ -83,6 +84,7 @@ class Order extends Model
             'address'=>$address,
             'user_id'=>$userId
         ]);
+
         $res = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $res['id'];
     }

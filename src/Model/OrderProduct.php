@@ -53,7 +53,8 @@ class OrderProduct extends Model
         return "order_products";
     }
 
-    public function objOrderProduct($product){
+    public function objOrderProduct($product)
+    {
         $obj = new self();
         $obj->id = $product["id"];
         $obj->order_id = $product["order_id"];
@@ -61,17 +62,22 @@ class OrderProduct extends Model
         $obj->amount = $product["amount"];
         return $obj;
     }
-    public function createOrderProduct(int $orderId, int $productId, int $amount) {
-        $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()}  SET amount = amount + :amount 
-         WHERE order_id = :order_id AND product_id = :product_id");
+    public function createOrderProduct(int $orderId, int $productId, int $amount)
+    {
+        $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()}  
+        SET amount = amount + :amount 
+        WHERE order_id = :order_id AND product_id = :product_id"
+        );
         $stmt->execute([
             ':order_id' => $orderId,
             ':product_id' => $productId,
             ':amount' => $amount
         ]);
+
         if ($stmt->rowCount() == 0) {
             $stmt = static::getPDO()->prepare("INSERT INTO {$this->getTableName()} (order_id, product_id, amount) 
-            VALUES (:order_id, :product_id, :amount)");
+            VALUES (:order_id, :product_id, :amount)"
+            );
             $stmt->execute([
                 ':order_id' => $orderId,
                 ':product_id' => $productId,
@@ -82,14 +88,18 @@ class OrderProduct extends Model
 
 
     public function getAllProductFromOrderByOrderId(int $orderId): array {
-        $stmt= static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE order_id = :order_id");
+        $stmt= static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
+         WHERE order_id = :order_id"
+        );
         $stmt->execute(['order_id' => $orderId]);
         $products= $stmt->fetchAll(\PDO::FETCH_ASSOC);
         $all_products_from_order=[];
+
         foreach ($products as $product) {
             $obj = $this->objOrderProduct($product);
             $all_products_from_order[] = $obj;
         }
+
         return $all_products_from_order;
     }
 

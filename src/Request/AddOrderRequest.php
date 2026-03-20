@@ -4,24 +4,32 @@ namespace Request;
 
 class AddOrderRequest
 {
-    public function __construct(private array $data) {
+    public function __construct(private array $data) {}
 
-    }
-    public function getContactName(): string {
+    public function getContactName(): string
+    {
         return $this->data['name'];
     }
-    public function getPhone(): string {
+
+    public function getPhone(): string
+    {
         return $this->data['phone'];
     }
-    public function getAddress(): string {
+
+    public function getAddress(): string
+    {
         return $this->data['address'];
     }
-    public function getComment(): string {
+
+    public function getComment(): string
+    {
         return $this->data['comm'];
     }
+
     public function validate(): array
     {
         $errors = [];
+
         if ($this->getContactName() !== null) {
             $name = $this->getContactName();
             if (strlen($name) < 4) {

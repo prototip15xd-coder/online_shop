@@ -7,11 +7,13 @@ use Model\User;
 interface AuthInterface
 {
     public function getCurrentUser(): ?User;
+
     public function check(): bool;
 
     public function auth(string $email, string $password): bool;
 
     public function logout();
+
     public function checkUser();
 
 }

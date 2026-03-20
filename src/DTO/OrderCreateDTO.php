@@ -38,6 +38,4 @@ class OrderCreateDTO
     {
         return $this->userId;
     }
-
-
 }
