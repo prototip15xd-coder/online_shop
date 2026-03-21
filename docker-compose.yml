@@ -5,19 +5,18 @@ services:
       - 82:80
     volumes:
       - '/home/mdr11/projects/online_shop/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
-      - '/home/mdr11/projects/online_shop:/var/www/html'
+      - '.:/var/www/html'
 
 
   php-fpm:
     build: ./docker/php
     volumes:
-      - '/home/mdr11/projects/online_shop:/var/www/html'
+      - '.:/var/www/html'
       - ./docker/php/Xdebug.ini:/usr/local/etc/php/conf.d/docker-php-xdebug.ini
 
 
   postgres:
     image: postgres:16
-    #добавить volumes? см урок от 4 дек
     environment:
       - POSTGRES_USER=USER # {$DB_USER}
       - POSTGRES_PASSWORD=PASS #{$DB_PASSWORD}
