@@ -136,6 +136,4 @@ class User extends Model
             'id' => $_SESSION['userid']
         ]);
     }
-
-
 }

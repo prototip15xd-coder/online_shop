@@ -13,7 +13,6 @@ class App
         $this->logger = $logger;
     }
 
-
     public function Run()
     {
         session_start();
@@ -23,6 +22,7 @@ class App
 
         if (isset($this->routes[$requestUri])) {   //если перестанет работать см урок разбор рефакторинга маршрутизации
             $routeMethod = $this->routes[$requestUri];
+
             if (isset($routeMethod[$requestMethod])) {
                 $handler = $routeMethod[$requestMethod];
 
@@ -34,6 +34,7 @@ class App
 
                 $queryParams = [];
                 $queryString = parse_url($requestUri, PHP_URL_QUERY);
+
                 if ($queryString) {
                     parse_str($queryString, $queryParams);
                 }
@@ -55,15 +56,10 @@ class App
                         exit;
                 }
 
-//                if ($method === 'GET') {
-//                    $controller->$method();
-//                } elseif ($method === 'POST') {
-//                    $controller->$method($_POST);
-//                }
-                //$controller->$method($_POST);
             } else {
                 echo "$requestMethod не поддерживается для $requestUri";
             }
+
         } else {
             http_response_code(404);
             require_once '../Views/404.php';
@@ -75,23 +71,27 @@ class App
                 'class' => $className,
                 'method' => $classMethod, ];
     }
+
     public function get(string $route, string $className, string $classMethod, ?string $request = null){
         $this->routes[$route]['GET'] = [
             'class' => $className,
             'method' => $classMethod,
             'request' => $request ];
     }
+
     public function post(string $route, string $className, string $classMethod, ?string $request = null){
         $this->routes[$route]['POST'] = [
             'class' => $className,
             'method' => $classMethod,
             'request' => $request ];
     }
+
     public function put(string $route, string $className, string $classMethod){
         $this->routes[$route]['PUT'] = [
             'class' => $className,
             'method' => $classMethod ];
     }
+
     public function delete(string $route, string $className, string $classMethod){
         $this->routes[$route]['DELETE'] = [
             'class' => $className,

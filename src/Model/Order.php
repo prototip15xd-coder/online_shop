@@ -18,6 +18,7 @@ class Order extends Model
     {
         return $this->id;
     }
+
     public function getContactName(): string
     {
         return $this->contact_name;
@@ -37,22 +38,27 @@ class Order extends Model
     {
         return $this->address;
     }
+
     public function getOrderProducts(): array
     {
         return $this->orderProducts;
     }
+
     public function setOrderProducts(array $orderProducts): void
     {
         $this->orderProducts = $orderProducts;
     }
+
     public function getOrderCost(): int
     {
         return $this->orderCost;
     }
+
     public function setOrderCost(int $orderCost): void
     {
         $this->orderCost = $orderCost;
     }
+
     protected static function getTableName(): string
     {
         return "orders";
@@ -88,6 +94,7 @@ class Order extends Model
         $res = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $res['id'];
     }
+
     public function getOrder(int $orderId): Order
     {
         $stmt = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :order_id");
@@ -95,6 +102,7 @@ class Order extends Model
         $order = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $this->objOrder($order);
     }
+
     public function getOrders(int $us_id): array
     {
         $stmt = static::getPDO()->prepare("SELECT * FROM orders WHERE user_id = :user_id");

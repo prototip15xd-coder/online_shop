@@ -9,10 +9,10 @@ use Request\RegistrateRequest;
 
 class UserController extends BaseController
 {
-
     public function __construct() {
         parent::__construct();
     }
+
     public function getRegistration()
     {
         if ($this->authService->getCurrentUser()) {
@@ -21,6 +21,7 @@ class UserController extends BaseController
         }
         require_once '/var/www/html/src/Views/registration.php';
     }
+
     public function getLogin()
     {
         if ($this->authService->getCurrentUser()) {
@@ -78,6 +79,7 @@ class UserController extends BaseController
             require_once '/var/www/html/src/Views/login.php';
         }
     }
+
     public function profileEdit(ProfileEditRequest $request) {
         if ($this->authService->getCurrentUser()) {
             $user = $this->userModel->UserbyDB();

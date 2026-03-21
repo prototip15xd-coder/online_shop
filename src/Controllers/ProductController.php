@@ -17,8 +17,6 @@ class ProductController extends BaseController
     protected UserProduct $userProductModel;
     protected ProductReview $productReviewModel;
 
-
-
     public function __construct()
     {
         parent::__construct();
@@ -29,6 +27,7 @@ class ProductController extends BaseController
         $this->productReviewModel = new ProductReview();
 
     }
+
     public function catalog() ////вьюху переделай
     {
         if ($this->authService->check()) {
@@ -39,7 +38,6 @@ class ProductController extends BaseController
             require_once '/var/www/html/src/Views/login.php';
         }
     }
-
 
     public function product(ProductRequest $request)  ///отдельный rout add-product
     {

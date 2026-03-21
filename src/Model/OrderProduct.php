@@ -32,22 +32,27 @@ class OrderProduct extends Model
     {
         return $this->amount ?? 0;
     }
+
     public function getTotalSum(): ?int
     {
         return $this->totalSum;
     }
+
     public function setTotalSum(int $totalSum): void
     {
         $this->totalSum = $totalSum;
     }
+
     public function getProduct(): ?Product
     {
         return $this->product;
     }
+
     public function setProduct(Product $product): void
     {
         $this->product = $product;
     }
+
     protected static function getTableName(): string
     {
         return "order_products";
@@ -62,6 +67,7 @@ class OrderProduct extends Model
         $obj->amount = $product["amount"];
         return $obj;
     }
+
     public function createOrderProduct(int $orderId, int $productId, int $amount)
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()}  
@@ -85,7 +91,6 @@ class OrderProduct extends Model
             ]);
         }
     }
-
 
     public function getAllProductFromOrderByOrderId(int $orderId): array {
         $stmt= static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 

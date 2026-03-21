@@ -17,6 +17,7 @@ abstract class BaseController
     protected CartService $cartService;
     protected LoggerService $loggerService;
     protected LoggerDBService $loggerDBService;
+
     public function __construct()
     {
         $this->userModel = new User();

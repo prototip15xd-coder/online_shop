@@ -11,7 +11,6 @@ class OrderController extends BaseController
 {
     private Order $orderModel;
 
-
     public function __construct()
     {
         parent::__construct();

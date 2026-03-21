@@ -4,14 +4,14 @@ services:
     ports:
       - 82:80
     volumes:
-      - '/home/mdr11/projects/online_shop/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
-      - '.:/var/www/html'
+      - './:mdr11/projects/online_shop/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
+      - './:var/www/html'
 
 
   php-fpm:
     build: ./docker/php
     volumes:
-      - '.:/var/www/html'
+      - './:var/www/html'
       - ./docker/php/Xdebug.ini:/usr/local/etc/php/conf.d/docker-php-xdebug.ini
 
 
