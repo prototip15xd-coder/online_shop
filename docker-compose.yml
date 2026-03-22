@@ -7,7 +7,7 @@ services:
       - './:mdr11/projects/online_shop/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
       - './:var/www/html'
 
-
+git
   php-fpm:
     build: ./docker/php
     volumes:
