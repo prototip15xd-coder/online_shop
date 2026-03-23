@@ -12,12 +12,12 @@ class Product extends Model
      private string $value;
      private ?int $amount = null;
 
-    public function getProductId()
+    public function getProductId(): ?int
     {
         return $this->id;
     }
 
-    public function getProductName(): string
+    public function getProductName(): ?string
     {
         return $this->name;
     }
@@ -27,7 +27,7 @@ class Product extends Model
         return $this->description;
     }
 
-    public function getProductPrice(): int
+    public function getProductPrice(): ?int
     {
         return $this->price;
     }
@@ -50,11 +50,6 @@ class Product extends Model
     public function setProductAmount(?int $amount): void
     {
         $this->amount = $amount;
-    }
-
-    public function setProductId(int $id): void
-    {
-        $this->id = $id;
     }
 
     public function setProductName(string $name): void
@@ -84,10 +79,10 @@ class Product extends Model
 
     public static function objProduct(array $product) {
         $obj = new self();
-        $obj->id = $product["id"];
-        $obj->name = $product["name"];
+        $obj->id = $product["id"] ?? null;
+        $obj->name = $product["name"] ?? null;
         $obj->description = $product["description"] ?? null;
-        $obj->price = $product["price"];
+        $obj->price = $product["price"] ?? null;
         $obj->image_url = $product["image_url"] ?? null;
         $obj->value = $product["value"] ?? null;
         $obj->amount = $product["amount"] ?? null;
