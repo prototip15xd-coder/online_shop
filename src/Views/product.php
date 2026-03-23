@@ -35,3 +35,20 @@
 </div>
 </body>
 </html>
+<style>
+    body {
+        padding-top: 80px;
+    }
+
+    .show-cart li {
+        display: flex;
+    }
+    .card {
+        margin-bottom: 20px;
+    }
+    .card-img-top {
+        width: 200px;
+        height: 200px;
+        align-self: center;
+    }
+</style>

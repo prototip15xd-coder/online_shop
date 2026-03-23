@@ -64,9 +64,13 @@ class CartController extends BaseController
         if (empty($errors)) {
             $this->cartService->add_product();
             $products = Product::getWithAmount($this->authService->getCurrentUser()->getUserId());
-            $response = [
-                'amount' => $products->getProductAmount()///??
-            ];
+            $response =[];
+
+            foreach($products as $product){
+                $response[] = [
+                    'amount' => $product->getProductAmount()
+                ];
+            }
 
             header('Content-Type: application/json');
             echo json_encode($response);

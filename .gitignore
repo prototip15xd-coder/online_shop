@@ -1,9 +1,11 @@
 .idea/
+docker/postgres/data
 # Environment variables
 .env
 
 # Database data
 ./docker/postgres/data
+
 *.sql
 
 # Docker
