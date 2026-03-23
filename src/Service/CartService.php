@@ -15,20 +15,16 @@ class CartService
         $this->authService = new AuthSessionService();
     }
 
-    public function add_product()
+    public function add_product(int $productId, string $action): void
     {
-        $action = $_POST['action'];
+        $amount = match($action) {
+            'plus'  =>  1,
+            'minus' => -1,
+            default =>  0,
+        };
 
-        if ($action === 'plus') {
-            $amount = 1;
-        } elseif ($action === 'minus') {
-            $amount = -1;
-        } else {
-            $amount = 0;
-        }
-
-        UserProduct::add_productDB($amount);
-        $action = false;
+        $userId = $this->authService->getCurrentUser()->getUserId();
+        UserProduct::add_productDB($userId, $productId, $amount);
     }
 
     public function getUserProducts(): array

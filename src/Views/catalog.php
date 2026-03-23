@@ -27,7 +27,7 @@
                         </div>
                         <div style="display: flex; margin: 10px;">
                             <!-- Кнопка - -->
-                            <form class="add-form" method="POST" onsubmit="return false" style="margin: 0;">
+                            <form class="add-form" method="POST" style="margin: 0;">
                                 <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                                 <input type="hidden" name="action" value="minus">
                                 <input type="hidden" name="redirect_url" value="<?= $_SERVER['REQUEST_URI'] ?>">
@@ -40,7 +40,7 @@
                             </span>
 
                             <!-- Кнопка + -->
-                            <form class="decrease-form" method="POST" onsubmit="return false" style="margin: 0;">
+                            <form class="decrease-form" method="POST" style="margin: 0;">
                                 <input type="hidden" name="product_id" value="<?php echo $product->getProductId(); ?>">
                                 <input type="hidden" name="action" value="plus">
                                 <input type="hidden" name="redirect_url" value="<?= $_SERVER['REQUEST_URI'] ?>">
@@ -64,64 +64,28 @@
 </body>
 </html>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<!--<script>-->
-<!--    $("document").ready(function () {-->
-<!--        $(.add-form).submit(function () {-->
-<!--            $.ajax({-->
-<!--                type: "POST",-->
-<!--                url: "/add-product",-->
-<!--                data: $(this).serialize(),-->
-<!--                dataType: 'json',-->
-<!--                success: function (response) {-->
-<!--                    var amountSpan = form.closest('.card').find('span');-->
-<!--                    amountSpan.text(response.amount);-->
-<!--                },-->
-<!--                error: function(xhr, status, error) {-->
-<!--                    console.error('Ошибка при добавлении товара:', error);-->
-<!--                }-->
-<!--            });-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
 <script>
-$("document").ready(function () {
-    $('.add-form').submit(function () {
-        $.ajax({
-            type: "POST",
-            url: "/add-product",
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function (response) {
-                console.log('test');
-                // Обновляем количество товаров в бейдже корзины
-                $('.badge').text(response.count);
-            },
-            error: function(xhr, status, error) {
-                console.error('Ошибка при добавлении товара:', error);
-            }
+    $(document).ready(function () {
+
+        $('.add-form, .decrease-form').submit(function () {
+            var form = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: "/add-product",
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (response) {
+                    $('.badge').text(response.count);
+                    form.closest('.card').find('span').text(response.amount ?? 0);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Ошибка:', error);
+                }
+            });
             return false;
         });
     });
-});
-$("document").ready(function () {
-    $('.decrease-form').submit(function () {
-        $.ajax({
-            type: "POST",
-            url: "/add-product",
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function (response) {
-                console.log('test');
-                // Обновляем количество товаров в бейдже корзины
-                $('.badge').text(response.count);
-            },
-            error: function(xhr, status, error) {
-                console.error('Ошибка при добавлении товара:', error);
-            }
-            return false;
-        });
-    });
-});
 </script>
 <style>
     body {

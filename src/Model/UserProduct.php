@@ -161,25 +161,25 @@ class UserProduct extends Model ///тут уже объявлены новые �
         $stmt->execute([':user_id' => $us_id]);
     }
 
-    public static function add_productDB($amount)
+    public static function add_productDB(int $userId, int $productId, int $amount): void
     {
         $tableName = static::getTableName();
-        $stmt = static::getPDO()->prepare("UPDATE {$tableName} SET amount = amount + :amount 
-             WHERE user_id = :user_id AND product_id = :product_id
-             ");
+        $stmt = static::getPDO()->prepare("UPDATE {$tableName} 
+        SET amount = amount + :amount 
+        WHERE user_id = :user_id AND product_id = :product_id");
         $stmt->execute([
-            'user_id' => $_SESSION['userid'],
-            'product_id' => $_POST['product_id'],
-            'amount' => $amount
+            'user_id'    => $userId,
+            'product_id' => $productId,
+            'amount'     => $amount
         ]);
 
         if ($stmt->rowCount() == 0) {
             $stmt = static::getPDO()->prepare("INSERT INTO {$tableName} (user_id, product_id, amount) 
             VALUES (:user_id, :product_id, :amount)");
             $stmt->execute([
-                'user_id' => $_SESSION['userid'],
-                'product_id' => $_POST['product_id'],
-                'amount' => $amount
+                'user_id'    => $userId,
+                'product_id' => $productId,
+                'amount'     => $amount
             ]);
         }
     }

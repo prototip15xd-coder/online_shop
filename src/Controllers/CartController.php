@@ -62,22 +62,35 @@ class CartController extends BaseController
         $errors = $this->add_product_validate($request->getAction(), $request->getProductId());
 
         if (empty($errors)) {
-            $this->cartService->add_product();
-            $products = Product::getWithAmount($this->authService->getCurrentUser()->getUserId());
-            $response =[];
+            $this->cartService->add_product($request->getProductId(), $request->getAction());
 
-            foreach($products as $product){
-                $response[] = [
-                    'amount' => $product->getProductAmount()
-                ];
+            $userId   = $this->authService->getCurrentUser()->getUserId();
+            $products = Product::getWithAmount($userId);
+
+            $updatedProduct = null;
+            foreach ($products as $product) {
+                if ($product->getProductId() === $request->getProductId()) {
+                    $updatedProduct = $product;
+                    break;
+                }
             }
 
+            $totalCount = array_sum(array_map(
+                fn($p) => $p->getProductAmount() ?? 0,
+                $products
+            ));
+
             header('Content-Type: application/json');
-            echo json_encode($response);
+            echo json_encode([
+                'amount' => $updatedProduct?->getProductAmount() ?? 0,
+                'count'  => $totalCount,
+            ]);
             exit;
         }
 
-        header('Location: /catalog');
+        header('Content-Type: application/json');
+        http_response_code(422);
+        echo json_encode(['errors' => $errors]);
+        exit;
     }
-
 }
