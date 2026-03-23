@@ -2,7 +2,6 @@
 
 namespace Controllers;
 
-
 use Request\LoginRequest;
 use Request\ProfileEditRequest;
 use Request\RegistrateRequest;
@@ -121,5 +120,3 @@ class UserController extends BaseController
         header('Location: /login');
     }
 }
-
-?>

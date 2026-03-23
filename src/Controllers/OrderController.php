@@ -32,7 +32,7 @@ class OrderController extends BaseController
             $dto = new OrderCreateDTO($request->getContactName(),
                 $request->getPhone(),
                 $request->getComment(),
-                $request->getAddress()); /// как здесь избежать передачи юзерИд?
+                $request->getAddress());
             $this->orderService->createOrder($dto);
             header('Location: /orders');
         } else {
@@ -52,7 +52,6 @@ class OrderController extends BaseController
         $user = $this->authService->getCurrentUser();
         $order= $this->orderModel->getOrder($request->getOrderId());
         $order->setOrderProducts($this->orderService->getOrderProduct($request->getOrderId()));
-        /////добавь сюда тотал сум и вызов полной цены заказа
         require_once '/var/www/html/src/Views/order.php';
     }
 

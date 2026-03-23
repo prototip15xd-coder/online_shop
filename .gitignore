@@ -1,1 +1,10 @@
 .idea/
+# Environment variables
+.env
+
+# Database data
+./docker/postgres/data
+*.sql
+
+# Docker
+volumes/

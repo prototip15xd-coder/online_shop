@@ -4,8 +4,8 @@ services:
     ports:
       - 82:80
     volumes:
-      - './:mdr11/projects/online_shop/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
-      - './:var/www/html'
+      - ./:mdr11/projects/online_shop/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf //?
+      - ./:var/www/html
 
 git
   php-fpm:
@@ -17,9 +17,11 @@ git
 
   postgres:
     image: postgres:16
+    volumes:
+      - ./docker/postgres/data
     environment:
       - POSTGRES_USER=USER # {$DB_USER}
       - POSTGRES_PASSWORD=PASS #{$DB_PASSWORD}
       - POSTGRES_DB=mydb #{$DB}
     ports:
-      - 54324:5432
+      - 5434:5432

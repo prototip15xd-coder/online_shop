@@ -1,6 +1,7 @@
 <?php
 
 namespace Controllers;
+
 use Model\OrderProduct;
 use Model\Product;
 use Model\ProductReview;
@@ -28,7 +29,7 @@ class ProductController extends BaseController
 
     }
 
-    public function catalog() ////вьюху переделай
+    public function catalog()
     {
         if ($this->authService->check()) {
             $products = Product::getWithAmount($this->authService->getCurrentUser()->getUserId());
