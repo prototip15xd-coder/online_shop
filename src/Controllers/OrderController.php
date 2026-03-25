@@ -7,7 +7,7 @@ use Model\Order;
 use Request\AddOrderRequest;
 use Request\OrderRequest;
 
-class OrderController extends BaseController
+class OrderController extends Controller
 {
     private Order $orderModel;
 
@@ -54,6 +54,5 @@ class OrderController extends BaseController
         $order->setOrderProducts($this->orderService->getOrderProduct($request->getOrderId()));
         require_once '/var/www/html/src/Views/order.php';
     }
-
 }
 

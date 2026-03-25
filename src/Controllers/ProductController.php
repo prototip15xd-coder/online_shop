@@ -10,7 +10,7 @@ use Model\User;
 use Request\AddProductRequest;
 use Request\ProductRequest;
 
-class ProductController extends BaseController
+class ProductController extends Controller
 {
     protected User $userModel;
     protected OrderProduct $orderProductModel;
@@ -33,6 +33,11 @@ class ProductController extends BaseController
     {
         if ($this->authService->check()) {
             $products = Product::getWithAmount($this->authService->getCurrentUser()->getUserId());
+            $totalCount = 0;
+
+            foreach ($products as $product) {
+                $totalCount += $product->getProductAmount();
+            }
 
             require_once '/var/www/html/src/Views/catalog.php';
         } else {

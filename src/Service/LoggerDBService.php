@@ -16,7 +16,4 @@ class LoggerDBService
     {
         $this->loggerModel->error($exception->getMessage(), $exception->getFile(),$exception->getLine());
     }
-
-
-
 }

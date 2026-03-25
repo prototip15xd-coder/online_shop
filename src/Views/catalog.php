@@ -8,7 +8,7 @@
     <div class="container">
         <a href="/profile" target="_blank">Мой профиль<br></a>
         <a href="/cart" class="Cart">
-            Корзина <span class="badge">0</span><br>
+            Корзина <span class="badge"><?php echo $totalCount ?? 0 ?></span><br>
         </a>
         <a href="/logout" class="edit-mode-btn">Выйти из профиля<br></a>
         <h3>Catalog</h3>
@@ -65,7 +65,7 @@
 </html>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function () {  // ← убрали кавычки
 
         $('.add-form, .decrease-form').submit(function () {
             var form = $(this);

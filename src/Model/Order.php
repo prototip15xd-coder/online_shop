@@ -115,5 +115,4 @@ class Order extends Model
         }
         return $all_orders;
     }
-
 }

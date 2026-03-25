@@ -6,7 +6,7 @@ use Request\LoginRequest;
 use Request\ProfileEditRequest;
 use Request\RegistrateRequest;
 
-class UserController extends BaseController
+class UserController extends Controller
 {
     public function __construct() {
         parent::__construct();
@@ -35,7 +35,7 @@ class UserController extends BaseController
         $errors = $request->validate();
 
         if (empty($errors)) {
-            $chekemail = $this->userModel->count_getbyEmail($request->getEmail());
+            $chekemail = $this->userModel->countGetByEmail($request->getEmail());
 
             if ($chekemail > 0) {
                 $errors['email'] = 'Такой email уже существует';

@@ -88,5 +88,4 @@ class ProductReview extends Model
         return $objProductReviews;
 
     }
-
 }

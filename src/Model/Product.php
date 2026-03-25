@@ -12,7 +12,7 @@ class Product extends Model
      private string $value;
      private ?int $amount = null;
 
-    public function getProductId(): ?int
+    public function getProductId(): int
     {
         return $this->id;
     }
@@ -172,7 +172,7 @@ class Product extends Model
         return $obj_array;
     }
 
-    public function validate_product($productId): int
+    public function validateProduct($productId): int
     {
         $stms = static::getPDO()->prepare("SELECT id FROM {$this->getTableName()} 
           WHERE id = :product_id"

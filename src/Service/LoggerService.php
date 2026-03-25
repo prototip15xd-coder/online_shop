@@ -18,6 +18,4 @@ class LoggerService
         $logFile = __DIR__ . '/../Storage/Log/errors.txt';
         file_put_contents($logFile, $message, FILE_APPEND);
     }
-
-
 }

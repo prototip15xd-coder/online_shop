@@ -9,7 +9,7 @@ use Service\LoggerDBService;
 use Service\OrderService;
 use Service\LoggerService;
 
-abstract class BaseController
+abstract class Controller
 {
     protected User $userModel;
     protected AuthInterface $authService;

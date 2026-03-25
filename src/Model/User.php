@@ -58,7 +58,7 @@ class User extends Model
         return $obj;
     }
 
-    public function count_getbyEmail(string $email)
+    public function countGetByEmail(string $email)
     {
         $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
         $stms->execute(['email' => $email]);

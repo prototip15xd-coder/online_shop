@@ -15,7 +15,7 @@ class CartService
         $this->authService = new AuthSessionService();
     }
 
-    public function add_product(int $productId, string $action): void
+    public function addProduct(int $productId, string $action): void
     {
         $amount = match($action) {
             'plus'  =>  1,
@@ -50,5 +50,4 @@ class CartService
 
         return $total;
     }
-
 }

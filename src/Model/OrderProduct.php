@@ -107,6 +107,4 @@ class OrderProduct extends Model
 
         return $all_products_from_order;
     }
-
-
 }

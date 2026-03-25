@@ -12,7 +12,7 @@
     <a href="/catalog" class="catalog">Каталог<br></a>
     <h3>Cart</h3>
     <div class="card-deck">
-        <?php foreach ($all_products as $product): ?>
+        <?php foreach ($allProducts as $product): ?>
             <div class="card text-center">
                 <a href="#">
                     <img class="card-img-top" src="<?php echo $product->getProduct()->getProductImageUrl(); ?>">
