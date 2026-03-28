@@ -5,6 +5,7 @@ namespace Controllers;
 use Request\LoginRequest;
 use Request\ProfileEditRequest;
 use Request\RegistrateRequest;
+use DTO\UserCreateDTO;
 
 class UserController extends Controller
 {
@@ -40,12 +41,14 @@ class UserController extends Controller
             if ($chekemail > 0) {
                 $errors['email'] = 'Такой email уже существует';
             } else {
-                $password = password_hash($request->getPassword(), PASSWORD_DEFAULT); //['psw']
-                $this->userModel-> password_hash($password);
-                $user = $this->userModel->getByEmail($request->getEmail());
+                $dto = new UserCreateDTO($request->getName(),
+                    $request->getEmail(),
+                    $request->getPassword());
 
-                header("Location: /catalog");
-                exit;
+                $this->userService->registrate($dto);
+
+                header('Location: /catalog');
+                exit();
             }
 
         }

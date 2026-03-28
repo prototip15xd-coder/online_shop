@@ -66,11 +66,12 @@ class User extends Model
         return $stms;
     }
 
-    public function password_hash($password)
+    public function registrate($name, $email, $password)
     {
         $stmt = static::getPDO()->prepare("INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
-        $stmt->execute(['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $password]);
-        return $stmt;
+        $password = password_hash($password, PASSWORD_DEFAULT); //['psw']
+        $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);
+        //return $stmt; разве он должен что-то возвращать?
     }
 
     public function UpdateByPassword($newName, $newEmail, $hashedPassword)  /// сделай опциональность для редактирования каждого парметра

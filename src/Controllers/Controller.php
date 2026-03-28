@@ -8,6 +8,7 @@ use Service\CartService;
 use Service\LoggerDBService;
 use Service\OrderService;
 use Service\LoggerService;
+use Service\UserSevice;
 
 abstract class Controller
 {
@@ -17,6 +18,7 @@ abstract class Controller
     protected CartService $cartService;
     protected LoggerService $loggerService;
     protected LoggerDBService $loggerDBService;
+    protected UserSevice $userService;
 
     public function __construct()
     {
@@ -26,5 +28,6 @@ abstract class Controller
         $this->cartService = new CartService();
         $this->loggerService = new LoggerService();
         $this->loggerDBService = new LoggerDBService();
+        $this->userService = new UserSevice();
     }
 }

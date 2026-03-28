@@ -83,4 +83,9 @@ class OrderService
 
         return $orders;
     }
+    public function getOrder($orderId)
+    {
+        $this->authService->checkUser();
+        return $order = $this->orderModel->getOrder($orderId);
+    }
 }
