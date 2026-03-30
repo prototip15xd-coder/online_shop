@@ -30,6 +30,9 @@ class CartController extends Controller
         }
     }
 
+    // PSR-12: Комментарий должен начинаться с //, а не с ///
+    // Также: у метода отсутствуют типы параметров
+    // и отсутствует тип возвращаемого значения
     public function addProductValidate($action, $productId)   /// сделать реализацию +- в самой корзине?
     {
         $errors = [];
@@ -63,6 +66,9 @@ class CartController extends Controller
         if (empty($errors)) {
             $this->cartService->addProduct($request->getProductId(), $request->getAction());
 
+            // PSR-12: Лишние пробелы перед = при выравнивании — допустимо только если
+            // выравниваются несколько соседних присваиваний. Здесь это только одна переменная,
+            // поэтому лишние пробелы не нужны: $userId = ...
             $userId   = $this->authService->getCurrentUser()->getUserId();
             $products = Product::getWithAmount($userId);
 

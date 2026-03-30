@@ -17,13 +17,16 @@ class CartService
 
     public function addProduct(int $productId, string $action): void
     {
-        $amount = match($action) {
+        $amount = match($action) { // проблема из 48 строки
             'plus'  =>  1,
             'minus' => -1,
             default =>  0,
         };
 
         $userId = $this->authService->getCurrentUser()->getUserId();
+        // PSR-1: Имена методов ДОЛЖНЫ быть в camelCase.
+        // add_productDB — нарушение, snake_case здесь недопустим.
+        // Переименуй в addProductDB или addProduct (в самой модели тоже нужно исправить)
         UserProduct::add_productDB($userId, $productId, $amount);
     }
 
@@ -40,6 +43,10 @@ class CartService
         return $userProducts;
     }
 
+    // PSR-12: Встроенный комментарий с временной меткой (//25:48) — не подходит для продакшн-кода.
+    // Используй стандартный формат: // TODO: цена заказа должна отображаться внизу в корзине
+    // PSR-12: match — это языковая конструкция, перед скобкой должен быть пробел: match ($action)
+    // (см. метод addProduct выше — та же проблема)
     public function getCartSum(): int   //25:48     цена заказа должно высвечиваться внизу в корзине!
     {
         $total = 0;
