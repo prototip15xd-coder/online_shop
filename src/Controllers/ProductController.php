@@ -14,7 +14,6 @@ class ProductController extends Controller
 {
     protected User $userModel;
     protected OrderProduct $orderProductModel;
-    protected Product $productModel;
     protected UserProduct $userProductModel;
     protected ProductReview $productReviewModel;
 
@@ -23,7 +22,6 @@ class ProductController extends Controller
         parent::__construct();
         $this->userModel = new User();
         $this->orderProductModel = new OrderProduct();
-        $this->productModel = new Product();
         $this->userProductModel = new UserProduct();
         $this->productReviewModel = new ProductReview();
 
@@ -55,14 +53,14 @@ class ProductController extends Controller
                 exit;
             }
 
-            $product = $this->productModel->productByproductId($product_id);
+            $product = $this->productService->getProduct($product_id);
 
             if (!$product) {
                 header("Location: /catalog");
                 exit;
             }
 
-            $user_product = $this->userProductModel->userProductByDB($product_id);
+            $user_product = $this->userProductService->getUserProduct($product_id);
             $product->setProductAmount($user_product->getAmount());
             $productReviews = $this->productReview($request->getProductId());
 
@@ -72,14 +70,14 @@ class ProductController extends Controller
         }
     }
 
-    public function productReview(int $product_id): array //нужно проверить какой тип передается int или str
+    public function productReview(int $product_id): ?array
     {
-        $productReviews = $this->productReviewModel->productReviews($product_id);
+        $productReviews = $this->productReviewService->getReview($product_id);
 
         if (isset($productReviews)) {
             foreach ($productReviews as $productReview) {
                 $user_id = $productReview->getUserId();
-                $user = $this->userModel->UserbyID($user_id);
+                $user = $this->userService->getUserbyID($user_id);
                 $productReview->setUserName($user->getUserName());
             }
         }

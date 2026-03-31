@@ -95,7 +95,7 @@ class User extends Model
         ]);
     }
 
-    public function UserbyDB(): User
+    public function userbyDB(): User
     {
         $stmt = static::getPDO()->prepare("SELECT id, name, email, password 
                                 FROM {$this->getTableName()} 

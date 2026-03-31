@@ -17,7 +17,7 @@ class AuthSessionService implements AuthInterface
         $this->session();
 
         if ($this->check()) {
-            return $this->userModel->UserbyDB();
+            return $this->userModel->userbyDB();
         } else {
             return null;
         }

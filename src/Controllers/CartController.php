@@ -31,7 +31,7 @@ class CartController extends Controller // OPTIMIZE: переложи логик
     public function addProductValidate(string $action, int $productId): array  // TODO: сделать реализацию +- в самой корзине
     {
         $errors = [];
-        $objUserProduct = $this->userProductService->userProduct($productId);
+        $objUserProduct = $this->userProductService->getUserProduct($productId);
         $amount = $objUserProduct->getAmount();
 
         if ($this->authService->check()) {

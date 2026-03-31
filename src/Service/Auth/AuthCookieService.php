@@ -15,7 +15,7 @@ class AuthCookieService implements AuthInterface
     public function getCurrentUser(): ?User
     {
         if ($this->check()) {
-            return $this->userModel->UserbyDB();
+            return $this->userModel->userbyDB();
         } else {
             return null;
         }

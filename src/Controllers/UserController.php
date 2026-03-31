@@ -37,7 +37,7 @@ class UserController extends Controller
         $errors = $request->validate();
 
         if (empty($errors)) {
-            $chekemail = $this->userModel->countGetByEmail($request->getEmail());
+            $chekemail = $this->userService->countEmail($request->getEmail());
 
             if ($chekemail > 0) {
                 $errors['email'] = 'Такой email уже существует';
@@ -76,8 +76,8 @@ class UserController extends Controller
     public function profile()
     {
         if ($this->authService->getCurrentUser()) {
-            $user = $this->userModel->UserbyDB();
-            require_once __DIR__ . '/../Views/profile.php';
+            $user = $this->userService->getUser();
+;            require_once __DIR__ . '/../Views/profile.php';
         } else {
             require_once __DIR__ . '/../Views/login.php';
         }
@@ -85,28 +85,10 @@ class UserController extends Controller
 
     public function profileEdit(ProfileEditRequest $request) {
         if ($this->authService->getCurrentUser()) {
-            $user = $this->userModel->UserbyDB();
+            $user = $this->userService->getUser();
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $newName = $request->getName() ?? $user->getUserName();
-                $newEmail = $request->getEmail() ?? $user->getUserEmail();
-                $newPassword = $request->getPassword() ?? '';
-
-                $nameChanged = ($newName !== $user->getUserName());
-                $emailChanged = ($newEmail !== $user->getUserEmail());
-                $passwordChanged = !empty($newPassword);
-
-                if ($passwordChanged) {
-                    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-                    $this->userModel->UpdatePassword($newName, $newEmail, $hashedPassword);
-                } else if ($nameChanged && $emailChanged) {
-                    $this->userModel->UpdateNameEmail($newName, $newEmail);
-                } else if ($nameChanged) {
-                    $this->userModel->UpdateName($newName);
-                } else if ($emailChanged) {
-                    $this->userModel->UpdateEmail($newEmail);
-                }
-
+                $this->userService->profileEdit($request, $user);
                 header('Location: /profile');
                 exit;
             } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {

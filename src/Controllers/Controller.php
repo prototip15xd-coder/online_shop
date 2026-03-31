@@ -11,6 +11,7 @@ use Service\LoggerService;
 use Service\UserSevice;
 use Service\ProductService;
 use Service\UserProductService;
+use Service\ProductReviewService;
 
 
 abstract class Controller
@@ -24,6 +25,7 @@ abstract class Controller
     protected UserSevice $userService;
     protected ProductService $productService;
     protected UserProductService $userProductService;
+    protected ProductReviewService $productReviewService;
 
     public function __construct()
     {
@@ -36,5 +38,6 @@ abstract class Controller
         $this->userService = new UserSevice();
         $this->productService = new ProductService();
         $this->userProductService = new UserProductService();
+        $this->productReviewService = new ProductReviewService;
     }
 }

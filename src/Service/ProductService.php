@@ -5,15 +5,21 @@ namespace Service;
 use Model\Product;
 class ProductService
 {
-    private Product $ProductModel;
+    private Product $productModel;
 
     public function __construct()
     {
-        $this->ProductModel = new Product();
+        $this->productModel = new Product();
     }
+
     public function rowCountProduct(int $productId): int
     {
-        return $this->ProductModel->validateProduct($productId);
+        return $this->productModel->validateProduct($productId);
+    }
+
+    public function getProduct(int $productId): Product
+    {
+        return $this->productModel->productByproductId($productId);
     }
 
 }
