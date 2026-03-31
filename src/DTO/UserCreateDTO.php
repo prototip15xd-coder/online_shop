@@ -8,7 +8,9 @@ class UserCreateDTO
         private string $userName,
         private string $userEmail,
         private string $password
-    ){}
+    ) {
+
+    }
 
     public function getUserName(): string
     {

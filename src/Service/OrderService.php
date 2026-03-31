@@ -78,7 +78,7 @@ class OrderService
 
         foreach ($orders as $order) {
             $order->setOrderProducts($this->getOrderProduct($order->getOrderId()));
-            //добавь сюда тотал сум и вызов полной цены заказа
+            // TODO: добавь сюда тотал сум и вызов полной цены заказа
         }
 
         return $orders;

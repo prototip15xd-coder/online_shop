@@ -39,9 +39,9 @@ class ProductController extends Controller
                 $totalCount += $product->getProductAmount();
             }
 
-            require_once '/var/www/html/src/Views/catalog.php';
+            require_once __DIR__ . '/../Views/catalog.php';
         } else {
-            require_once '/var/www/html/src/Views/login.php';
+            require_once __DIR__ . '/../Views/login.php';
         }
     }
 
@@ -66,9 +66,9 @@ class ProductController extends Controller
             $product->setProductAmount($user_product->getAmount());
             $productReviews = $this->productReview($request->getProductId());
 
-            require_once '/var/www/html/src/Views/product.php';
+            require_once __DIR__ . '/../Views/product.php';
         } else {
-            require_once '/var/www/html/src/Views/login.php';
+            require_once __DIR__ . '/../Views/login.php';
         }
     }
 

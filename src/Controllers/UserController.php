@@ -20,7 +20,7 @@ class UserController extends Controller
             header("Location: /catalog");
             exit;
         }
-        require_once '/var/www/html/src/Views/registration.php';
+        require_once __DIR__ . '/../Views/registration.php';
     }
 
     public function getLogin()
@@ -29,7 +29,7 @@ class UserController extends Controller
             header("Location: /catalog");
             exit;
         }
-        require_once '/var/www/html/src/Views/login.php';
+        require_once __DIR__ . '/../Views/login.php';
     }
 
     function registration(RegistrateRequest $request)
@@ -55,7 +55,7 @@ class UserController extends Controller
         }
 
         $errors = $errors ?? [];
-        require_once '/var/www/html/src/Views/registration.php';
+        require_once __DIR__ . '/../Views/registration.php';
     }
 
     public function login(LoginRequest $request)
@@ -70,16 +70,16 @@ class UserController extends Controller
             exit();
         }
 
-        require_once '/var/www/html/src/Views/login.php';
+        require_once __DIR__ . '/../Views/login.php';
     }
 
     public function profile()
     {
         if ($this->authService->getCurrentUser()) {
             $user = $this->userModel->UserbyDB();
-            require_once '/var/www/html/src/Views/profile.php';
+            require_once __DIR__ . '/../Views/profile.php';
         } else {
-            require_once '/var/www/html/src/Views/login.php';
+            require_once __DIR__ . '/../Views/login.php';
         }
     }
 
@@ -110,7 +110,7 @@ class UserController extends Controller
                 header('Location: /profile');
                 exit;
             } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                require_once '/var/www/html/src/Views/profile_edit.php';
+                require_once __DIR__ . '/../Views/profile_edit.php';
             } else {
                 header('Location: /login');
                 exit;

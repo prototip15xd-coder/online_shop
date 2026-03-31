@@ -24,9 +24,9 @@ class CartController extends Controller // OPTIMIZE: переложи логик
             $allProducts = $this->cartService->getUserProducts();
             $cartTotalSum = $this->cartService->getCartSum();
 
-            require_once '/var/www/html/src/Views/cart.php';
+            require_once __DIR__ . '/../Views/cart.php';
         } else {
-            require_once '/var/www/html/src/Views/login.php';
+            require_once __DIR__ . '/../Views/login.php';
         }
     }
 
