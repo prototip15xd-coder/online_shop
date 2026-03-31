@@ -9,13 +9,11 @@ use Request\AddProductRequest;
 class CartController extends Controller // OPTIMIZE: переложи логику моделей в сервис
 {
     private UserProduct $userProductModel;
-    private Product $productModel;
 
     public function __construct()
     {
         parent::__construct();
         $this->userProductModel = new UserProduct();
-        $this->productModel = new Product();
     }
 
     public function cart()
@@ -33,11 +31,11 @@ class CartController extends Controller // OPTIMIZE: переложи логик
     public function addProductValidate(string $action, int $productId): array  // TODO: сделать реализацию +- в самой корзине
     {
         $errors = [];
-        $objUserProduct = $this->userProductModel->userProductByDB($productId);
+        $objUserProduct = $this->userProductService->userProduct($productId);
         $amount = $objUserProduct->getAmount();
 
         if ($this->authService->check()) {
-            $result = $this->productModel->validateProduct($productId);
+            $result = $this->productService->rowCountProduct($productId);
 
             if (!isset($result)) {
                 $errors['product_id'] = 'Данный товар не существует или закончился';
