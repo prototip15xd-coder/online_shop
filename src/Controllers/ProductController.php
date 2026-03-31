@@ -2,35 +2,19 @@
 
 namespace Controllers;
 
-use Model\OrderProduct;
-use Model\Product;
-use Model\ProductReview;
-use Model\UserProduct;
-use Model\User;
-use Request\AddProductRequest;
 use Request\ProductRequest;
 
 class ProductController extends Controller
 {
-    protected User $userModel;
-    protected OrderProduct $orderProductModel;
-    protected UserProduct $userProductModel;
-    protected ProductReview $productReviewModel;
-
     public function __construct()
     {
         parent::__construct();
-        $this->userModel = new User();
-        $this->orderProductModel = new OrderProduct();
-        $this->userProductModel = new UserProduct();
-        $this->productReviewModel = new ProductReview();
-
     }
 
     public function catalog()
     {
         if ($this->authService->check()) {
-            $products = Product::getWithAmount($this->authService->getCurrentUser()->getUserId());
+            $products = $this->productService->getProductWithAmount($this->authService->getCurrentUser()->getUserId());
             $totalCount = 0;
 
             foreach ($products as $product) {

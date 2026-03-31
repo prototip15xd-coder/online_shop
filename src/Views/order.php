@@ -25,14 +25,14 @@
             <td>Товары:</td>
             <?php foreach ($order->getOrderProducts() as $orderProduct): ?>
                 <div class="card text-center">
-                    <td><?php echo $orderProduct->getProduct()->getProductName(); ?></td>
-                    <img class="card-img-top" src="<?php echo $orderProduct->getProduct()->getProductImageUrl(); ?>">
+                    <td><?php echo $orderProduct->getProductName(); ?></td>
+                    <img class="card-img-top" src="<?php echo $orderProduct->getProductImageUrl(); ?>">
                     <td>Количество товара:</td>
-                    <td><?php echo $orderProduct->getAmount(); ?></td>
+                    <td><?php echo $orderProduct->getProductAmount(); ?></td>
                     <td>Стоимость товара:</td>
-                    <td><?php echo $orderProduct->getProduct()->getProductPrice(); ?></td>
+                    <td><?php echo $orderProduct->getProductPrice(); ?></td>
                     <td>Общая стоимость товара:</td>
-                    <td><?php echo $orderProduct->getTotalSum(); ?></td>
+                    <td><?php echo $orderProduct->getProductTotalSum(); ?></td>
                 </div>
             <?php endforeach; ?>
             </tr>
