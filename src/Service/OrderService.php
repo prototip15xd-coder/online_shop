@@ -64,8 +64,8 @@ class OrderService
         $products = Product::getProductsByOrderID($orderId);
 
         foreach ($products as &$product) {
-            $totalSum = $product->getAmount() * $product->getProductPrice();
-            $product->setTotalSum($totalSum);
+            $totalSum = $product->getProductAmount() * $product->getProductPrice();
+            $product->setProductTotalSum($totalSum);
         }
 
         return $products;
@@ -78,7 +78,11 @@ class OrderService
 
         foreach ($orders as $order) {
             $order->setOrderProducts($this->getOrderProduct($order->getOrderId()));
-            // TODO: добавь сюда тотал сум и вызов полной цены заказа
+            $totalOrderSum = 0;
+            foreach ($order->getOrderProducts() as $orderProduct) {
+                $totalOrderSum += $orderProduct->getProductTotalSum();
+            }
+            $order->setOrderCost($totalOrderSum);
         }
 
         return $orders;

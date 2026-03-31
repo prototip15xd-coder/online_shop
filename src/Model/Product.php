@@ -11,6 +11,7 @@ class Product extends Model
      private ?string $image_url = null;
      private string $value;
      private ?int $amount = null;
+     private ?int $totalSum = null;
 
     public function getProductId(): int
     {
@@ -47,6 +48,7 @@ class Product extends Model
         return $this->amount;
     }
 
+
     public function setProductAmount(?int $amount): void
     {
         $this->amount = $amount;
@@ -76,6 +78,15 @@ class Product extends Model
     {
         $this->value = $value;
     }
+    public function getProductTotalSum(): ?int
+    {
+        return $this->totalSum;
+    }
+
+    public function setProductTotalSum(?int $totalSum): void
+    {
+        $this->totalSum = $totalSum;
+    }
 
     public static function objProduct(array $product): self
     {
@@ -87,6 +98,7 @@ class Product extends Model
         $obj->image_url = $product["image_url"] ?? null;
         $obj->value = $product["value"] ?? null;
         $obj->amount = $product["amount"] ?? null;
+        $obj->totalSum = $product["totalSum"] ?? null;
         return $obj;
     }
 
@@ -133,7 +145,7 @@ class Product extends Model
          WHERE op.order_id = :order_id"
         );
         $stms -> execute([':order_id' => $order_id]);
-        $products_array = $stms->fetch(\PDO::FETCH_ASSOC);
+        $products_array = $stms->fetchAll(\PDO::FETCH_ASSOC);
 
         if (!$products_array) {
             return null;
