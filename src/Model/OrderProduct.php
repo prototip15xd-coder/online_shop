@@ -58,7 +58,7 @@ class OrderProduct extends Model
         return "order_products";
     }
 
-    public function objOrderProduct($product)
+    public function objOrderProduct(array $product): self
     {
         $obj = new self();
         $obj->id = $product["id"];
@@ -92,7 +92,8 @@ class OrderProduct extends Model
         }
     }
 
-    public function getAllProductFromOrderByOrderId(int $orderId): array {
+    public function getAllProductFromOrderByOrderId(int $orderId): array
+    {
         $stmt= static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
          WHERE order_id = :order_id"
         );

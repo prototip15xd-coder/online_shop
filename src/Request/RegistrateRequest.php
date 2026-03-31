@@ -26,7 +26,7 @@ class RegistrateRequest
         return $this->data['psw-repeat'];
     }
 
-    public function validate()
+    public function validate(): array
     {
         $errors = [];
 

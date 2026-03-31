@@ -16,7 +16,7 @@ class LoginRequest
         return $this->data['password'];
     }
 
-    public function validate()
+    public function validate(): array
     {
         $errors = [];
 

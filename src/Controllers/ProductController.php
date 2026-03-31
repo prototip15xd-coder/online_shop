@@ -45,7 +45,7 @@ class ProductController extends Controller
         }
     }
 
-    public function product(ProductRequest $request)  ///отдельный rout add-product
+    public function product(ProductRequest $request)
     {
         if ($this->authService->check()) {
             $product_id = $request->getProductId();
@@ -72,9 +72,9 @@ class ProductController extends Controller
         }
     }
 
-    public function productReview($product_id)
+    public function productReview(int $product_id): array //нужно проверить какой тип передается int или str
     {
-        $productReviews = $this->productReviewModel->product_reviews($product_id);
+        $productReviews = $this->productReviewModel->productReviews($product_id);
 
         if (isset($productReviews)) {
             foreach ($productReviews as $productReview) {

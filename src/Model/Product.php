@@ -77,7 +77,8 @@ class Product extends Model
         $this->value = $value;
     }
 
-    public static function objProduct(array $product) {
+    public static function objProduct(array $product): self
+    {
         $obj = new self();
         $obj->id = $product["id"] ?? null;
         $obj->name = $product["name"] ?? null;
@@ -110,7 +111,7 @@ class Product extends Model
         return $products;
     }
 
-    public function productByproductId($productId): ?Product
+    public function productByproductId(int $productId): ?Product
     {
         $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :id");
         $stms -> execute([':id' => $productId]);
@@ -172,7 +173,7 @@ class Product extends Model
         return $obj_array;
     }
 
-    public function validateProduct($productId): int
+    public function validateProduct(int $productId): int
     {
         $stms = static::getPDO()->prepare("SELECT id FROM {$this->getTableName()} 
           WHERE id = :product_id"

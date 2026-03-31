@@ -1,7 +1,7 @@
 <?php
 
 namespace Model;
-/// НИКАКОЙ БЛЯТЬ ДИНАМИКИ НАХУЙ
+
 class ProductReview extends Model
 {
     private int $id;
@@ -47,7 +47,8 @@ class ProductReview extends Model
         return $this->name;
     }
 
-    public function setUserName(?string $name): void {
+    public function setUserName(?string $name): void
+    {
         $this->name = $name;
     }
 
@@ -56,7 +57,8 @@ class ProductReview extends Model
         return "products_review";
     }
 
-    public function objProductReview(array $product) {
+    public function objProductReview(array $product): self
+    {
         $obj = new self();
         $obj->id = $product["id"];
         $obj->product_id = $product["product_id"];
@@ -68,7 +70,7 @@ class ProductReview extends Model
         return $obj;
     }
 
-    public function product_reviews($productId)
+    public function productReviews(int $productId): ?array
     {
         $tableName = static::getTableName();
         $stms = static::getPDO()->prepare("SELECT * FROM {$tableName} WHERE product_id = :product_id");

@@ -9,7 +9,8 @@ use DTO\UserCreateDTO;
 
 class UserController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -97,9 +98,9 @@ class UserController extends Controller
 
                 if ($passwordChanged) {
                     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-                    $this->userModel->UpdateByPassword($newName, $newEmail, $hashedPassword);
+                    $this->userModel->UpdatePassword($newName, $newEmail, $hashedPassword);
                 } else if ($nameChanged && $emailChanged) {
-                    $this->userModel->UpdateByName_Email($newName, $newEmail);
+                    $this->userModel->UpdateNameEmail($newName, $newEmail);
                 } else if ($nameChanged) {
                     $this->userModel->UpdateName($newName);
                 } else if ($emailChanged) {

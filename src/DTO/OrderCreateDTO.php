@@ -5,12 +5,15 @@ namespace DTO;
 class OrderCreateDTO
 {
 
-    public function __construct(private string $contactName,
-                                private string $contactPhone,
-                                private string $comment,
-                                private string $address,
-                                private ?int $userId= null){}
+    public function __construct(
+        private string $contactName,
+        private string $contactPhone,
+        private string $comment,
+        private string $address,
+        private ?int $userId = null // каким образом реализую добавление этих данных?
+    ) {
 
+    }
 
     public function getContactName(): string
     {
@@ -32,7 +35,7 @@ class OrderCreateDTO
         return $this->address;
     }
 
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->userId;
     }

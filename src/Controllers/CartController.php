@@ -6,7 +6,7 @@ use Model\Product;
 use Model\UserProduct;
 use Request\AddProductRequest;
 
-class CartController extends Controller
+class CartController extends Controller // OPTIMIZE: переложи логику моделей в сервис
 {
     private UserProduct $userProductModel;
     private Product $productModel;
@@ -30,7 +30,7 @@ class CartController extends Controller
         }
     }
 
-    public function addProductValidate($action, $productId)   /// сделать реализацию +- в самой корзине?
+    public function addProductValidate(string $action, int $productId): array  // TODO: сделать реализацию +- в самой корзине
     {
         $errors = [];
         $objUserProduct = $this->userProductModel->userProductByDB($productId);
@@ -63,7 +63,7 @@ class CartController extends Controller
         if (empty($errors)) {
             $this->cartService->addProduct($request->getProductId(), $request->getAction());
 
-            $userId   = $this->authService->getCurrentUser()->getUserId();
+            $userId = $this->authService->getCurrentUser()->getUserId();
             $products = Product::getWithAmount($userId);
 
             $updatedProduct = null;

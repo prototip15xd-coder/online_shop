@@ -2,6 +2,7 @@
 
 namespace Service;
 
+use DTO\UserCreateDTO;
 use Model\User;
 
 class UserSevice
@@ -11,7 +12,7 @@ class UserSevice
     {
         $this->userModel = new User();
     }
-    public function registrate($dto)
+    public function registrate(UserCreateDTO $dto)
     {
         $this->userModel->registrate($dto->getUserName(), $dto->getUserEmail(), $dto->getPassword());
     }

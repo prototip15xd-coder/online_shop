@@ -56,7 +56,7 @@ class UserProduct extends Model ///тут уже объявлены новые �
         return "user_products";
     }
 
-    public static function objUserProduct($userProduct)
+    public static function objUserProduct(array $userProduct): UserProduct
     {
         $obj = new self();
         $obj->id = $userProduct["id"];
@@ -80,7 +80,7 @@ class UserProduct extends Model ///тут уже объявлены новые �
         return $obj;
     }
 
-    public function getUserProducts($user_id): array
+    public function getUserProducts(int $user_id): array
     {
         $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
          WHERE user_id = :user_id"
@@ -115,7 +115,7 @@ class UserProduct extends Model ///тут уже объявлены новые �
 
     }
 
-    public function userProductByDB($product_id): UserProduct ///для случая когда запрос гет и мы просто заходим в каталог
+    public function userProductByDB(int $product_id): UserProduct
     {
         $user_p = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
          WHERE user_id = :user_id AND product_id = :product_id"
@@ -161,7 +161,7 @@ class UserProduct extends Model ///тут уже объявлены новые �
         $stmt->execute([':user_id' => $us_id]);
     }
 
-    public static function add_productDB(int $userId, int $productId, int $amount): void
+    public static function addProductDB(int $userId, int $productId, int $amount)
     {
         $tableName = static::getTableName();
         $stmt = static::getPDO()->prepare("UPDATE {$tableName} 

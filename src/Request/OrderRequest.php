@@ -6,7 +6,7 @@ class OrderRequest
 {
     public function __construct(private array $data) {}
 
-    public function getOrderId()
+    public function getOrderId(): int
     {
         return $this->data['order_id'];
     }

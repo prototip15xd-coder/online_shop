@@ -31,7 +31,7 @@ class User extends Model
         return $this->password;
     }
 
-    public function objUser(array $user)
+    public function objUser(array $user): self
     {
         $obj = new self();
         $obj->id = $user["id"];
@@ -58,7 +58,7 @@ class User extends Model
         return $obj;
     }
 
-    public function countGetByEmail(string $email)
+    public function countGetByEmail(string $email): ?int
     {
         $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
         $stms->execute(['email' => $email]);
@@ -66,7 +66,7 @@ class User extends Model
         return $stms;
     }
 
-    public function registrate($name, $email, $password)
+    public function registrate(string $name, string $email, string $password)
     {
         $stmt = static::getPDO()->prepare("INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
         $password = password_hash($password, PASSWORD_DEFAULT); //['psw']
@@ -74,7 +74,7 @@ class User extends Model
         //return $stmt; разве он должен что-то возвращать?
     }
 
-    public function UpdateByPassword($newName, $newEmail, $hashedPassword)  /// сделай опциональность для редактирования каждого парметра
+    public function UpdatePassword(string $newName, string $newEmail, string $hashedPassword)
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email, password = :password WHERE id = :id");
         $stmt->execute([
@@ -85,7 +85,7 @@ class User extends Model
         ]);
     }
 
-    public function UpdateByName_Email($newName, $newEmail)
+    public function UpdateNameEmail(string $newName, string $newEmail)
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email WHERE id = :id");
         $stmt->execute([
@@ -95,7 +95,7 @@ class User extends Model
         ]);
     }
 
-    public function UserbyDB()
+    public function UserbyDB(): User
     {
         $stmt = static::getPDO()->prepare("SELECT id, name, email, password 
                                 FROM {$this->getTableName()} 
@@ -107,7 +107,7 @@ class User extends Model
         return $obj;
     }
 
-    public function UserbyID(int $user_id)
+    public function UserbyID(int $user_id): User
     {
         $stmt = static::getPDO()->prepare("SELECT id, name, email, password 
                                 FROM {$this->getTableName()} 
@@ -120,7 +120,7 @@ class User extends Model
         return $obj;
     }
 
-    public function UpdateName($newName)
+    public function UpdateName(string $newName)
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = :id");
         $stmt->execute([
@@ -129,7 +129,7 @@ class User extends Model
         ]);
     }
 
-    public function UpdateEmail($newEmail)
+    public function UpdateEmail(string $newEmail)
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = :id");
         $stmt->execute([

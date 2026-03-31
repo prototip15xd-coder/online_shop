@@ -76,7 +76,7 @@ class Order extends Model
         return $obj;
     }
 
-    public function create( string $name, $phone, $comm, string $address, int $userId)
+    public function create( string $name, string $phone, string $comm, string $address, int $userId): int //точно int?
     {
         $stmt = static::getPDO()->prepare(
             "INSERT INTO {$this->getTableName()} (contact_name, contact_phone, comment, address, user_id) 

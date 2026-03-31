@@ -17,14 +17,14 @@ class CartService
 
     public function addProduct(int $productId, string $action): void
     {
-        $amount = match($action) {
+        $amount = match ($action) {
             'plus'  =>  1,
             'minus' => -1,
             default =>  0,
         };
 
         $userId = $this->authService->getCurrentUser()->getUserId();
-        UserProduct::add_productDB($userId, $productId, $amount);
+        UserProduct::addProductDB($userId, $productId, $amount);
     }
 
     public function getUserProducts(): array
@@ -40,14 +40,14 @@ class CartService
         return $userProducts;
     }
 
-    public function getCartSum(): int   //25:48     цена заказа должно высвечиваться внизу в корзине!
+    public function getCartSum(): int
     {
         $total = 0;
 
         foreach ($this->getUserProducts() as $userProduct) {
             $total += $userProduct->getTotalSum();
         }
-
+// TODO: цена заказа должна отображаться внизу в корзине
         return $total;
     }
 }

@@ -6,12 +6,12 @@ class AddProductRequest
 {
     public function __construct(private array $data) {}
 
-    public function getAction()
+    public function getAction(): string
     {
         return $this->data['action'];
     }
 
-    public function getProductId()
+    public function getProductId(): int
     {
         return $this->data['product_id'];
     }
