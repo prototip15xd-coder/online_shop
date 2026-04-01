@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class UserProduct extends Model ///тут уже объявлены новые св-ва нужно довести до ума
+class UserProduct extends Model
 {
     private int $id;
     private int $user_id;

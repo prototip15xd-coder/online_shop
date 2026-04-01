@@ -13,6 +13,7 @@ class UserProductService
     {
         $this->userProductModel = new UserProduct();
     }
+
     public function getUserProduct(int $productId): UserProduct
     {
         return $this->userProductModel->userProductByDB($productId);

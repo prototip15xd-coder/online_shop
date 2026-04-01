@@ -22,9 +22,9 @@ class ProductService
         return $this->productModel->productByproductId($productId);
     }
 
-     public function getProductWithAmount(int $userId): array
-     {
-         return Product::getWithAmount($userId);
-     }
+    public function getProductWithAmount(int $userId): array
+    {
+        return Product::getWithAmount($userId);
+    }
 
 }

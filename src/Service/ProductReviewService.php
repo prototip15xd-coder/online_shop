@@ -14,7 +14,7 @@ class ProductReviewService
         $this->productReviewModel = new ProductReview();
     }
 
-    public function getReview(int $productId)
+    public function getReview(int $productId): ?array
     {
         return $this->productReviewModel->productReviews($productId);
     }

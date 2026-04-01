@@ -70,6 +70,7 @@ class OrderService
 
         return $products;
     }
+
     public function getAllOrders(): array
     {
         $this->authService->checkUser();
@@ -87,6 +88,7 @@ class OrderService
 
         return $orders;
     }
+
     public function getOrder(int $orderId): Order
     {
         $this->authService->checkUser();

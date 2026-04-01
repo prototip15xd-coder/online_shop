@@ -46,7 +46,7 @@ class UserSevice
         }
     }
 
-    public function countEmail($email)
+    public function countEmail(string $email): int
     {
         return $this->userModel->countGetByEmail($email);
 

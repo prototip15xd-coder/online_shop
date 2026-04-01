@@ -2,18 +2,14 @@
 
 namespace Controllers;
 
-use Model\Product;
-use Model\UserProduct;
 use Request\AddProductRequest;
 
-class CartController extends Controller // OPTIMIZE: переложи логику моделей в сервис
+class CartController extends Controller
 {
-    private UserProduct $userProductModel;
 
     public function __construct()
     {
         parent::__construct();
-        $this->userProductModel = new UserProduct();
     }
 
     public function cart()
@@ -62,7 +58,7 @@ class CartController extends Controller // OPTIMIZE: переложи логик
             $this->cartService->addProduct($request->getProductId(), $request->getAction());
 
             $userId = $this->authService->getCurrentUser()->getUserId();
-            $products = Product::getWithAmount($userId);
+            $products = $this->productService->getProductWithAmount($userId);
 
             $updatedProduct = null;
             foreach ($products as $product) {
