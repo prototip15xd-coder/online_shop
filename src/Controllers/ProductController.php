@@ -63,7 +63,7 @@ class ProductController extends Controller
         if (isset($productReviews)) {
             foreach ($productReviews as $productReview) {
                 $userId = $productReview->getUserId();
-                $user = $this->userService->getUserbyID($userId);
+                $user = $this->userService->getUserByID($userId);
                 $productReview->setUserName($user->getUserName());
             }
         }

@@ -34,14 +34,14 @@ class UserController extends Controller
         require_once __DIR__ . '/../Views/login.php';
     }
 
-    function registration(RegistrateRequest $request): void
+    public function registration(RegistrateRequest $request): void
     {
         $errors = $request->validate();
 
         if (empty($errors)) {
-            $chekemail = $this->userService->countEmail($request->getEmail());
+            $emailCount = $this->userService->countEmail($request->getEmail());
 
-            if ($chekemail > 0) {
+            if ($emailCount > 0) {
                 $errors['email'] = 'Такой email уже существует';
             } else {
                 $dto = new UserCreateDTO($request->getName(),
@@ -65,7 +65,7 @@ class UserController extends Controller
         $errors = $request->validate();
         $user = $this->authService->auth($request->getEmail(), $request->getPassword());
 
-        if ($user === false or $user == null) {
+        if ($user === false || $user === null) { // Выяснить: почему phpstorm считает это ошибкой?
             $errors['PASSWORD'] = 'логин или пароль указаны неверно';
         } else {
             header("Location: /catalog");
