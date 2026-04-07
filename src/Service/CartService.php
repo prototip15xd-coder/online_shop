@@ -6,14 +6,21 @@ use Model\UserProduct;
 use Service\Auth\AuthInterface;
 use Service\Auth\AuthSessionService;
 
-class CartService
+
+class CartService extends Service
 {
     private AuthInterface $authService;
+    private ProductService $productService;
+    private UserProductService $userProductService;
+
 
     public function __construct()
     {
         $this->authService = new AuthSessionService();
+        $this->productService = new ProductService();
+        $this->userProductService = new UserProductService();
     }
+
 
     public function addProduct(int $productId, string $action): void
     {
@@ -49,5 +56,31 @@ class CartService
         }
 // TODO: цена заказа должна отображаться внизу в корзине
         return $total;
+    }
+
+    public function addProductValidate(string $action, int $productId): array  // TODO: сделать реализацию +- в самой корзине
+    {
+        $errors = [];
+        $objUserProduct = $this->userProductService->getUserProduct($productId);
+        $amount = $objUserProduct->getAmount();
+
+        if ($this->authService->check()) {
+            $result = $this->productService->rowCountProduct($productId);
+
+            if (!isset($result)) {
+                $errors['product_id'] = 'Данный товар не существует или закончился';
+            } else {
+
+                if ($action === 'minus') {
+                    $amount -= 1;
+
+                    if ($amount <= 0) {
+                        $errors['amount'] = 'Количество товаров должно быть больше нуля';
+                    }
+                }
+            }
+        }
+
+        return $errors;
     }
 }

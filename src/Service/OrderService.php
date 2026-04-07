@@ -3,21 +3,16 @@
 namespace Service;
 
 use DTO\OrderCreateDTO;
-use Model\Product;
 use Model\Order;
-use Model\OrderProduct;
-use Model\UserProduct;
+use Model\Product;
 use Service\Auth\AuthInterface;
 use Service\Auth\AuthSessionService;
 use Service\LoggerDBService;
 use Service\LoggerService;
 
 
-class OrderService
+class OrderService extends Service
 {
-    private Order $orderModel;
-    private UserProduct $userProductModel;
-    private OrderProduct $orderProductModel;
     private AuthInterface $authService;
     private CartService $cartService;
     protected LoggerService $loggerService;
@@ -25,9 +20,7 @@ class OrderService
 
     public function __construct()
     {
-        $this->orderModel = new Order();
-        $this->userProductModel = new UserProduct();
-        $this->orderProductModel = new OrderProduct();
+        parent::__construct();
         $this->authService = new AuthSessionService();
         $this->cartService = new CartService();
         $this->loggerService = new LoggerService();

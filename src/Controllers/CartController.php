@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Controllers;
 
 use Request\AddProductRequest;
+use Service\CartService;
 
 class CartController extends Controller
 {
-
     public function __construct()
     {
         parent::__construct();
+
     }
 
     public function cart()
@@ -24,35 +27,10 @@ class CartController extends Controller
         }
     }
 
-    public function addProductValidate(string $action, int $productId): array  // TODO: сделать реализацию +- в самой корзине
-    {
-        $errors = [];
-        $objUserProduct = $this->userProductService->getUserProduct($productId);
-        $amount = $objUserProduct->getAmount();
-
-        if ($this->authService->check()) {
-            $result = $this->productService->rowCountProduct($productId);
-
-            if (!isset($result)) {
-                $errors['product_id'] = 'Данный товар не существует или закончился';
-            } else {
-
-                if ($action === 'minus') {
-                    $amount -= 1;
-
-                    if ($amount < 0) {
-                        $errors['amount'] = 'Количество товаров должно быть больше нуля';
-                    }
-                }
-            }
-        }
-
-        return $errors;
-    }
 
     public function addProduct(AddProductRequest $request)
     {
-        $errors = $this->addProductValidate($request->getAction(), $request->getProductId());
+        $errors = $this->cartService->addProductValidate($request->getAction(), $request->getProductId());
 
         if (empty($errors)) {
             $this->cartService->addProduct($request->getProductId(), $request->getAction());

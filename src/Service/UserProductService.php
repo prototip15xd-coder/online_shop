@@ -2,16 +2,14 @@
 
 namespace Service;
 
-use Model\Product;
 use Model\UserProduct;
 
-class UserProductService
+class UserProductService extends Service
 {
-    private UserProduct $userProductModel;
 
     public function __construct()
     {
-        $this->userProductModel = new UserProduct();
+        parent::__construct();
     }
 
     public function getUserProduct(int $productId): UserProduct

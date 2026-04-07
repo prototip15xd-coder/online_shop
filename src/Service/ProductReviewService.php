@@ -2,16 +2,11 @@
 
 namespace Service;
 
-use Model\Product;
-use Model\ProductReview;
-class ProductReviewService
+class ProductReviewService extends Service
 {
-
-    private ProductReview $productReviewModel;
-
     public function __construct()
     {
-        $this->productReviewModel = new ProductReview();
+        parent::__construct();
     }
 
     public function getReview(int $productId): ?array

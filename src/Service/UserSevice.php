@@ -6,13 +6,11 @@ use DTO\UserCreateDTO;
 use Model\User;
 use Request\ProfileEditRequest;
 
-class UserSevice
+class UserSevice extends Service
 {
-    protected User $userModel;
-
     public function __construct()
     {
-        $this->userModel = new User();
+        parent::__construct();
     }
 
     public function registrate(UserCreateDTO $dto)

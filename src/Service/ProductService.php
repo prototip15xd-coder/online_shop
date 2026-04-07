@@ -3,13 +3,13 @@
 namespace Service;
 
 use Model\Product;
-class ProductService
+
+class ProductService extends Service
 {
-    private Product $productModel;
 
     public function __construct()
     {
-        $this->productModel = new Product();
+        parent::__construct();
     }
 
     public function rowCountProduct(int $productId): int
