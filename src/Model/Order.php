@@ -6,8 +6,8 @@ use Model\Model;
 class Order extends Model
 {
     private int $id;
-    private string $contact_name;
-    private string $contact_phone;
+    private string $contactName;
+    private string $contactPhone;
     private ?string $comment;
     private string $address;
     private ?array $orderProducts;
@@ -21,12 +21,12 @@ class Order extends Model
 
     public function getContactName(): string
     {
-        return $this->contact_name;
+        return $this->contactName;
     }
 
     public function getContactPhone(): string
     {
-        return $this->contact_phone;
+        return $this->contactPhone;
     }
 
     public function getComment(): ?string
@@ -68,8 +68,8 @@ class Order extends Model
     {
         $obj = new self();
         $obj->id = $order['id'];
-        $obj->contact_name = $order['contact_name'];
-        $obj->contact_phone = $order['contact_phone'];
+        $obj->contactName = $order['contact_name'];
+        $obj->contactPhone = $order['contact_phone'];
         $obj->comment = $order['comment'] ?? null;
         $obj->address = $order['address'];
         $obj->orderProducts = $order['orderProducts'] ?? null;
@@ -104,16 +104,16 @@ class Order extends Model
         return $this->objOrder($order);
     }
 
-    public function getOrders(int $us_id): array
+    public function getOrders(int $userId): array
     {
         $stmt = static::getPDO()->prepare("SELECT * FROM orders WHERE user_id = :user_id");
-        $stmt->execute([':user_id' => $us_id]);
+        $stmt->execute([':user_id' => $userId]);
         $orders = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $all_orders = [];
+        $allOrders = [];
         foreach ($orders as $order) {
             $obj = $this->objOrder($order);
-            $all_orders[] = $obj;
+            $allOrders[] = $obj;
         }
-        return $all_orders;
+        return $allOrders;
     }
 }

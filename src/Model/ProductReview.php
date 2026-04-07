@@ -5,9 +5,9 @@ namespace Model;
 class ProductReview extends Model
 {
     private int $id;
-    private int $product_id;
-    private int $user_id;
-    private int $order_id;
+    private int $productId;
+    private int $userId;
+    private int $orderId;
     private int $rating;
     private ?string $review;
     private ?string $name;
@@ -19,17 +19,17 @@ class ProductReview extends Model
 
     public function getProductId(): int
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
     public function getUserId(): int
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     public function getOrderId(): int
     {
-        return $this->order_id;
+        return $this->orderId;
     }
 
     public function getRating(): int
@@ -61,9 +61,9 @@ class ProductReview extends Model
     {
         $obj = new self();
         $obj->id = $product["id"];
-        $obj->product_id = $product["product_id"];
-        $obj->user_id = $product["user_id"];
-        $obj->order_id = $product["order_id"];
+        $obj->productId = $product["product_id"];
+        $obj->userId = $product["user_id"];
+        $obj->orderId = $product["order_id"];
         $obj->rating = $product["rating"];
         $obj->review = $product["review"] ?? null;
         $obj->name = $product["name"] ?? null;

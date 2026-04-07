@@ -32,22 +32,22 @@ class ProductController extends Controller
     public function product(ProductRequest $request): void
     {
         if ($this->authService->check()) {
-            $product_id = $request->getProductId();
+            $productId = $request->getProductId();
 
-            if ($product_id === 0) {
+            if ($productId === 0) {
                 header("Location: /catalog");
                 exit;
             }
 
-            $product = $this->productService->getProduct($product_id);
+            $product = $this->productService->getProduct($productId);
 
             if (!$product) {
                 header("Location: /catalog");
                 exit;
             }
 
-            $user_product = $this->userProductService->getUserProduct($product_id);
-            $product->setProductAmount($user_product->getAmount());
+            $userProduct = $this->userProductService->getUserProduct($productId);
+            $product->setProductAmount($userProduct->getAmount());
             $productReviews = $this->productReview($request->getProductId());
 
             require_once __DIR__ . '/../Views/product.php';
@@ -56,14 +56,14 @@ class ProductController extends Controller
         }
     }
 
-    public function productReview(int $product_id): ?array
+    public function productReview(int $productId): ?array
     {
-        $productReviews = $this->productReviewService->getReview($product_id);
+        $productReviews = $this->productReviewService->getReview($productId);
 
         if (isset($productReviews)) {
             foreach ($productReviews as $productReview) {
-                $user_id = $productReview->getUserId();
-                $user = $this->userService->getUserbyID($user_id);
+                $userId = $productReview->getUserId();
+                $user = $this->userService->getUserbyID($userId);
                 $productReview->setUserName($user->getUserName());
             }
         }

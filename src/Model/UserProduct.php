@@ -5,8 +5,8 @@ namespace Model;
 class UserProduct extends Model
 {
     private int $id;
-    private int $user_id;
-    private int $product_id;
+    private int $userId;
+    private int $productId;
     private int $amount;
     private ?Product $product = null;
     private ?int $totalSum = null;
@@ -18,12 +18,12 @@ class UserProduct extends Model
 
     public function getUserId(): int
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     public function getProductId(): int
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
     public function getAmount(): int
@@ -60,8 +60,8 @@ class UserProduct extends Model
     {
         $obj = new self();
         $obj->id = $userProduct["id"];
-        $obj->user_id = $userProduct["user_id"];
-        $obj->product_id = $userProduct["product_id"];
+        $obj->userId = $userProduct["user_id"];
+        $obj->productId = $userProduct["product_id"];
         $obj->amount = $userProduct["amount"];
 
         if (isset($userProduct["name"])) {
@@ -80,12 +80,12 @@ class UserProduct extends Model
         return $obj;
     }
 
-    public function getUserProducts(int $user_id): array
+    public function getUserProducts(int $userId): array
     {
         $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
          WHERE user_id = :user_id"
         );
-        $stms->execute([":user_id" => $user_id]);
+        $stms->execute([":user_id" => $userId]);
         $userProducts = $stms->fetchAll(\PDO::FETCH_ASSOC);
         $objUserProducts =[];
 
@@ -97,12 +97,16 @@ class UserProduct extends Model
         return $objUserProducts;
     }
 
-    public static function getByUserIdWithProducts(int $user_id): array
+    public static function getByUserIdWithProducts(int $userId): array
     {
         $tableName = static::getTableName();
-        $stms = static::getPDO()->prepare("SELECT * FROM {$tableName} up 
-         INNER JOIN products p ON up.product_id = p.id WHERE up.user_id = :user_id");
-        $stms->execute([":user_id" => $user_id]);
+        $stms = static::getPDO()->prepare(
+            "SELECT * FROM {$tableName} up 
+            INNER JOIN products p 
+            ON up.product_id = p.id 
+            WHERE up.user_id = :user_id"
+        );
+        $stms->execute([":user_id" => $userId]);
         $userProductsWithProducts = $stms->fetchAll(\PDO::FETCH_ASSOC);
         $objUserProductsWithProducts = [];
 
@@ -115,19 +119,19 @@ class UserProduct extends Model
 
     }
 
-    public function userProductByDB(int $product_id): UserProduct
+    public function userProductByDB(int $productId): UserProduct
     {
-        $user_p = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
+        $userProduct = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
          WHERE user_id = :user_id AND product_id = :product_id"
         );
-        $user_p->execute(['user_id' => $_SESSION['userid'], 'product_id' => $product_id]);
-        $product  = $user_p->fetch(\PDO::FETCH_ASSOC);
+        $userProduct->execute(['user_id' => $_SESSION['userid'], 'product_id' => $productId]);
+        $product  = $userProduct->fetch(\PDO::FETCH_ASSOC);
 
         if ($product=== false) {
             $product = [
                 'id' => 0,
                 'user_id' => $_SESSION['userid'],
-                'product_id' => $product_id,
+                'product_id' => $productId,
                 'amount' => 0
             ];
         }
@@ -136,37 +140,41 @@ class UserProduct extends Model
         return $obj;
     }
 
-    public function getAllByUserId(int $us_id): UserProduct|array
+    public function getAllByUserId(int $userId): UserProduct|array
     {
-        $stmt = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
-         WHERE user_id = :user_id"
+        $stmt = static::getPDO()->prepare(
+            "SELECT * FROM {$this->getTableName()} 
+            WHERE user_id = :user_id"
         );
-        $stmt->execute([':user_id' => $us_id]);
-        $all_products = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $user_products = [];
+        $stmt->execute([':user_id' => $userId]);
+        $allProducts = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $userProducts = [];
 
-        foreach ($all_products as $product) {
+        foreach ($allProducts as $product) {
             $obj = $this->objUserProduct($product);
-            $user_products[] = $obj;
+            $userProducts[] = $obj;
         }
 
-        return $user_products;
+        return $userProducts;
     }
 
-    public function deleteByUserId(int $us_id): void
+    public function deleteByUserId(int $usId): void
     {
-        $stmt = static::getPDO()->prepare("DELETE FROM {$this->getTableName()} 
-       WHERE user_id = :user_id
-       ");
-        $stmt->execute([':user_id' => $us_id]);
+        $stmt = static::getPDO()->prepare(
+            "DELETE FROM {$this->getTableName()} 
+            WHERE user_id = :user_id"
+        );
+        $stmt->execute([':user_id' => $usId]);
     }
 
     public static function addProductDB(int $userId, int $productId, int $amount): void
     {
         $tableName = static::getTableName();
-        $stmt = static::getPDO()->prepare("UPDATE {$tableName} 
-        SET amount = amount + :amount 
-        WHERE user_id = :user_id AND product_id = :product_id");
+        $stmt = static::getPDO()->prepare(
+            "UPDATE {$tableName} 
+            SET amount = amount + :amount 
+            WHERE user_id = :user_id AND product_id = :product_id"
+        );
         $stmt->execute([
             'user_id'    => $userId,
             'product_id' => $productId,
@@ -174,8 +182,10 @@ class UserProduct extends Model
         ]);
 
         if ($stmt->rowCount() == 0) {
-            $stmt = static::getPDO()->prepare("INSERT INTO {$tableName} (user_id, product_id, amount) 
-            VALUES (:user_id, :product_id, :amount)");
+            $stmt = static::getPDO()->prepare(
+                "INSERT INTO {$tableName} (user_id, product_id, amount) 
+                VALUES (:user_id, :product_id, :amount)"
+            );
             $stmt->execute([
                 'user_id'    => $userId,
                 'product_id' => $productId,

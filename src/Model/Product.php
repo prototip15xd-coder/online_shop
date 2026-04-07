@@ -8,7 +8,7 @@ class Product extends Model
      private string $name;
      private string $description;
      private int $price;
-     private ?string $image_url = null;
+     private ?string $imageUrl = null;
      private string $value;
      private ?int $amount = null;
      private ?int $totalSum = null;
@@ -35,7 +35,7 @@ class Product extends Model
 
     public function getProductImageUrl(): ?string
     {
-        return $this->image_url;
+        return $this->imageUrl;
     }
 
     public function getProductValue(): ?string
@@ -66,7 +66,7 @@ class Product extends Model
 
     public function setProductImageUrl(string $image_url): void
     {
-        $this->image_url = $image_url;
+        $this->imageUrl = $image_url;
     }
 
     public function setProductPrice(int $price): void
@@ -95,7 +95,7 @@ class Product extends Model
         $obj->name = $product["name"] ?? null;
         $obj->description = $product["description"] ?? null;
         $obj->price = $product["price"] ?? null;
-        $obj->image_url = $product["image_url"] ?? null;
+        $obj->imageUrl = $product["image_url"] ?? null;
         $obj->value = $product["value"] ?? null;
         $obj->amount = $product["amount"] ?? null;
         $obj->totalSum = $product["totalSum"] ?? null;
@@ -112,10 +112,10 @@ class Product extends Model
         $tableName = static::getTableName();
         $stms = static::getPDO()->prepare("SELECT * FROM $tableName");
         $stms->execute();
-        $products_array = $stms->fetchAll(\PDO::FETCH_ASSOC);
+        $productsArray = $stms->fetchAll(\PDO::FETCH_ASSOC);
         $products = [];
 
-        foreach ($products_array as $product) {
+        foreach ($productsArray as $product) {
             $obj = static::objProduct($product);
             $products[] = $obj;
         }
@@ -127,62 +127,62 @@ class Product extends Model
     {
         $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :id");
         $stms -> execute([':id' => $productId]);
-        $product_array = $stms->fetch(\PDO::FETCH_ASSOC);
+        $productArray = $stms->fetch(\PDO::FETCH_ASSOC);
 
-        if (!$product_array) {
+        if (!$productArray) {
             return null;
         }
 
-        $obj = $this->objProduct($product_array);
+        $obj = $this->objProduct($productArray);
         return $obj;
     }
 
-    public static function getProductsByOrderID(int $order_id): ?array
+    public static function getProductsByOrderID(int $orderId): ?array
     {
         $tableName = static::getTableName();
         $stms = static::getPDO()->prepare("SELECT * FROM {$tableName} p 
          INNER JOIN order_products op ON p.id = op.product_id 
          WHERE op.order_id = :order_id"
         );
-        $stms -> execute([':order_id' => $order_id]);
-        $products_array = $stms->fetchAll(\PDO::FETCH_ASSOC);
+        $stms -> execute([':order_id' => $orderId]);
+        $productsArray = $stms->fetchAll(\PDO::FETCH_ASSOC);
 
-        if (!$products_array) {
+        if (!$productsArray) {
             return null;
         }
 
-        $obj_array =[];
+        $objArray =[];
 
-        foreach ($products_array as $product) {
+        foreach ($productsArray as $product) {
             $obj = static::objProduct($product);
-            $obj_array[] = $obj;
+            $objArray[] = $obj;
         }
 
-        return $obj_array;
+        return $objArray;
     }
 
-    public static function getWithAmount(int $user_id): ?array
+    public static function getWithAmount(int $userId): ?array
     {
         $tableName = static::getTableName();
         $stms = static::getPDO()->prepare("SELECT p.*, up.amount FROM {$tableName} p 
             LEFT JOIN user_products up ON p.id = up.product_id AND up.user_id = :user_id"
         );
 
-        $stms -> execute([":user_id" => $user_id]);
-        $products_array = $stms->fetchAll(\PDO::FETCH_ASSOC);
+        $stms -> execute([":user_id" => $userId]);
+        $productsArray = $stms->fetchAll(\PDO::FETCH_ASSOC);
 
-        if (!$products_array) {
+        if (!$productsArray) {
             return null;
         }
 
-        $obj_array =[];
+        $objArray =[];
 
-        foreach ($products_array as $product) {
+        foreach ($productsArray as $product) {
             $obj = static::objProduct($product);
-            $obj_array[] = $obj;
+            $objArray[] = $obj;
         }
 
-        return $obj_array;
+        return $objArray;
     }
 
     public function validateProduct(int $productId): int

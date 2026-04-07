@@ -8,7 +8,7 @@ class Logger extends Model
     private string $message;
     private string $file;
     private string $line;
-    private string $created_at;
+    private string $createdAt;
 
     public function getId(): int
     {
@@ -52,12 +52,12 @@ class Logger extends Model
 
     public function getCreatedAt(): string
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(string $created_at): void
+    public function setCreatedAt(string $createdAt): void
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
     }
     protected static function getTableName(): string
     {

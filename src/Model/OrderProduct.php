@@ -7,8 +7,8 @@ use Model\Model;
 class OrderProduct extends Model
 {
     private int $id;
-    private int $order_id;
-    private int $product_id;
+    private int $orderId;
+    private int $productId;
     private int $amount;
     private ?Product $product = null;
     private ?int $totalSum = null;
@@ -20,12 +20,12 @@ class OrderProduct extends Model
 
     public function getOrderId(): int
     {
-        return $this->order_id;
+        return $this->orderId;
     }
 
     public function getProductId(): int
     {
-        return $this->product_id;
+        return $this->productId;
     }
 
     public function getAmount(): int
@@ -62,8 +62,8 @@ class OrderProduct extends Model
     {
         $obj = new self();
         $obj->id = $product["id"];
-        $obj->order_id = $product["order_id"];
-        $obj->product_id = $product["product_id"];
+        $obj->orderId = $product["order_id"];
+        $obj->productId = $product["product_id"];
         $obj->amount = $product["amount"];
         return $obj;
     }
@@ -99,13 +99,13 @@ class OrderProduct extends Model
         );
         $stmt->execute(['order_id' => $orderId]);
         $products= $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $all_products_from_order=[];
+        $allProductsFromOrder=[];
 
         foreach ($products as $product) {
             $obj = $this->objOrderProduct($product);
-            $all_products_from_order[] = $obj;
+            $allProductsFromOrder[] = $obj;
         }
 
-        return $all_products_from_order;
+        return $allProductsFromOrder;
     }
 }

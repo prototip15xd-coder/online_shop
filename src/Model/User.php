@@ -68,7 +68,10 @@ class User extends Model
 
     public function registrate(string $name, string $email, string $password): void
     {
-        $stmt = static::getPDO()->prepare("INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
+        $stmt = static::getPDO()->prepare(
+            "INSERT INTO {$this->getTableName()} (name, email, password) 
+            VALUES (:name, :email, :password)"
+        );
         $password = password_hash($password, PASSWORD_DEFAULT); //['psw']
         $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);
         //return $stmt; разве он должен что-то возвращать?
@@ -76,7 +79,11 @@ class User extends Model
 
     public function UpdatePassword(string $newName, string $newEmail, string $hashedPassword): void
     {
-        $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email, password = :password WHERE id = :id");
+        $stmt = static::getPDO()->prepare(
+            "UPDATE {$this->getTableName()} 
+            SET name = :name, email = :email, password = :password 
+            WHERE id = :id"
+        );
         $stmt->execute([
             'name' => $newName,
             'email' => $newEmail,
@@ -87,7 +94,11 @@ class User extends Model
 
     public function UpdateNameEmail(string $newName, string $newEmail): void
     {
-        $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email WHERE id = :id");
+        $stmt = static::getPDO()->prepare(
+            "UPDATE {$this->getTableName()} 
+            SET name = :name, email = :email 
+            WHERE id = :id"
+        );
         $stmt->execute([
             'name' => $newName,
             'email' => $newEmail,
@@ -97,26 +108,27 @@ class User extends Model
 
     public function userbyDB(): User
     {
-        $stmt = static::getPDO()->prepare("SELECT id, name, email, password 
-                                FROM {$this->getTableName()} 
-                                WHERE id = :id"
-                                );
+        $stmt = static::getPDO()->prepare(
+            "SELECT id, name, email, password 
+            FROM {$this->getTableName()} 
+            WHERE id = :id"
+        );
         $stmt->execute(['id' => $_SESSION['userid']]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         $obj = $this->objUser($user);
         return $obj;
     }
 
-    public function UserbyID(int $user_id): User
+    public function UserbyID(int $userId): User
     {
-        $stmt = static::getPDO()->prepare("SELECT id, name, email, password 
-                                FROM {$this->getTableName()} 
-                                WHERE id = :id"
-                                );
-        $stmt->execute(['id' => $user_id]);
+        $stmt = static::getPDO()->prepare(
+            "SELECT id, name, email, password 
+                FROM {$this->getTableName()} 
+                WHERE id = :id"
+        );
+        $stmt->execute(['id' => $userId]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         $obj = $this->objUser($user);
-
         return $obj;
     }
 
