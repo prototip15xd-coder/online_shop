@@ -6,14 +6,14 @@ use DTO\UserCreateDTO;
 use Model\User;
 use Request\ProfileEditRequest;
 
-class UserSevice extends Service
+class UserService extends Service
 {
     public function __construct()
     {
         parent::__construct();
     }
 
-    public function registrate(UserCreateDTO $dto)
+    public function registrate(UserCreateDTO $dto): void
     {
         $this->userModel->registrate($dto->getUserName(), $dto->getUserEmail(), $dto->getPassword());
     }
@@ -23,7 +23,7 @@ class UserSevice extends Service
         return $this->userModel->userbyDB();
     }
 
-    public function profileEdit(ProfileEditRequest $request, User $user)
+    public function profileEdit(ProfileEditRequest $request, User $user): void
     {
         $newName = $request->getName() ?? $user->getUserName();
         $newEmail = $request->getEmail() ?? $user->getUserEmail();

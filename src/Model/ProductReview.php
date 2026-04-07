@@ -57,7 +57,7 @@ class ProductReview extends Model
         return "products_review";
     }
 
-    public function objProductReview(array $product): self
+    public function objProductReview(array $product): ProductReview
     {
         $obj = new self();
         $obj->id = $product["id"];

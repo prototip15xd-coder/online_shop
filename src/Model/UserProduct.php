@@ -153,7 +153,7 @@ class UserProduct extends Model
         return $user_products;
     }
 
-    public function deleteByUserId(int $us_id)
+    public function deleteByUserId(int $us_id): void
     {
         $stmt = static::getPDO()->prepare("DELETE FROM {$this->getTableName()} 
        WHERE user_id = :user_id
@@ -161,7 +161,7 @@ class UserProduct extends Model
         $stmt->execute([':user_id' => $us_id]);
     }
 
-    public static function addProductDB(int $userId, int $productId, int $amount)
+    public static function addProductDB(int $userId, int $productId, int $amount): void
     {
         $tableName = static::getTableName();
         $stmt = static::getPDO()->prepare("UPDATE {$tableName} 

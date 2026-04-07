@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Controllers;
 
 use Request\ProductRequest;
@@ -11,7 +13,7 @@ class ProductController extends Controller
         parent::__construct();
     }
 
-    public function catalog()
+    public function catalog(): void
     {
         if ($this->authService->check()) {
             $products = $this->productService->getProductWithAmount($this->authService->getCurrentUser()->getUserId());
@@ -27,7 +29,7 @@ class ProductController extends Controller
         }
     }
 
-    public function product(ProductRequest $request)
+    public function product(ProductRequest $request): void
     {
         if ($this->authService->check()) {
             $product_id = $request->getProductId();
@@ -67,6 +69,5 @@ class ProductController extends Controller
         }
 
         return $productReviews;
-
     }
 }

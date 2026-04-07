@@ -27,7 +27,7 @@ class OrderService extends Service
         $this->loggerDBService = new LoggerDBService();
     }
 
-    public function createOrder(OrderCreateDTO $data)
+    public function createOrder(OrderCreateDTO $data): void
     {
         $orderSum = $this->cartService->getCartSum();
 

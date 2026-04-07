@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Controllers;
 
 use Request\LoginRequest;
@@ -14,7 +16,7 @@ class UserController extends Controller
         parent::__construct();
     }
 
-    public function getRegistration()
+    public function getRegistration(): void
     {
         if ($this->authService->getCurrentUser()) {
             header("Location: /catalog");
@@ -23,7 +25,7 @@ class UserController extends Controller
         require_once __DIR__ . '/../Views/registration.php';
     }
 
-    public function getLogin()
+    public function getLogin(): void
     {
         if ($this->authService->getCurrentUser()) {
             header("Location: /catalog");
@@ -32,7 +34,7 @@ class UserController extends Controller
         require_once __DIR__ . '/../Views/login.php';
     }
 
-    function registration(RegistrateRequest $request)
+    function registration(RegistrateRequest $request): void
     {
         $errors = $request->validate();
 
@@ -58,7 +60,7 @@ class UserController extends Controller
         require_once __DIR__ . '/../Views/registration.php';
     }
 
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): void
     {
         $errors = $request->validate();
         $user = $this->authService->auth($request->getEmail(), $request->getPassword());
@@ -73,7 +75,7 @@ class UserController extends Controller
         require_once __DIR__ . '/../Views/login.php';
     }
 
-    public function profile()
+    public function profile(): void
     {
         if ($this->authService->getCurrentUser()) {
             $user = $this->userService->getUser();
@@ -83,7 +85,8 @@ class UserController extends Controller
         }
     }
 
-    public function profileEdit(ProfileEditRequest $request) {
+    public function profileEdit(ProfileEditRequest $request): void
+    {
         if ($this->authService->getCurrentUser()) {
             $user = $this->userService->getUser();
 
@@ -100,7 +103,7 @@ class UserController extends Controller
         }
     }
 
-    public function logout()
+    public function logout(): void
     {
         session_destroy();
         header('Location: /login');

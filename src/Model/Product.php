@@ -88,7 +88,7 @@ class Product extends Model
         $this->totalSum = $totalSum;
     }
 
-    public static function objProduct(array $product): self
+    public static function objProduct(array $product): Product
     {
         $obj = new self();
         $obj->id = $product["id"] ?? null;

@@ -15,7 +15,7 @@ class CartController extends Controller
 
     }
 
-    public function cart()
+    public function cart(): void
     {
         if ($this->authService->check()) {
             $allProducts = $this->cartService->getUserProducts();
@@ -28,7 +28,7 @@ class CartController extends Controller
     }
 
 
-    public function addProduct(AddProductRequest $request)
+    public function addProduct(AddProductRequest $request): void
     {
         $errors = $this->cartService->addProductValidate($request->getAction(), $request->getProductId());
 

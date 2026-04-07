@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Controllers;
 
 use DTO\OrderCreateDTO;
@@ -13,13 +15,13 @@ class OrderController extends Controller
         parent::__construct();
     }
 
-    public function getCheckoutForm()
+    public function getCheckoutForm(): void
     {
         $this->authService->checkUser();
         require_once __DIR__ . '/../Views/create-order.php';
     }
 
-    public function handleCheckoutOrder(AddOrderRequest $request)
+    public function handleCheckoutOrder(AddOrderRequest $request): void
     {
         $this->authService->checkUser();
         $errors = $request->validate();
@@ -37,7 +39,7 @@ class OrderController extends Controller
         }
     }
 
-    public function getAllOrders()
+    public function getAllOrders(): void
     {
         if ($this->authService->getCurrentUser() !== null) {
             $orders = $this->orderService->getAllOrders();
@@ -45,7 +47,7 @@ class OrderController extends Controller
         }
     }
 
-    public function getOrderByOrderID(OrderRequest $request)
+    public function getOrderByOrderID(OrderRequest $request): void
     {
         $order= $this->orderService->getOrder($request->getOrderId());
         $order->setOrderProducts($this->orderService->getOrderProduct($request->getOrderId()));

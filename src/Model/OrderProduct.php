@@ -58,7 +58,7 @@ class OrderProduct extends Model
         return "order_products";
     }
 
-    public function objOrderProduct(array $product): self
+    public function objOrderProduct(array $product): OrderProduct
     {
         $obj = new self();
         $obj->id = $product["id"];
@@ -68,7 +68,7 @@ class OrderProduct extends Model
         return $obj;
     }
 
-    public function createOrderProduct(int $orderId, int $productId, int $amount)
+    public function createOrderProduct(int $orderId, int $productId, int $amount): void
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()}  
         SET amount = amount + :amount 

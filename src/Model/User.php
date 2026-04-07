@@ -66,7 +66,7 @@ class User extends Model
         return $stms;
     }
 
-    public function registrate(string $name, string $email, string $password)
+    public function registrate(string $name, string $email, string $password): void
     {
         $stmt = static::getPDO()->prepare("INSERT INTO {$this->getTableName()} (name, email, password) VALUES (:name, :email, :password)");
         $password = password_hash($password, PASSWORD_DEFAULT); //['psw']
@@ -74,7 +74,7 @@ class User extends Model
         //return $stmt; разве он должен что-то возвращать?
     }
 
-    public function UpdatePassword(string $newName, string $newEmail, string $hashedPassword)
+    public function UpdatePassword(string $newName, string $newEmail, string $hashedPassword): void
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email, password = :password WHERE id = :id");
         $stmt->execute([
@@ -85,7 +85,7 @@ class User extends Model
         ]);
     }
 
-    public function UpdateNameEmail(string $newName, string $newEmail)
+    public function UpdateNameEmail(string $newName, string $newEmail): void
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name, email = :email WHERE id = :id");
         $stmt->execute([
@@ -120,7 +120,7 @@ class User extends Model
         return $obj;
     }
 
-    public function UpdateName(string $newName)
+    public function UpdateName(string $newName): void
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET name = :name WHERE id = :id");
         $stmt->execute([
@@ -129,7 +129,7 @@ class User extends Model
         ]);
     }
 
-    public function UpdateEmail(string $newEmail)
+    public function UpdateEmail(string $newEmail): void
     {
         $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()} SET email = :email WHERE id = :id");
         $stmt->execute([

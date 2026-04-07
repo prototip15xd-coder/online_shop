@@ -64,7 +64,8 @@ class Order extends Model
         return "orders";
     }
 
-    public function objOrder($order){
+    public function objOrder($order): ?Order
+    {
         $obj = new self();
         $obj->id = $order['id'];
         $obj->contact_name = $order['contact_name'];
