@@ -1,6 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Controllers;
+
 use Model\User;
 use Service\Auth\AuthSessionService;
 use Service\Auth\AuthInterface;

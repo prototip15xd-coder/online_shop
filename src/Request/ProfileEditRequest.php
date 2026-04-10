@@ -19,4 +19,9 @@ class ProfileEditRequest
         return $this->data['password'];
     }
 
+    public function getMethod(): string
+    {
+        return $this->$_SERVER['REQUEST_METHOD'];
+    }
+
 }

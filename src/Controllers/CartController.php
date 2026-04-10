@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Controllers;
 
 use Request\AddProductRequest;
-use Service\CartService;
-
 class CartController extends Controller
 {
     public function __construct()
     {
         parent::__construct();
-
     }
 
     public function cart(): void
@@ -40,7 +37,7 @@ class CartController extends Controller
 
             $updatedProduct = null;
             foreach ($products as $product) {
-                if ($product->getProductId() === (int)$request->getProductId()) {
+                if ($product->getProductId() === $request->getProductId()) {
                     $updatedProduct = $product;
                     break;
                 }

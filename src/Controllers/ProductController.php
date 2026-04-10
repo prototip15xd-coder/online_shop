@@ -60,7 +60,7 @@ class ProductController extends Controller
     {
         $productReviews = $this->productReviewService->getReview($productId);
 
-        if (isset($productReviews)) {
+        if (!empty($productReviews)) {
             foreach ($productReviews as $productReview) {
                 $userId = $productReview->getUserId();
                 $user = $this->userService->getUserByID($userId);
