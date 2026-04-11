@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Service\Auth;
 
 use Model\User;
@@ -51,20 +53,20 @@ class AuthSessionService implements AuthInterface
 
     }
 
-    private function session()
+    private function session(): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
     }
 
-    public function logout()
+    public function logout(): void
     {
         $this->session();
         session_destroy();
     }
 
-    public function checkUser()
+    public function checkUser(): void
     {
         if (!$this->getCurrentUser()) {
             header('Location: /login');

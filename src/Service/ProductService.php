@@ -18,7 +18,7 @@ class ProductService extends Service
 
     public function getProduct(int $productId): Product
     {
-        return $this->productModel->productByproductId($productId);
+        return $this->productModel->productByProductId($productId);
     }
 
     public function getProductWithAmount(int $userId): array

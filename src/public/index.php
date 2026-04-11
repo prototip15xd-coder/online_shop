@@ -11,7 +11,6 @@ $autoload = function(string $className) {
     }
     return false;
 };
-//внедрение зависимостей
 spl_autoload_register($autoload);
 
 $app = new \Core\App(new \Service\LoggerDBService());
@@ -20,7 +19,6 @@ $app->post('/registration', \Controllers\UserController::class , 'registration',
 $app->get('/login', \Controllers\UserController::class , 'getLogin');
 $app->post('/login', \Controllers\UserController::class , 'login', \Request\LoginRequest::class );
 $app->get('/catalog', \Controllers\ProductController::class , 'catalog');
-$app->post('/catalog', \Controllers\ProductController::class, 'catalog' );
 $app->post('/add-product', \Controllers\CartController::class, 'addProduct', \Request\AddProductRequest::class );
 $app->get('/profile', \Controllers\UserController::class , 'profile');
 $app->post('/profile', \Controllers\UserController::class , 'profile');
@@ -34,5 +32,4 @@ $app->get('/orders', \Controllers\OrderController::class , 'getAllOrders');
 $app->post('/order', \Controllers\OrderController::class , 'getOrderByOrderID', \Request\OrderRequest::class );
 $app->post('/product', \Controllers\ProductController::class , 'product', \Request\ProductRequest::class);
 $app->get('/product', \Controllers\ProductController::class, 'product', \Request\ProductRequest::class);
-$app->get('/500', \Service\LoggerService::class , 'getError');
 $app->Run();

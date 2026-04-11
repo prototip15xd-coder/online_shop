@@ -64,7 +64,7 @@ class Logger extends Model
         return "logger";
     }
 
-    public function error(string $message, string $file, string $line): void
+    public function error(string $message, string $file, int $line): void
     {
         $stmt = static::getPDO()->prepare(
             "INSERT INTO {$this->getTableName()} (message, file, line) VALUES (:message, :file, :line)");

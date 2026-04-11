@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Service;
 use Model\Logger;
 use Throwable;
 class LoggerDBService
 {
-    private logger $loggerModel;
+    private Logger $loggerModel;
 
     public function __construct()
     {

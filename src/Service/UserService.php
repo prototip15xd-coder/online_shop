@@ -23,11 +23,11 @@ class UserService extends Service
         return $this->userModel->userbyDB();
     }
 
-    public function profileEdit(ProfileEditRequest $request, User $user): void
+    public function profileEdit(?string $name, ?string $email, ?string $password, User $user): void
     {
-        $newName = $request->getName() ?? $user->getUserName();
-        $newEmail = $request->getEmail() ?? $user->getUserEmail();
-        $newPassword = $request->getPassword() ?? '';
+        $newName = !empty($name) ? $user->getUserName();
+        $newEmail = $email ?? $user->getUserEmail();
+        $newPassword = $password ?? $user->getUserPassword();
         $nameChanged = ($newName !== $user->getUserName());
         $emailChanged = ($newEmail !== $user->getUserEmail());
         $passwordChanged = !empty($newPassword);
@@ -50,8 +50,8 @@ class UserService extends Service
 
     }
 
-    public function getUserByID(int $userId): User
+    public function getUserById(int $userId): User
     {
-        return $this->userModel->UserbyID($userId);
+        return $this->userModel->UserbyId($userId);
     }
 }

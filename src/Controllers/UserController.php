@@ -92,7 +92,7 @@ class UserController extends Controller
             $user = $this->userService->getUser();
 
             if ($request->getMethod() === 'POST') {
-                $this->userService->profileEdit($request, $user);
+                $this->userService->profileEdit($request->getName(), $request->getEmail(), $request->getPassword(), $user);
                 header('Location: /profile');
                 exit;
             } else if ($request->getMethod() === 'GET') {

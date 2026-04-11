@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Request;
 
 class ProfileEditRequest
@@ -10,10 +12,12 @@ class ProfileEditRequest
     {
         return $this->data['name'];
     }
+
     public function getEmail(): string
     {
         return $this->data['email'];
     }
+
     public function getPassword(): string
     {
         return $this->data['password'];

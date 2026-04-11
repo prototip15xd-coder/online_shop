@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Request;
 
 class RegistrateRequest
@@ -33,13 +35,13 @@ class RegistrateRequest
         if ($this->getName() !== null) {  //['name']
             $name = $this->getName();
             if (strlen($name) < 4) {
-                $errors['name'] = 'Имя должно быть длинее 4 символов';
+                $errors['name'] = 'Имя должно быть длиннее 4 символов';
             }
         } else {
             $errors['name'] = 'Имя должно быть заполнено';
         }
 
-        if ($this->getEmail() !== null) { //['email']
+        if (!empty($this->getEmail())) {
             $email = $this->getEmail();
             if (strpos($email, '@') === false) {
                 $errors['email'] = 'email должен содержать знак @';
@@ -48,10 +50,10 @@ class RegistrateRequest
             $errors['email'] = 'email должен быть заполнен';
         }
 
-        if ($this->getPassword() !== null) { ///['psw']
+        if (!empty($this->getPassword())) {
             $password = $this->getPassword();
-            $psw_repeat = $this->getPasswordRepeat(); //['psw-repeat']
-            if ($password !== $psw_repeat) {
+            $passwordRepeat = $this->getPasswordRepeat(); //['psw-repeat']
+            if ($password !== $passwordRepeat) {
                 $errors['psw-repeat'] = "Пароли не совпадают\n";
             }
         } else {
@@ -60,5 +62,4 @@ class RegistrateRequest
 
         return $errors;
     }
-
 }

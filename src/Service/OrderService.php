@@ -33,8 +33,9 @@ class OrderService extends Service
 
         if ($orderSum < 100)
         {
-            $exception = throw new \Exception('Сумма заказа должна превышать 100р рублей', $this->authService->getCurrentUser()->getUserId());
-            $this->loggerDBService->error($exception); //????
+            $exception = new \Exception('Сумма заказа должна превышать 100р рублей');
+            $this->loggerDBService->error($exception);
+            throw $exception;
         }
 
         $user = $this->authService->getCurrentUser();
@@ -85,6 +86,6 @@ class OrderService extends Service
     public function getOrder(int $orderId): Order
     {
         $this->authService->checkUser();
-        return $order = $this->orderModel->getOrder($orderId);
+        return $this->orderModel->getOrder($orderId);
     }
 }

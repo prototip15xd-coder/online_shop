@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Service\Auth;
 
 use Model\User;
@@ -44,13 +46,13 @@ class AuthCookieService implements AuthInterface
 
     }
 
-    public function logout()
+    public function logout(): void
     {
         setcookie('userid', '', time() - 3600, '/');
         unset($_COOKIE['userid']);
     }
 
-    public function checkUser()
+    public function checkUser(): void
     {
         if (!$this->getCurrentUser()) {
             header('Location: /login');

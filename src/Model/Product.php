@@ -123,7 +123,7 @@ class Product extends Model
         return $products;
     }
 
-    public function productByproductId(int $productId): ?Product
+    public function productByProductId(int $productId): ?Product
     {
         $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE id = :id");
         $stms -> execute([':id' => $productId]);

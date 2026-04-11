@@ -12,7 +12,7 @@ use Model\UserProduct;
 
 class Service
 {
-    private logger $loggerModel;
+    private Logger $loggerModel;
     protected Order $orderModel;
     protected UserProduct $userProductModel;
     protected OrderProduct $orderProductModel;

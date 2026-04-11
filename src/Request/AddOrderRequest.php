@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Request;
 
 class AddOrderRequest
@@ -30,16 +32,16 @@ class AddOrderRequest
     {
         $errors = [];
 
-        if ($this->getContactName() !== null) {
+        if (!empty($this->getContactName())) {
             $name = $this->getContactName();
             if (strlen($name) < 4) {
-                $errors['name'] = 'Имя должно быть длинее 2 символов';
+                $errors['name'] = 'Имя должно быть длиннее 2 символов';
             }
         } else {
             $errors['name'] = 'Имя должно быть заполнено';
         }
 
-        if ($this->getPhone() !== null) {
+        if (!empty($this->getPhone())) {
             $phone = $this->getPhone();
             if (strlen($phone) > 12 || strlen($phone) < 10) {
                 $errors['phone'] = 'Введите корректный номер телефона';
@@ -48,7 +50,7 @@ class AddOrderRequest
             $errors['phone'] = 'Номер телефона должен быть заполнен';
         }
 
-        if (!isset($_POST['address'])) {
+        if (!empty($this->getAddress())) {
             $errors['address'] = 'Адрес получателя должен быть заполнен';
         }
 

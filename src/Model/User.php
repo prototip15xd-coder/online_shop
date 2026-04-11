@@ -119,7 +119,7 @@ class User extends Model
         return $obj;
     }
 
-    public function UserbyID(int $userId): User
+    public function UserbyId(int $userId): User
     {
         $stmt = static::getPDO()->prepare(
             "SELECT id, name, email, password 

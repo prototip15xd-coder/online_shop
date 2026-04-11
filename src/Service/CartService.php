@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Service;
 
 use Model\UserProduct;
@@ -47,9 +49,9 @@ class CartService extends Service
         return $userProducts;
     }
 
-    public function getCartSum(): int
+    public function getCartSum(): float
     {
-        $total = 0;
+        $total = 0.0;
 
         foreach ($this->getUserProducts() as $userProduct) {
             $total += $userProduct->getTotalSum();
@@ -67,7 +69,7 @@ class CartService extends Service
         if ($this->authService->check()) {
             $result = $this->productService->rowCountProduct($productId);
 
-            if (!isset($result)) {
+            if ($result === 0) {
                 $errors['product_id'] = 'Данный товар не существует или закончился';
             } else {
 
