@@ -25,7 +25,7 @@ class UserService extends Service
 
     public function profileEdit(?string $name, ?string $email, ?string $password, User $user): void
     {
-        $newName = !empty($name) ? $user->getUserName();
+        $newName = !empty($name) ?? $user->getUserName();
         $newEmail = $email ?? $user->getUserEmail();
         $newPassword = $password ?? $user->getUserPassword();
         $nameChanged = ($newName !== $user->getUserName());
