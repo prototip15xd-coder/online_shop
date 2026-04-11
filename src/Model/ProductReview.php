@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Model;
 
 class ProductReview extends Model
@@ -88,6 +90,5 @@ class ProductReview extends Model
         }
 
         return $objProductReviews;
-
     }
 }

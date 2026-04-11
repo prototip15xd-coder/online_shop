@@ -1,23 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Model;
 
 class Product extends Model
 {
-     private int $id;
-     private string $name;
-     private string $description;
-     private int $price;
-     private ?string $imageUrl = null;
-     private string $value;
-     private ?int $amount = null;
-     private ?int $totalSum = null;
+    private int $id;
+    private string $name;
+    private string $description;
+    private int $price;
+    private ?string $imageUrl = null;
+    private string $value;
+    private ?int $amount = null;
+    private ?int $totalSum = null;
 
     public function getProductId(): int
     {
         return $this->id;
     }
-
     public function getProductName(): ?string
     {
         return $this->name;
@@ -78,6 +79,7 @@ class Product extends Model
     {
         $this->value = $value;
     }
+
     public function getProductTotalSum(): ?int
     {
         return $this->totalSum;
@@ -194,6 +196,4 @@ class Product extends Model
         $stms->execute(['product_id' => $productId]);
         return $stms->rowCount();
     }
-
-
 }

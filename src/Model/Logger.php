@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Model;
 
 class Logger extends Model
@@ -59,6 +61,7 @@ class Logger extends Model
     {
         $this->createdAt = $createdAt;
     }
+
     protected static function getTableName(): string
     {
         return "logger";

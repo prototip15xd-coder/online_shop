@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Model;
 
 use PDO;
@@ -60,10 +62,14 @@ class User extends Model
 
     public function countGetByEmail(string $email): ?int
     {
-        $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE email = :email");
-        $stms->execute(['email' => $email]);
-        $stms->rowCount();
-        return $stms;
+        $stmt = static::getPDO()->prepare(
+            "SELECT COUNT(*) as count FROM {$this->getTableName()} WHERE email = :email"
+        );
+        $stmt->execute(['email' => $email]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $count = (int)$result['count'];
+        return $count > 0 ? $count : null;
     }
 
     public function registrate(string $name, string $email, string $password): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Model;
 
 class UserProduct extends Model
@@ -121,8 +123,9 @@ class UserProduct extends Model
 
     public function userProductByDB(int $productId): UserProduct
     {
-        $userProduct = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
-         WHERE user_id = :user_id AND product_id = :product_id"
+        $userProduct = static::getPDO()->prepare(
+            "SELECT * FROM {$this->getTableName()} 
+            WHERE user_id = :user_id AND product_id = :product_id"
         );
         $userProduct->execute(['user_id' => $_SESSION['userid'], 'product_id' => $productId]);
         $product  = $userProduct->fetch(\PDO::FETCH_ASSOC);

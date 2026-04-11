@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DTO;
 
 class UserCreateDTO
@@ -8,9 +10,7 @@ class UserCreateDTO
         private string $userName,
         private string $userEmail,
         private string $password
-    ) {
-
-    }
+    ) {}
 
     public function getUserName(): string
     {

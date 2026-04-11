@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DTO;
 
 class OrderCreateDTO
@@ -10,10 +12,8 @@ class OrderCreateDTO
         private string $contactPhone,
         private string $comment,
         private string $address,
-        private ?int $userId = null // каким образом реализую добавление этих данных?
-    ) {
-
-    }
+        private ?int $userId = null
+    ) {}
 
     public function getContactName(): string
     {
