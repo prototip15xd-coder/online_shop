@@ -25,15 +25,15 @@ class UserService extends Service
 
     public function profileEdit(?string $name, ?string $email, ?string $password, User $user): void
     {
-        $newName = !empty($name) ?? $user->getUserName();
-        $newEmail = $email ?? $user->getUserEmail();
-        $newPassword = $password ?? $user->getUserPassword();
+        $newName = (!empty($name)) ? $name : $user->getUserName();
+        $newEmail = (!empty($email)) ? $email : $user->getUserEmail();
+        $newPassword = (!empty($password)) ? $password : null;
         $nameChanged = ($newName !== $user->getUserName());
         $emailChanged = ($newEmail !== $user->getUserEmail());
         $passwordChanged = !empty($newPassword);
 
         if ($passwordChanged) {
-            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEAULT);
             $this->userModel->UpdatePassword($newName, $newEmail, $hashedPassword);
         } else if ($nameChanged && $emailChanged) {
             $this->userModel->UpdateNameEmail($newName, $newEmail);
@@ -44,10 +44,9 @@ class UserService extends Service
         }
     }
 
-    public function countEmail(string $email): int
+    public function countEmail(string $email): ?int
     {
         return $this->userModel->countGetByEmail($email);
-
     }
 
     public function getUserById(int $userId): User

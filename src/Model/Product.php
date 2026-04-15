@@ -96,7 +96,7 @@ class Product extends Model
         $obj->id = $product["id"] ?? null;
         $obj->name = $product["name"] ?? null;
         $obj->description = $product["description"] ?? null;
-        $obj->price = $product["price"] ?? null;
+        $obj->price = (int)$product["price"] ?? null;
         $obj->imageUrl = $product["image_url"] ?? null;
         $obj->value = $product["value"] ?? null;
         $obj->amount = $product["amount"] ?? null;

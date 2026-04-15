@@ -25,7 +25,7 @@ class ProfileEditRequest
 
     public function getMethod(): string
     {
-        return $this->$_SERVER['REQUEST_METHOD'];
+        return $_SERVER['REQUEST_METHOD'];
     }
 
 }
