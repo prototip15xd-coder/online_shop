@@ -50,7 +50,7 @@ class AddOrderRequest
             $errors['phone'] = 'Номер телефона должен быть заполнен';
         }
 
-        if (!empty($this->getAddress())) {
+        if (empty($this->getAddress())) {
             $errors['address'] = 'Адрес получателя должен быть заполнен';
         }
 

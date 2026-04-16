@@ -33,7 +33,7 @@ class UserService extends Service
         $passwordChanged = !empty($newPassword);
 
         if ($passwordChanged) {
-            $hashedPassword = password_hash($newPassword, PASSWORD_DEAULT);
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
             $this->userModel->UpdatePassword($newName, $newEmail, $hashedPassword);
         } else if ($nameChanged && $emailChanged) {
             $this->userModel->UpdateNameEmail($newName, $newEmail);

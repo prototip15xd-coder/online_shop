@@ -76,7 +76,7 @@ class CartService extends Service
                 if ($action === 'minus') {
                     $amount -= 1;
 
-                    if ($amount <= 0) {
+                    if ($amount < 0) {
                         $errors['amount'] = 'Количество товаров должно быть больше нуля';
                     }
                 }

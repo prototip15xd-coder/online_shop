@@ -15,6 +15,6 @@ class AddProductRequest
 
     public function getProductId(): int
     {
-        return $this->data['product_id'];
+        return (int)$this->data['product_id'];
     }
 }

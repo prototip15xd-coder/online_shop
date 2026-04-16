@@ -49,7 +49,6 @@ class Product extends Model
         return $this->amount;
     }
 
-
     public function setProductAmount(?int $amount): void
     {
         $this->amount = $amount;

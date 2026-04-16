@@ -42,15 +42,19 @@ class CartController extends Controller
                     break;
                 }
             }
-
             $totalCount = array_sum(array_map(
-                fn($p) => $p->getProductAmount() ?? 0,
+                fn($p) => $p->getProductAmount() ?? 0, // не ищет метод а он есть
                 $products
             ));
 
+            $amount = 0;
+            if ($updatedProduct !== null) {
+                $amount = $updatedProduct->getProductAmount() ?? 0;
+            }
+
             header('Content-Type: application/json');
             echo json_encode([
-                'amount' => $updatedProduct->getProductAmount() ?? 0,
+                'amount' => $amount,
                 'count'  => $totalCount,
             ]);
             exit;

@@ -10,7 +10,7 @@ class OrderRequest
 
     public function getOrderId(): int
     {
-        return $this->data['order_id'];
+        return (int)$this->data['order_id'];
     }
 
 }
