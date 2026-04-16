@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 namespace Service;
+
 use Model\Logger;
 use Throwable;
+
 class LoggerDBService
 {
     private Logger $loggerModel;

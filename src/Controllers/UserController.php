@@ -11,10 +11,6 @@ use DTO\UserCreateDTO;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     public function getRegistration(): void
     {
@@ -80,6 +76,7 @@ class UserController extends Controller
     {
         if ($this->authService->getCurrentUser()) {
             $user = $this->userService->getUser();
+
 ;           require_once __DIR__ . '/../Views/profile.php';
         } else {
             require_once __DIR__ . '/../Views/login.php';

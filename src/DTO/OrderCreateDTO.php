@@ -6,7 +6,6 @@ namespace DTO;
 
 class OrderCreateDTO
 {
-
     public function __construct(
         private string $contactName,
         private string $contactPhone,

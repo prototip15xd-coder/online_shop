@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Model;
 
-use Model\Model;
-
 class OrderProduct extends Model
 {
     private int $id;
@@ -72,10 +70,11 @@ class OrderProduct extends Model
 
     public function createOrderProduct(int $orderId, int $productId, int $amount): void
     {
-        $stmt = static::getPDO()->prepare("UPDATE {$this->getTableName()}  
-        SET amount = amount + :amount 
-        WHERE order_id = :order_id AND product_id = :product_id"
-        );
+        $stmt = static::getPDO()->prepare("
+            UPDATE {$this->getTableName()}  
+            SET amount = amount + :amount 
+            WHERE order_id = :order_id AND product_id = :product_id
+            ");
         $stmt->execute([
             ':order_id' => $orderId,
             ':product_id' => $productId,
@@ -83,9 +82,10 @@ class OrderProduct extends Model
         ]);
 
         if ($stmt->rowCount() == 0) {
-            $stmt = static::getPDO()->prepare("INSERT INTO {$this->getTableName()} (order_id, product_id, amount) 
-            VALUES (:order_id, :product_id, :amount)"
-            );
+            $stmt = static::getPDO()->prepare("
+                INSERT INTO {$this->getTableName()} (order_id, product_id, amount) 
+                VALUES (:order_id, :product_id, :amount)
+                ");
             $stmt->execute([
                 ':order_id' => $orderId,
                 ':product_id' => $productId,
@@ -96,11 +96,10 @@ class OrderProduct extends Model
 
     public function getAllProductFromOrderByOrderId(int $orderId): array
     {
-        $stmt= static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
-         WHERE order_id = :order_id"
-        );
+        $stmt= static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE order_id = :order_id");
         $stmt->execute(['order_id' => $orderId]);
         $products= $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
         $allProductsFromOrder=[];
 
         foreach ($products as $product) {

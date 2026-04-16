@@ -8,7 +8,6 @@ use Model\UserProduct;
 use Service\Auth\AuthInterface;
 use Service\Auth\AuthSessionService;
 
-
 class CartService extends Service
 {
     private AuthInterface $authService;
@@ -56,11 +55,11 @@ class CartService extends Service
         foreach ($this->getUserProducts() as $userProduct) {
             $total += $userProduct->getTotalSum();
         }
-// TODO: цена заказа должна отображаться внизу в корзине
+
         return $total;
     }
 
-    public function addProductValidate(string $action, int $productId): array  // TODO: сделать реализацию +- в самой корзине
+    public function addProductValidate(string $action, int $productId): array
     {
         $errors = [];
         $objUserProduct = $this->userProductService->getUserProduct($productId);

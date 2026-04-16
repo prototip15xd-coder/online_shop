@@ -78,6 +78,7 @@ class ProductReview extends Model
         $stms = static::getPDO()->prepare("SELECT * FROM {$tableName} WHERE product_id = :product_id");
         $stms->execute(['product_id' => $productId]);
         $productReviews = $stms->fetchAll(\PDO::FETCH_ASSOC);
+
         $objProductReviews = [];
 
         if (!$productReviews) {
@@ -86,7 +87,7 @@ class ProductReview extends Model
 
         foreach ($productReviews as $productReview) {
             $obj = $this->objProductReview($productReview);
-            $objProductReviews[] = $obj;///попробуй убрать это
+            $objProductReviews[] = $obj;
         }
 
         return $objProductReviews;

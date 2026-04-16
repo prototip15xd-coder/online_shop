@@ -10,14 +10,10 @@ use Request\OrderRequest;
 
 class OrderController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function getCheckoutForm(): void
     {
         $this->authService->checkUser();
+
         require_once __DIR__ . '/../Views/create-order.php';
     }
 
@@ -43,6 +39,7 @@ class OrderController extends Controller
     {
         if ($this->authService->getCurrentUser() !== null) {
             $orders = $this->orderService->getAllOrders();
+
             require_once __DIR__ . '/../Views/user_orders.php';
         } else {
             require_once __DIR__ . '/../Views/login.php';
@@ -54,6 +51,7 @@ class OrderController extends Controller
         if ($this->authService->getCurrentUser() !== null) {
             $order = $this->orderService->getOrder($request->getOrderId());
             $order->setOrderProducts($this->orderService->getOrderProduct($request->getOrderId()));
+
             require_once __DIR__ . '/../Views/order.php';
         } else {
             require_once __DIR__ . '/../Views/login.php';

@@ -32,30 +32,36 @@ class RegistrateRequest
     {
         $errors = [];
 
-        if ($this->getName() !== null) {  //['name']
+        if ($this->getName() !== null) {
             $name = $this->getName();
+
             if (strlen($name) < 4) {
                 $errors['name'] = 'Имя должно быть длиннее 4 символов';
             }
+
         } else {
             $errors['name'] = 'Имя должно быть заполнено';
         }
 
         if (!empty($this->getEmail())) {
             $email = $this->getEmail();
+
             if (strpos($email, '@') === false) {
                 $errors['email'] = 'email должен содержать знак @';
             }
+
         } else {
             $errors['email'] = 'email должен быть заполнен';
         }
 
         if (!empty($this->getPassword())) {
             $password = $this->getPassword();
-            $passwordRepeat = $this->getPasswordRepeat(); //['psw-repeat']
+            $passwordRepeat = $this->getPasswordRepeat();
+
             if ($password !== $passwordRepeat) {
                 $errors['psw-repeat'] = "Пароли не совпадают\n";
             }
+
         } else {
             $errors['password'] = 'пароли должны быть заполнены';
         }

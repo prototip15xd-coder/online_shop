@@ -19,6 +19,7 @@ class Product extends Model
     {
         return $this->id;
     }
+
     public function getProductName(): ?string
     {
         return $this->name;
@@ -108,12 +109,13 @@ class Product extends Model
         return "products";
     }
 
-    public static function productsByDB(): array | null
+    public static function productsByDB(): array|null
     {
         $tableName = static::getTableName();
         $stms = static::getPDO()->prepare("SELECT * FROM $tableName");
         $stms->execute();
         $productsArray = $stms->fetchAll(\PDO::FETCH_ASSOC);
+
         $products = [];
 
         foreach ($productsArray as $product) {
@@ -135,16 +137,18 @@ class Product extends Model
         }
 
         $obj = $this->objProduct($productArray);
+
         return $obj;
     }
 
     public static function getProductsByOrderID(int $orderId): ?array
     {
         $tableName = static::getTableName();
-        $stms = static::getPDO()->prepare("SELECT * FROM {$tableName} p 
-         INNER JOIN order_products op ON p.id = op.product_id 
-         WHERE op.order_id = :order_id"
-        );
+        $stms = static::getPDO()->prepare("
+            SELECT * FROM {$tableName} p 
+            INNER JOIN order_products op ON p.id = op.product_id 
+            WHERE op.order_id = :order_id
+            ");
         $stms -> execute([':order_id' => $orderId]);
         $productsArray = $stms->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -165,9 +169,11 @@ class Product extends Model
     public static function getWithAmount(int $userId): ?array
     {
         $tableName = static::getTableName();
-        $stms = static::getPDO()->prepare("SELECT p.*, up.amount FROM {$tableName} p 
-            LEFT JOIN user_products up ON p.id = up.product_id AND up.user_id = :user_id"
-        );
+        $stms = static::getPDO()->prepare("
+            SELECT p.*, up.amount 
+            FROM {$tableName} p 
+            LEFT JOIN user_products up ON p.id = up.product_id AND up.user_id = :user_id
+            ");
 
         $stms -> execute([":user_id" => $userId]);
         $productsArray = $stms->fetchAll(\PDO::FETCH_ASSOC);
@@ -188,11 +194,9 @@ class Product extends Model
 
     public function validateProduct(int $productId): int
     {
-        $stms = static::getPDO()->prepare("SELECT id FROM {$this->getTableName()} 
-          WHERE id = :product_id"
-        );
-
+        $stms = static::getPDO()->prepare("SELECT id FROM {$this->getTableName()} WHERE id = :product_id");
         $stms->execute(['product_id' => $productId]);
+
         return $stms->rowCount();
     }
 }

@@ -27,5 +27,4 @@ class ProfileEditRequest
     {
         return $_SERVER['REQUEST_METHOD'];
     }
-
 }

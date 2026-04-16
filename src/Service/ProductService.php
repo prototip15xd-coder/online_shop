@@ -6,11 +6,6 @@ use Model\Product;
 
 class ProductService extends Service
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function rowCountProduct(int $productId): int
     {
         return $this->productModel->validateProduct($productId);

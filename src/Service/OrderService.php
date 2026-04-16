@@ -7,9 +7,6 @@ use Model\Order;
 use Model\Product;
 use Service\Auth\AuthInterface;
 use Service\Auth\AuthSessionService;
-use Service\LoggerDBService;
-use Service\LoggerService;
-
 
 class OrderService extends Service
 {
@@ -74,9 +71,11 @@ class OrderService extends Service
         foreach ($orders as $order) {
             $order->setOrderProducts($this->getOrderProduct($order->getOrderId()));
             $totalOrderSum = 0;
+
             foreach ($order->getOrderProducts() as $orderProduct) {
                 $totalOrderSum += $orderProduct->getProductTotalSum();
             }
+
             $order->setOrderCost($totalOrderSum);
         }
 

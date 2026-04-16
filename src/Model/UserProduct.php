@@ -84,11 +84,10 @@ class UserProduct extends Model
 
     public function getUserProducts(int $userId): array
     {
-        $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} 
-         WHERE user_id = :user_id"
-        );
+        $stms = static::getPDO()->prepare("SELECT * FROM {$this->getTableName()} WHERE user_id = :user_id");
         $stms->execute([":user_id" => $userId]);
         $userProducts = $stms->fetchAll(\PDO::FETCH_ASSOC);
+
         $objUserProducts =[];
 
         foreach ($userProducts as $userProduct) {
@@ -102,14 +101,15 @@ class UserProduct extends Model
     public static function getByUserIdWithProducts(int $userId): array
     {
         $tableName = static::getTableName();
-        $stms = static::getPDO()->prepare(
-            "SELECT * FROM {$tableName} up 
+        $stms = static::getPDO()->prepare("
+            SELECT * FROM {$tableName} up 
             INNER JOIN products p 
             ON up.product_id = p.id 
-            WHERE up.user_id = :user_id"
-        );
+            WHERE up.user_id = :user_id
+            ");
         $stms->execute([":user_id" => $userId]);
         $userProductsWithProducts = $stms->fetchAll(\PDO::FETCH_ASSOC);
+
         $objUserProductsWithProducts = [];
 
         foreach ($userProductsWithProducts as $userProduct) {
@@ -123,14 +123,14 @@ class UserProduct extends Model
 
     public function userProductByDB(int $productId): UserProduct
     {
-        $userProduct = static::getPDO()->prepare(
-            "SELECT * FROM {$this->getTableName()} 
-            WHERE user_id = :user_id AND product_id = :product_id"
-        );
+        $userProduct = static::getPDO()->prepare("
+            SELECT * FROM {$this->getTableName()} 
+            WHERE user_id = :user_id AND product_id = :product_id
+            ");
         $userProduct->execute(['user_id' => $_SESSION['userid'], 'product_id' => $productId]);
         $product  = $userProduct->fetch(\PDO::FETCH_ASSOC);
 
-        if ($product=== false) {
+        if ($product === false) {
             $product = [
                 'id' => 0,
                 'user_id' => $_SESSION['userid'],
@@ -140,17 +140,19 @@ class UserProduct extends Model
         }
 
         $obj = $this->objUserProduct($product);
+
         return $obj;
     }
 
     public function getAllByUserId(int $userId): UserProduct|array
     {
-        $stmt = static::getPDO()->prepare(
-            "SELECT * FROM {$this->getTableName()} 
-            WHERE user_id = :user_id"
-        );
+        $stmt = static::getPDO()->prepare("
+            SELECT * FROM {$this->getTableName()} 
+            WHERE user_id = :user_id
+            ");
         $stmt->execute([':user_id' => $userId]);
         $allProducts = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
         $userProducts = [];
 
         foreach ($allProducts as $product) {
@@ -163,21 +165,18 @@ class UserProduct extends Model
 
     public function deleteByUserId(int $usId): void
     {
-        $stmt = static::getPDO()->prepare(
-            "DELETE FROM {$this->getTableName()} 
-            WHERE user_id = :user_id"
-        );
+        $stmt = static::getPDO()->prepare("DELETE FROM {$this->getTableName()} WHERE user_id = :user_id");
         $stmt->execute([':user_id' => $usId]);
     }
 
     public static function addProductDB(int $userId, int $productId, int $amount): void
     {
         $tableName = static::getTableName();
-        $stmt = static::getPDO()->prepare(
-            "UPDATE {$tableName} 
+        $stmt = static::getPDO()->prepare("
+            UPDATE {$tableName} 
             SET amount = amount + :amount 
-            WHERE user_id = :user_id AND product_id = :product_id"
-        );
+            WHERE user_id = :user_id AND product_id = :product_id
+            ");
         $stmt->execute([
             'user_id'    => $userId,
             'product_id' => $productId,
@@ -185,10 +184,10 @@ class UserProduct extends Model
         ]);
 
         if ($stmt->rowCount() == 0) {
-            $stmt = static::getPDO()->prepare(
-                "INSERT INTO {$tableName} (user_id, product_id, amount) 
-                VALUES (:user_id, :product_id, :amount)"
-            );
+            $stmt = static::getPDO()->prepare("
+                INSERT INTO {$tableName} (user_id, product_id, amount) 
+                VALUES (:user_id, :product_id, :amount)
+                ");
             $stmt->execute([
                 'user_id'    => $userId,
                 'product_id' => $productId,

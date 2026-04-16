@@ -4,15 +4,9 @@ namespace Service;
 
 use DTO\UserCreateDTO;
 use Model\User;
-use Request\ProfileEditRequest;
 
 class UserService extends Service
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function registrate(UserCreateDTO $dto): void
     {
         $this->userModel->registrate($dto->getUserName(), $dto->getUserEmail(), $dto->getPassword());

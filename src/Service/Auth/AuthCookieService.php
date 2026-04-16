@@ -9,6 +9,7 @@ use Model\User;
 class AuthCookieService implements AuthInterface
 {
     protected User $userModel;
+
     public function __construct()
     {
         $this->userModel = new User();
@@ -33,17 +34,19 @@ class AuthCookieService implements AuthInterface
         $user = $this->userModel->getByEmail($email);
 
         if (!$user) {
-            return false;//$errors['USERNAME'] = 'Все поля должны быть заполнены';
+            return false;
         } else {
             $passwordDB = $user->getUserPassword();
+            $userId = $user->getUserId();
+
             if (password_verify($password, $passwordDB)) {
-                setcookie('userid', $user->getUserID());
+                setcookie('userid', $userId, time() + (86400 * 30), "/"); // не понимаю почему ругается
+
                 return true;
             } else {
                 return false;
             }
         }
-
     }
 
     public function logout(): void

@@ -5,13 +5,9 @@ declare(strict_types=1);
 namespace Controllers;
 
 use Request\AddProductRequest;
+
 class CartController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function cart(): void
     {
         if ($this->authService->check()) {
@@ -43,7 +39,7 @@ class CartController extends Controller
                 }
             }
             $totalCount = array_sum(array_map(
-                fn($p) => $p->getProductAmount() ?? 0, // не ищет метод а он есть
+                fn($product) => $product->getProductAmount() ?? 0,
                 $products
             ));
 

@@ -9,6 +9,7 @@ use Model\User;
 class AuthSessionService implements AuthInterface
 {
     protected User $userModel;
+
     public function __construct()
     {
         $this->userModel = new User();
@@ -23,7 +24,6 @@ class AuthSessionService implements AuthInterface
         } else {
             return null;
         }
-
     }
 
     public function check(): bool
@@ -37,7 +37,7 @@ class AuthSessionService implements AuthInterface
         $user = $this->userModel->getByEmail($email);
 
         if (!$user) {
-            return false;//$errors['USERNAME'] = 'Все поля должны быть заполнены';
+            return false;
         } else {
             $passwordDB = $user->getUserPassword();
 
@@ -48,9 +48,7 @@ class AuthSessionService implements AuthInterface
             } else {
                 return false;
             }
-
         }
-
     }
 
     private function session(): void
@@ -73,5 +71,4 @@ class AuthSessionService implements AuthInterface
             exit;
         }
     }
-
 }
