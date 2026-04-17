@@ -40,7 +40,7 @@ class AuthCookieService implements AuthInterface
             $userId = $user->getUserId();
 
             if (password_verify($password, $passwordDB)) {
-                setcookie('userid', $userId, time() + (86400 * 30), "/"); // не понимаю почему ругается
+                setcookie('userid', (string)$userId, time() + (86400 * 30), "/");
 
                 return true;
             } else {
